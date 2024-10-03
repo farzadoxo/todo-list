@@ -3,7 +3,7 @@ from fastapi import FastAPI
 api = FastAPI()
 
 @api.get('/test')
-def hello():
+async def hello():
     return "fool"
 
 
