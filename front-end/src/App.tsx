@@ -1,9 +1,13 @@
+import TodoList from "./home/todos"
 
 function App() {
 
   return (
 
-    <p className="">hello world</p>
+    <div className="w-full h-full ">
+      <TodoList />
+
+    </div>
 
 
   )

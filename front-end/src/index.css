@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.completeTask {
+  background-color: #333333;
+  color: #999999; 
+
+}
