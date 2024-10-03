@@ -1,4 +1,10 @@
+from fastapi import FastAPI
 
+api = FastAPI()
+
+@api.get('/test')
+def hello():
+    return "fool"
 
 
 class ToDoList:
