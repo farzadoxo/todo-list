@@ -4,7 +4,11 @@
 
 
 .completeTask {
-  background-color: #333333;
-  color: #999999; 
+  background-color: #444444;
+
+}
+.completeTask-dark {
+  background-color: #999999;
+  color: #333333; 
 
 }
