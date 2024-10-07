@@ -1,10 +1,17 @@
-from fastapi import FastAPI
+from pydantic import BaseModel
+from typing import Optional
+from datetime import date
 
-api = FastAPI()
 
-@api.get('/test')
-async def hello():
-    return "fool"
+class Task(BaseModel):
+    # request body for task parameters
+
+    id:int = 0
+    title:str
+    completed:bool = False
+    dueDate:date = None
+
+
 
 
 class ToDoList:
@@ -22,8 +29,3 @@ class ToDoList:
             todo_page = open(f"{self.todo_list_owner_name}.txt",mode='a')
             todo_page.writelines(f"{task} \n")
 
-
-
-#test
-my_todo = ToDoList(owner_name="ali")
-my_todo.add_task(task="fuck sara")
