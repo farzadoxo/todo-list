@@ -7,11 +7,14 @@
     "dev": "vite --host",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview --host",
+    "generate-pwa-assets": "pwa-assets-generator --preset minimal public/logo.svg"
   },
   "dependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-responsive-modal": "^6.4.2",
+    "react-webcam": "^7.2.0",
     "zustand": "^5.0.0-rc.2"
   },
   "devDependencies": {
@@ -20,6 +23,8 @@
     "@testing-library/react": "^16.0.1",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
+    "@vite-pwa/assets-generator": "^0.2.6",
+    "@vitejs/plugin-basic-ssl": "^1.1.0",
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.20",
     "axios": "^1.7.7",
@@ -33,7 +38,9 @@
     "tailwindcss": "^3.4.13",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.0.1",
-    "vite": "^5.4.1"
+    "vite": "^5.4.1",
+    "vite-plugin-pwa": "^0.20.5",
+    "workbox-window": "^7.1.0"
   },
   "msw": {
     "workerDirectory": [

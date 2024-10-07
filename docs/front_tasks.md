@@ -7,8 +7,14 @@
 - [x] new todo
 - [x] mock api
 - [x] axios
+- [x] taking picture with user's camera
+- [x] choosing image from user's gallery
+- [ ] taking photo with front camera
+- [ ] adding photo to task as `completed picture`
 - [ ] pirority in tasks
 - [ ] due date in tasks
 - [ ] editing tasks
-- [ ] adding photo to task
+- [ ] deleting tasks
+- [ ] adding video to task as `completed video`
+- [ ] flash when taking picture
 - [ ] taking photo with user's phone
