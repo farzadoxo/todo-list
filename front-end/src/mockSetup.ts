@@ -43,10 +43,7 @@ mock.onPost('/api/todos/').reply((config) => {
   return [201, { id: Math.random(), title, completed }]; // Respond with a new todo object
 });
 
-// mock.onPost('/api/todos/').reply(201, {
-//   id: Math.random(),
-//   title: "something new",
-//   completed: false,
-//   dueDate: "2024-10-07"
-//
-// });
+// Mock the POST request for image uploads
+mock.onPost('/api/upload/').reply(200, {
+  message: 'Image uploaded successfully',
+});

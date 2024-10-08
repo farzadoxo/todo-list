@@ -10,10 +10,11 @@
 - [x] taking picture with user's camera
 - [x] choosing image from user's gallery
 - [x] switching cameras
-- [ ] adding photo to task as `completed picture`
+- [x] adding photo to task as `completed picture`
 - [ ] pirority in tasks
 - [ ] due date in tasks
 - [ ] editing tasks
+- [ ] completed tasks component
 - [ ] deleting tasks
 - [ ] adding video to task as `completed video`
 - [ ] flash when taking picture

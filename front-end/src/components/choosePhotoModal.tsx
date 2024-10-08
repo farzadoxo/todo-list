@@ -2,6 +2,7 @@ import React, { useState, useRef, useCallback } from 'react';
 import { Modal } from 'react-responsive-modal';
 import Webcam from 'react-webcam';
 import 'react-responsive-modal/styles.css';
+import api from '../axios';
 
 interface PhotoIconWithModalProps {
   size?: number;
@@ -52,6 +53,22 @@ const ChoosePhotoIcon: React.FC<PhotoIconWithModalProps> = ({ size, color, onIma
     setIsCameraMode(false);
   };
 
+  const uploadImage = async (file: File | string) => {
+    const formData = new FormData();
+    formData.append('image', file); // Adjust the key 'image' based on your backend requirements
+
+    try {
+      const response = await api.post('/api/upload/', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      console.log('Upload successful:', response.data);
+    } catch (error) {
+      console.error('Error uploading image:', error);
+    }
+  };
+
   const handleChooseImage = () => {
     fileInputRef.current?.click();
   };
@@ -62,6 +79,7 @@ const ChoosePhotoIcon: React.FC<PhotoIconWithModalProps> = ({ size, color, onIma
       const imageUrl = URL.createObjectURL(file);
       setSelectedImage(imageUrl);
       onImageSelected(file);
+      uploadImage(file)
     }
   };
 
@@ -85,6 +103,7 @@ const ChoosePhotoIcon: React.FC<PhotoIconWithModalProps> = ({ size, color, onIma
         .then(blob => {
           const file = new File([blob], "webcam-photo.jpg", { type: "image/jpeg" });
           onImageSelected(file);
+          uploadImage(file)
         });
     }
   }, [webcamRef, onImageSelected]);
@@ -156,6 +175,13 @@ const ChoosePhotoIcon: React.FC<PhotoIconWithModalProps> = ({ size, color, onIma
         {selectedImage && !isCameraMode && (
           <div className="mt-4">
             <img src={selectedImage} alt="Selected" className="max-w-full h-auto" />
+
+            <button
+              onClick={() => uploadImage(selectedImage)}
+              className="bg-black text-white p-3 m-2 rounded-full hover:bg-gray-800 transition duration-300 ease-in-out"
+            >
+              upload photo
+            </button>
           </div>
         )}
       </Modal>
