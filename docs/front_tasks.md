@@ -9,7 +9,7 @@
 - [x] axios
 - [x] taking picture with user's camera
 - [x] choosing image from user's gallery
-- [ ] taking photo with front camera
+- [x] switching cameras
 - [ ] adding photo to task as `completed picture`
 - [ ] pirority in tasks
 - [ ] due date in tasks

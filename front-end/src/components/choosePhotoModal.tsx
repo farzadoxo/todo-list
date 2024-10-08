@@ -41,6 +41,7 @@ const ChoosePhotoIcon: React.FC<PhotoIconWithModalProps> = ({ size, color, onIma
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isCameraMode, setIsCameraMode] = useState(false);
+  const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user');
   const fileInputRef = useRef<HTMLInputElement>(null);
   const webcamRef = useRef<Webcam>(null);
 
@@ -64,11 +65,12 @@ const ChoosePhotoIcon: React.FC<PhotoIconWithModalProps> = ({ size, color, onIma
     }
   };
 
-  //TODO: send image or video to server
-  //
-
   const handleTakePhoto = () => {
     setIsCameraMode(true);
+  };
+
+  const toggleCamera = () => {
+    setFacingMode(prevMode => prevMode === 'user' ? 'environment' : 'user');
   };
 
   const capture = useCallback(() => {
@@ -86,6 +88,10 @@ const ChoosePhotoIcon: React.FC<PhotoIconWithModalProps> = ({ size, color, onIma
         });
     }
   }, [webcamRef, onImageSelected]);
+
+  const videoConstraints = {
+    facingMode: facingMode
+  };
 
   return (
     <>
@@ -121,13 +127,30 @@ const ChoosePhotoIcon: React.FC<PhotoIconWithModalProps> = ({ size, color, onIma
               ref={webcamRef}
               screenshotFormat="image/jpeg"
               width="100%"
+              videoConstraints={videoConstraints}
+              className='rounded'
             />
-            <button
-              onClick={capture}
-              className="mt-4 bg-black text-white py-2 px-4 rounded-md hover:bg-gray-800 transition duration-300 ease-in-out"
-            >
-              Capture Photo
-            </button>
+            <div className="mt-4 flex justify-between">
+              <button
+                onClick={capture}
+                className="bg-black text-white p-3 rounded-full hover:bg-gray-800 transition duration-300 ease-in-out"
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path fill="none" stroke="currentColor" stroke-width="2" d="M20 6h-4l-2-2H10L8 6H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </button>
+              <button
+                onClick={toggleCamera}
+                className="bg-black text-white p-3 rounded-full hover:bg-gray-800 transition duration-300 ease-in-out"
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path fill="none" stroke="currentColor" stroke-width="2" d="M20 6h-4l-2-2H10L8 6H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2z" />
+                  <path fill="none" stroke="currentColor" stroke-width="2" d="M14 15l2-2-2-2M10 15l-2-2 2-2" />
+                  <path fill="none" stroke="currentColor" stroke-width="2" d="M16 13H8" />
+                </svg>
+              </button>
+            </div>
           </div>
         )}
         {selectedImage && !isCameraMode && (
