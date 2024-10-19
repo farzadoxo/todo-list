@@ -11,7 +11,9 @@
     "generate-pwa-assets": "pwa-assets-generator --preset minimal public/logo.svg"
   },
   "dependencies": {
+    "date-fns": "^4.1.0",
     "react": "^18.3.1",
+    "react-contenteditable": "^3.3.7",
     "react-dom": "^18.3.1",
     "react-responsive-modal": "^6.4.2",
     "react-webcam": "^7.2.0",
@@ -35,6 +37,7 @@
     "globals": "^15.9.0",
     "jest": "^29.7.0",
     "postcss": "^8.4.47",
+    "redux-mock-store": "^1.5.4",
     "tailwindcss": "^3.4.13",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.0.1",

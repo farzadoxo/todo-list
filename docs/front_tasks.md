@@ -11,8 +11,9 @@
 - [x] choosing image from user's gallery
 - [x] switching cameras
 - [x] adding photo to task as `completed picture`
+- [x] due date recognizer in new task input
+- [x] due date in tasks
 - [ ] pirority in tasks
-- [ ] due date in tasks
 - [ ] editing tasks
 - [ ] completed tasks component
 - [ ] deleting tasks

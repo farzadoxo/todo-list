@@ -1,25 +1,73 @@
-import React, { useState } from 'react';
-import { useTodosListState } from '../store';
+import React, { useState, useRef, ChangeEvent } from 'react';
+import { addDays, format } from 'date-fns';
 import api from '../axios';
+import { useTodosListState } from '../store';
+import type { TodoPostCallType } from '../types';
+import 'react-datepicker/dist/react-datepicker.css'; // Importing styles for DatePicker
+import DatePicker from 'react-datepicker';
 
 const NewTask: React.FC = () => {
-  const [taskText, setTaskText] = useState('');
+  const [taskData, setTaskData] = useState<TodoPostCallType>({
+    title: '',
+    completed: false,
+    dueDate: null
+  });
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const taskStore = useTodosListState();
+  const contentEditableRef = useRef<HTMLDivElement>(null);
+
+  const handleTextChange = (evt: ChangeEvent<HTMLInputElement>) => {
+    const text = evt.target.value;
+    let dueDate: string | null = null;
+
+    // Helper function to get the next occurrence of a day
+    const getNextDayOfWeek = (day: string): Date | null => {
+      const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+      const today = new Date();
+      const targetDay = days.indexOf(day);
+
+      if (targetDay !== -1) {
+        const daysUntilTarget = (targetDay + 7 - today.getDay()) % 7;
+        return addDays(today, daysUntilTarget === 0 ? 7 : daysUntilTarget);
+      }
+
+      return null;
+    };
+
+    // Getting dueDate from the title
+    const textArray = text.toLowerCase().split(" ");
+    const today = new Date();
+    if (textArray.includes("today")) {
+      dueDate = format(today, 'yyyy-MM-dd');
+    } else if (textArray.includes("tomorrow")) {
+      dueDate = format(addDays(today, 1), 'yyyy-MM-dd');
+    } else if (textArray.includes("next")) {
+      const dayIndex = textArray.indexOf("next") + 1;
+      if (dayIndex < textArray.length) {
+        const day = textArray[dayIndex];
+        const nextDay = getNextDayOfWeek(day);
+        if (nextDay) {
+          dueDate = format(nextDay, 'yyyy-MM-dd');
+        }
+      }
+    }
+
+    setSelectedDate(dueDate)
+    setTaskData(prevState => ({
+      ...prevState,
+      title: text,
+      dueDate: dueDate
+    }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // Validate input
-    if (!taskText.trim()) {
+    if (!taskData.title.trim()) {
       alert("Task cannot be empty");
       return;
     }
-
-    const taskData = {
-      title: taskText,
-      completed: false,
-      dueDate: null
-    };
 
     try {
       const res = await api.post("/api/todos/", taskData);
@@ -27,7 +75,15 @@ const NewTask: React.FC = () => {
       if (res.data) {
         taskStore.addTodo(res.data);
         console.log(res.data);
-        setTaskText(''); // Clear input field after successful submission
+        setTaskData(prevState => ({
+          ...prevState,
+          title: "",
+          dueDate: null // Resetting dueDate after submission
+        }));
+        setSelectedDate(null); // Resetting selected date after submission
+        if (contentEditableRef.current) {
+          contentEditableRef.current.innerHTML = '';
+        }
       }
     } catch (error) {
       console.error("Error adding task:", error);
@@ -35,22 +91,30 @@ const NewTask: React.FC = () => {
     }
   };
 
+
   return (
     <form onSubmit={handleSubmit} className="mb-4">
       <div className="flex items-center">
         <input
-          type="text"
-          value={taskText}
-          onChange={(e) => setTaskText(e.target.value)}
-          placeholder="Enter a new task"
+          type='text'
+          onChange={handleTextChange}
           className="flex-grow p-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
+
         <button
           type="submit"
           className="px-4 py-2 bg-blue-500 text-white rounded-r-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           Add Task
         </button>
+
+        <DatePicker
+          selected={selectedDate}
+          onChange={(date) => setSelectedDate(date)} // Update state with selected date
+          className="ml-2 border border-gray-300 rounded-md p-2"
+          placeholderText="Select Due Date"
+          dateFormat="yyyy-MM-dd"
+        />
       </div>
     </form>
   );
