@@ -13,10 +13,11 @@
 - [x] adding photo to task as `completed picture`
 - [x] due date recognizer in new task input
 - [x] due date in tasks
-- [ ] pirority in tasks
-- [ ] editing tasks
+- [x] pirority in new task
+- [x] pirority recognizer in new task
+- [-] editing tasks
 - [ ] completed tasks component
 - [ ] deleting tasks
 - [ ] adding video to task as `completed video`
 - [ ] flash when taking picture
-- [ ] taking photo with user's phone
+- [ ] mobile view

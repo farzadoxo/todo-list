@@ -5,6 +5,7 @@ import { useTodosListState } from '../store';
 import type { TodoPostCallType } from '../types';
 import 'react-datepicker/dist/react-datepicker.css'; // Importing styles for DatePicker
 import DatePicker from 'react-datepicker';
+import PrioritySelect from './prioriyLevel';
 
 const NewTask: React.FC = () => {
   const [taskData, setTaskData] = useState<TodoPostCallType>({
@@ -13,12 +14,16 @@ const NewTask: React.FC = () => {
     dueDate: null
   });
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [priority, setPriority] = useState<string>("None"); // Default to "None"
   const taskStore = useTodosListState();
   const contentEditableRef = useRef<HTMLDivElement>(null);
+
+
 
   const handleTextChange = (evt: ChangeEvent<HTMLInputElement>) => {
     const text = evt.target.value;
     let dueDate: string | null = null;
+    let priority: string | null = null; // Initialize priority variable
 
     // Helper function to get the next occurrence of a day
     const getNextDayOfWeek = (day: string): Date | null => {
@@ -37,6 +42,8 @@ const NewTask: React.FC = () => {
     // Getting dueDate from the title
     const textArray = text.toLowerCase().split(" ");
     const today = new Date();
+
+    // Check for due dates
     if (textArray.includes("today")) {
       dueDate = format(today, 'yyyy-MM-dd');
     } else if (textArray.includes("tomorrow")) {
@@ -52,11 +59,21 @@ const NewTask: React.FC = () => {
       }
     }
 
+    // Check for priority level based on input text
+    const priorityMatch = text.match(/~\s*(low|medium|high)/i);
+    if (priorityMatch) {
+      console.log("no heart")
+      priority = priorityMatch[1].toLowerCase(); // Capture the matched priority level
+      setPriority(priority)
+    }
+
+    // Update state with task data
     setSelectedDate(dueDate)
     setTaskData(prevState => ({
       ...prevState,
       title: text,
-      dueDate: dueDate
+      dueDate: dueDate,
+      priority: priority || null // Set priority or default to null
     }));
   };
 
@@ -108,15 +125,20 @@ const NewTask: React.FC = () => {
           Add Task
         </button>
 
+        <PrioritySelect
+          selected={priority}
+          onChange={(e) => setPriority(e.target.value)}
+        />
+
         <DatePicker
           selected={selectedDate}
-          onChange={(date) => setSelectedDate(date)} // Update state with selected date
+          onChange={(date: Date) => setSelectedDate(format(date, "yyyy-MM-dd"))} // Update state with selected date
           className="ml-2 border border-gray-300 rounded-md p-2"
           placeholderText="Select Due Date"
           dateFormat="yyyy-MM-dd"
         />
       </div>
-    </form>
+    </form >
   );
 };
 
