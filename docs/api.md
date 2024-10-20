@@ -79,3 +79,47 @@ The request body must be a JSON object containing the following fields:
   "completed": false,
   "dueDate": null
 }
+```
+
+## completed image
+
+This endpoint is used to add a new image as completed image
+
+### Request
+
+**POST** `/api/upload/`
+
+#### Body
+
+The request body must be a JSON object containing the following fields:
+
+- **`taks_id`**: `string`  
+   the related task_id
+- **`image`**: `image`  
+   the related task_id
+
+**Example Request Body**:
+
+```json
+{
+  task_id: 14,
+  image: IMage,
+}
+```
+
+### Success Response
+
+- **Status Code**: `201 Created`
+
+- **Description**: This response indicates that the task was successfully created.
+
+- **Body**: The response body will contain the newly created task object.
+
+**Example Response Body**:
+
+```json
+{
+  task_id: 14,
+  image: IMage,
+}
+```
