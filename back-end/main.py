@@ -1,13 +1,14 @@
 from pydantic import BaseModel
 from typing import Optional
 from datetime import date
+from fastapi import Path , Query
 
 
 class Task(BaseModel):
     # request body for task parameters
 
-    id:int = 0
-    title:str
+    id:int
+    title:str = Path(min_length=2 , max_length=50)
     completed:bool = False
     dueDate:date = None
 
