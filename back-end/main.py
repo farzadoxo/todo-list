@@ -4,16 +4,6 @@ from datetime import date
 from fastapi import Path , Query
 
 
-class Task(BaseModel):
-    # request body for task parameters
-
-    id:int
-    title:str = Path(min_length=2 , max_length=50)
-    completed:bool = False
-    dueDate:date = None
-
-
-
 # raw class for tests
 class ToDoList:
     """  Create a task , when its complete take a picture or video 
