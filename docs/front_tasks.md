@@ -15,9 +15,11 @@
 - [x] due date in tasks
 - [x] pirority in new task
 - [x] pirority recognizer in new task
-- [-] editing tasks
-- [ ] completed tasks component
+- [x] editing tasks
 - [ ] deleting tasks
-- [ ] adding video to task as `completed video`
-- [ ] flash when taking picture
 - [ ] mobile view
+- [ ] changing the dueDate
+- [ ] adding notes to task
+- [ ] adding video to task as `completed video`
+- [ ] completed tasks component styles
+- [ ] flash when taking picture

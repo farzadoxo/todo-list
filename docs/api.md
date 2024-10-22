@@ -123,3 +123,34 @@ The request body must be a JSON object containing the following fields:
   image: IMage,
 }
 ```
+
+## Updating a task
+
+updates the task data
+
+### Request
+
+`PATCH /api/todos/[id]`
+
+{
+  "title": "Buy groceries",
+  "completed": false,
+  "dueDate": null
+}
+
+NOTE: partial task updates are possible
+
+### Response
+
+updated task data
+
+#### Success Response (200 OK)
+
+```json
+{
+  "id": 1,
+  "title": "Complete project documentation",
+  "completed": false,
+  "dueDate": "2024-10-15"
+}
+```
