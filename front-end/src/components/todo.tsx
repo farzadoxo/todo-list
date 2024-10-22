@@ -3,7 +3,7 @@ import Checkbox from "./checkbox";
 import { TodoType } from "../types";
 import { useTodosListState } from "../store";
 import PhotoIconWithModal from "./choosePhotoModal";
-import { EditIcon } from "lucide-react";
+import { DeleteIcon, EditIcon } from "lucide-react";
 
 interface Option {
   icon: React.FC;
@@ -17,9 +17,10 @@ interface Options {
 
 interface DropdownButtonProps {
   onEdit: () => void;
+  onDelete: () => void;
 }
 
-const DropdownButton: React.FC<DropdownButtonProps> = ({ onEdit }) => {
+const DropdownButton: React.FC<DropdownButtonProps> = ({ onEdit, onDelete }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -29,6 +30,14 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({ onEdit }) => {
       text: "Edit",
       onClick: () => {
         onEdit();
+        setIsOpen(false);
+      }
+    },
+    delete: {
+      icon: DeleteIcon,
+      text: "Delete",
+      onClick: () => {
+        onDelete();
         setIsOpen(false);
       }
     }
@@ -113,6 +122,12 @@ const Todo: React.FC<TodoType> = ({ id, title, completed, dueDate }) => {
     setIsEditing(true);
   };
 
+
+  const handleDelete = () => {
+    taskStore.deleteTodo(id)
+    console.log("deleteTodo")
+  }
+
   const handleSave = () => {
     const updatedTask = {
       id,
@@ -164,7 +179,7 @@ const Todo: React.FC<TodoType> = ({ id, title, completed, dueDate }) => {
             color="blue"
             onImageSelected={handleImageSelected}
           />
-          <DropdownButton onEdit={handleEdit} />
+          <DropdownButton onEdit={handleEdit} onDelete={handleDelete} />
         </>
       )}
     </li>
