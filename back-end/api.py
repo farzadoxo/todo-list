@@ -111,11 +111,11 @@ def new_task(reqbody:NewTaskReqBody):
 def task_completed(reqbody:TaskCompletedReqBody):
     try:
         DataBase.cursor.execute(f"SELECT * FROM todos WHERE id = {reqbody.task_id}")
-        item = DataBase.cursor.fetchone()
+        task = DataBase.cursor.fetchone()
     except HTTPException or Exception as error:
         print(error)
     # --------------Update completed field to true---------------
-    if item != None:
+    if task != None:
         DataBase.cursor.execute(f"UPDATE todos SET completed = true WHERE id = {reqbody.task_id}")
         DataBase.connection.commit()
     else :
