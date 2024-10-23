@@ -33,6 +33,14 @@ class TaskCompletedReqBody(BaseModel):
 
 
 
+class UpdateTaskReqBody(BaseModel):
+
+    title : Optional[str] = None
+    completed : Optional[bool] = None
+    dueDate : Optional[str] = None
+
+
+
 # class ResMod(BaseModel):
 #     id : int
 #     title : str
@@ -98,6 +106,7 @@ def new_task(reqbody:NewTaskReqBody):
 
 
 
+
 @api.post('/api/upload' , status_code=status.HTTP_201_CREATED , description= "Task was successfully completed")
 def task_completed(reqbody:TaskCompletedReqBody):
     try:
@@ -105,7 +114,7 @@ def task_completed(reqbody:TaskCompletedReqBody):
         item = DataBase.cursor.fetchone()
     except HTTPException or Exception as error:
         print(error)
-    # --------------Update completed field to true (completed)----------------------------
+    # --------------Update completed field to true---------------
     if item != None:
         DataBase.cursor.execute(f"UPDATE todos SET completed = true WHERE id = {reqbody.task_id}")
         DataBase.connection.commit()
@@ -113,3 +122,26 @@ def task_completed(reqbody:TaskCompletedReqBody):
         return "Task not found in database!!!"
         
     return reqbody
+
+
+
+
+
+@api.patch('/api/todos/{id}' , status_code=status.HTTP_200_OK)
+def update_task(reqbody:UpdateTaskReqBody , id:int):
+
+    try:
+        DataBase.cursor.execute(f"SELECT * FROM todos WHERE id = {id}")
+        task = DataBase.cursor.fetchone()
+        # Update task :
+        if reqbody.title != None and reqbody.title != task[1]:
+            DataBase.cursor.execute(f"UPDATE todos SET title = {reqbody.title} WHERE id = {id}")
+            DataBase.connection.commit()
+        elif reqbody.completed != None :
+            DataBase.cursor.execute(f"UPDATE todos SET completed = {reqbody.completed} WHERE id = {id}")
+            DataBase.connection.commit()
+        elif reqbody.dueDate != None and reqbody.dueDate != task[3]:
+            DataBase.cursor.execute(f"UPDATE todos SET dueDate = {reqbody.dueDate} WHERE id = {id}")
+            DataBase.connection.commit()
+    except HTTPException as httperror :
+        print(httperror)
