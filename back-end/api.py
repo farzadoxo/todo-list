@@ -64,7 +64,7 @@ class DataBase:
 
 
 
-@api.get('/api/alltodos' , status_code=status.HTTP_200_OK)
+@api.get('/api/todos' , status_code=status.HTTP_200_OK)
 def all_todos():
     # fetch todos from database
     DataBase.cursor.execute("SELECT * FROM todos")
