@@ -1,10 +1,8 @@
 from random import randint
-from PIL.Image import Image
-from fastapi import FastAPI , Path , Query , status , HTTPException 
+from fastapi import FastAPI , status , HTTPException 
 from pydantic import BaseModel
 from typing import Optional
 import sqlite3
-import json
 
 
 # api instanse
