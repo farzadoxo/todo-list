@@ -43,6 +43,7 @@ class TaskCompletedReqBody(BaseModel):
 
 
 
+
 class DataBase:
     """For use this class you should create a table called 'todos' 
     with coloumns : id-title-completed-dueDate
@@ -56,11 +57,14 @@ class DataBase:
 
 
 
+
 @api.get('/api/alltodos' , status_code=status.HTTP_200_OK)
 def all_todos():
+    # fetch todos from database
     DataBase.cursor.execute("SELECT * FROM todos")
     items = DataBase.cursor.fetchall()
-    print(items)
+
+    return {"todos" : items}
 
 
 
@@ -98,10 +102,16 @@ def new_task(reqbody:NewTaskReqBody):
 
 @api.post('/api/upload' , status_code=status.HTTP_201_CREATED , description= "Task was successfully completed")
 def task_completed(reqbody:TaskCompletedReqBody):
-    DataBase.cursor.execute(f"SELECT * FROM todos WHERE id = {reqbody.task_id}")
-    item = DataBase.cursor.fetchone()
+    try:
+        DataBase.cursor.execute(f"SELECT * FROM todos WHERE id = {reqbody.task_id}")
+        item = DataBase.cursor.fetchone()
+    except HTTPException or Exception as error:
+        print(error)
     # --------------Update completed field to true (completed)----------------------------
-
-    DataBase.cursor.execute(f"UPDATE todos SET completed = true WHERE id = {reqbody.task_id}")
-    DataBase.connection.commit()
+    if item != None:
+        DataBase.cursor.execute(f"UPDATE todos SET completed = true WHERE id = {reqbody.task_id}")
+        DataBase.connection.commit()
+    else :
+        return "Task not found in database!!!"
+        
     return reqbody
