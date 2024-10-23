@@ -11,11 +11,15 @@
 - [x] choosing image from user's gallery
 - [x] switching cameras
 - [x] adding photo to task as `completed picture`
-- [ ] pirority in tasks
-- [ ] due date in tasks
-- [ ] editing tasks
-- [ ] completed tasks component
-- [ ] deleting tasks
+- [x] due date recognizer in new task input
+- [x] due date in tasks
+- [x] pirority in new task
+- [x] pirority recognizer in new task
+- [x] editing tasks
+- [x] deleting tasks
+- [ ] mobile view
+- [ ] changing the dueDate
+- [ ] adding notes to task
 - [ ] adding video to task as `completed video`
+- [ ] completed tasks component styles
 - [ ] flash when taking picture
-- [ ] taking photo with user's phone

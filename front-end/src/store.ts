@@ -5,6 +5,7 @@ interface TodosListState {
   todosList: TodoType[];
   addTodo: (task: TodoType) => void;
   setTodo: (tasks: TodoType[]) => void;
+  deleteTodo: (id: number) => void;
   clearTodosList: () => void;
   modifyTodo: (id: number, newTodo: TodoType) => void;
 }

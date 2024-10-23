@@ -39,8 +39,8 @@ mock.onGet('/api/todos/').reply(200, {
 
 // Mocking a POST request to /api/todos
 mock.onPost('/api/todos/').reply((config) => {
-  const { title, completed } = JSON.parse(config.data); // Parse the request body
-  return [201, { id: Math.random(), title, completed }]; // Respond with a new todo object
+  const { title, completed, dueDate } = JSON.parse(config.data); // Parse the request body
+  return [201, { id: Math.random(), title, completed, dueDate }]; // Respond with a new todo object
 });
 
 // Mock the POST request for image uploads
