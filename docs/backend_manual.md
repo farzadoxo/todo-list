@@ -21,6 +21,11 @@ todos table have 4 column :
 | `title`  | `STRING` |
 | `completed` | `BOOLEAN` |
 | `dueDate` | `STRING-NULL` |
+
+# How to run server/API
+1. Install package and librarys 
+2. Create database file and make table
+3. Run `main.py` file
 <h3>Use API</h3>
 For send request to api use a browser or app for work with api (postman or somthing else)
 <h4>Body reqyests</h4>
