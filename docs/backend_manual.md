@@ -3,7 +3,7 @@
 
 Use `requirements.txt` for install module and librarys or use following command :
 
-`pip install fastapi[orginal]`
+`pip install fastapi[standard]`
 
 (All libraries are installed by use this command)
 
