@@ -63,7 +63,7 @@ def task_completed(reqbody:TaskCompletedReqBody):
         DataBase.cursor.execute(f"UPDATE todos SET completed = true WHERE id = {reqbody.task_id}")
         DataBase.connection.commit()
     else :
-        return "Task not found in database!!!"
+        return "Task Not Found !"
         
     return reqbody
 
@@ -89,3 +89,21 @@ def update_task(reqbody:UpdateTaskReqBody , id:int):
             DataBase.connection.commit()
     except HTTPException as httperror :
         print(httperror)
+
+
+
+
+
+@router.delete('/api/todos/{id}' , status_code=status.HTTP_200_OK)
+def delete_task(id:int):
+    # Fetch task from database
+    DataBase.cursor.execute(f"SELECT * FROM todos WHERE id = {id}")
+    task = DataBase.cursor.fetchone()
+
+    # Delete task :
+    if task != None:
+        DataBase.cursor.execute(f"DELETE FROM todos WHERE id = {id}")
+        DataBase.connection.commit()
+        return "Task was successfully deleted from Database"
+    else:
+        return "Task Not Found !" , 
