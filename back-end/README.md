@@ -1,4 +1,3 @@
-# Manual for BackEnd
 <h3>Installing Package</h3>
 
 Use `requirements.txt` for install module and libraries or use following command :
