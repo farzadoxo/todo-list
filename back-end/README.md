@@ -1,13 +1,12 @@
-# Manual for BackEnd
 <h3>Installing Package</h3>
 
-Use `requirements.txt` for install module and librarys or use following command :
+Use `requirements.txt` for install module and libraries or use following command :
 
-`pip install fastapi[orginal]`
+`pip install fastapi[standard]`
 
 (All libraries are installed by use this command)
 
-installed modules and librarys : ***`fastapi - uvicorn - pydantic - typing - jinja2`***
+installed modules and libraries : ***`fastapi - uvicorn - pydantic - typing - jinja2`***
 
 <h3>DataBase</h3>
 
@@ -23,7 +22,7 @@ todos table have 4 column :
 | `dueDate` | `STRING-NULL` |
 
 # How to run server/API
-1. Install package and librarys 
+1. Install package and libraries 
 2. Create database file and make table
 3. Run `main.py` file
 <h3>Use API</h3>
