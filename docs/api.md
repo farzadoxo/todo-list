@@ -132,17 +132,42 @@ updates the task data
 
 `PATCH /api/todos/[id]`
 
+```json
 {
   "title": "Buy groceries",
   "completed": false,
   "dueDate": null
 }
+```
 
 NOTE: partial task updates are possible
 
 ### Response
 
 updated task data
+
+#### Success Response (200 OK)
+
+```json
+{
+  "id": 1,
+  "title": "Complete project documentation",
+  "completed": false,
+  "dueDate": "2024-10-15"
+}
+```
+
+## Updating a task
+
+deletes the task data
+
+### Request
+
+`DELETE /api/todos/[id]`
+
+### Response
+
+deleted task HTTP code
 
 #### Success Response (200 OK)
 

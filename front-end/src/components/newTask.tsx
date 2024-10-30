@@ -3,27 +3,24 @@ import { addDays, format } from 'date-fns';
 import api from '../axios';
 import { useTodosListState } from '../store';
 import type { TodoPostCallType } from '../types';
-import 'react-datepicker/dist/react-datepicker.css'; // Importing styles for DatePicker
-import DatePicker from 'react-datepicker';
-import PrioritySelect from './prioriyLevel';
+import PrioritySelect from './priorityLevel';
+import CustomDatePicker from './customDatePicker';
 
 const NewTask: React.FC = () => {
   const [taskData, setTaskData] = useState<TodoPostCallType>({
     title: '',
     completed: false,
-    dueDate: null
+    dueDate: null,
   });
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [priority, setPriority] = useState<string>("None"); // Default to "None"
+  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+  const [priority, setPriority] = useState<string>("none");
   const taskStore = useTodosListState();
   const contentEditableRef = useRef<HTMLDivElement>(null);
 
-
-
   const handleTextChange = (evt: ChangeEvent<HTMLInputElement>) => {
     const text = evt.target.value;
-    let dueDate: string | null = null;
-    let priority: string | null = null; // Initialize priority variable
+    let dueDate: Date | null = null;
+    let priority: string | null = null;
 
     // Helper function to get the next occurrence of a day
     const getNextDayOfWeek = (day: string): Date | null => {
@@ -43,44 +40,45 @@ const NewTask: React.FC = () => {
     const textArray = text.toLowerCase().split(" ");
     const today = new Date();
 
-    // Check for due dates
     if (textArray.includes("today")) {
-      dueDate = format(today, 'yyyy-MM-dd');
+      dueDate = today
     } else if (textArray.includes("tomorrow")) {
-      dueDate = format(addDays(today, 1), 'yyyy-MM-dd');
+      dueDate = addDays(today, 1)
     } else if (textArray.includes("next")) {
       const dayIndex = textArray.indexOf("next") + 1;
       if (dayIndex < textArray.length) {
         const day = textArray[dayIndex];
         const nextDay = getNextDayOfWeek(day);
         if (nextDay) {
-          dueDate = format(nextDay, 'yyyy-MM-dd');
+          dueDate = new Date(nextDay)
         }
       }
     }
 
-    // Check for priority level based on input text
     const priorityMatch = text.match(/~\s*(low|medium|high)/i);
     if (priorityMatch) {
-      console.log("no heart")
-      priority = priorityMatch[1].toLowerCase(); // Capture the matched priority level
-      setPriority(priority)
+      priority = priorityMatch[1].toLowerCase();
+      setPriority(priority);
+    }
+    let formattedDueDate: string;
+    if (dueDate) {
+
+      formattedDueDate = format(dueDate, "yyyy-MM-dd")
     }
 
-    // Update state with task data
-    setSelectedDate(dueDate)
+    setSelectedDate(dueDate);
+
     setTaskData(prevState => ({
       ...prevState,
       title: text,
-      dueDate: dueDate,
-      priority: priority || null // Set priority or default to null
+      dueDate: formattedDueDate,
+      priority: priority || null,
     }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validate input
     if (!taskData.title.trim()) {
       alert("Task cannot be empty");
       return;
@@ -92,12 +90,16 @@ const NewTask: React.FC = () => {
       if (res.data) {
         taskStore.addTodo(res.data);
         console.log(res.data);
-        setTaskData(prevState => ({
-          ...prevState,
+
+        // Resetting task data
+        setTaskData({
           title: "",
-          dueDate: null // Resetting dueDate after submission
-        }));
-        setSelectedDate(null); // Resetting selected date after submission
+          completed: false,
+          dueDate: null,
+        });
+        setSelectedDate(null);
+
+        // Clear contentEditableRef if needed
         if (contentEditableRef.current) {
           contentEditableRef.current.innerHTML = '';
         }
@@ -108,37 +110,27 @@ const NewTask: React.FC = () => {
     }
   };
 
-
   return (
-    <form onSubmit={handleSubmit} className="mb-4">
-      <div className="flex items-center">
-        <input
-          type='text'
-          onChange={handleTextChange}
-          className="flex-grow p-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-
-        <button
-          type="submit"
-          className="px-4 py-2 bg-blue-500 text-white rounded-r-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          Add Task
+    <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row my-3 mx-1 max-w-md w-full">
+      <div className="flex items-center border border-gray-300 rounded-md w-full">
+        <button type="submit" className="mr-2">
+          <img src="/add-circle-svgrepo-com.svg" width={"30px"} height={"30px"} className='w-6 h-6' alt='add task' />
         </button>
 
-        <PrioritySelect
-          selected={priority}
-          onChange={(e) => setPriority(e.target.value)}
+        <input
+          type='text'
+          value={taskData.title} // Set value here
+          onChange={handleTextChange}
+          className="h-8 p-2 border-none bg-transparent focus:outline-none focus:ring-0 focus:ring-offset-0 flex-grow"
+          placeholder="Add a new task..."
         />
 
-        <DatePicker
-          selected={selectedDate}
-          onChange={(date: Date) => setSelectedDate(format(date, "yyyy-MM-dd"))} // Update state with selected date
-          className="ml-2 border border-gray-300 rounded-md p-2"
-          placeholderText="Select Due Date"
-          dateFormat="yyyy-MM-dd"
-        />
+        {/* Uncomment and implement these components as needed */}
+        <PrioritySelect selected={priority} onValueChangeSetter={setPriority} />
+        <CustomDatePicker selectedDate={selectedDate} onDateChange={setSelectedDate} />
+
       </div>
-    </form >
+    </form>
   );
 };
 

@@ -1,0 +1,16 @@
+services:
+  node_app:
+    build:
+      context: ./front-end/
+      dockerfile: ./Dockerfile.dev
+    expose:
+      - "5173"
+
+  nginx:
+    build:
+      context: ./front-end/
+      dockerfile: ./Dockerfile.dev
+      target: nginx
+    ports:
+      - "80:80"
+      - "443:443"
