@@ -157,7 +157,7 @@ updated task data
 }
 ```
 
-## Updating a task
+## Delete a task
 
 deletes the task data
 
