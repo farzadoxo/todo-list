@@ -66,3 +66,5 @@ New Task : POST >>`/api/todos`
 Upload Pic : POST >> `/api/upload`
 
 Update Task : PATCH >> `/api/todos/{id}`
+
+Find Task : GET >> `api/todos/{id}`
