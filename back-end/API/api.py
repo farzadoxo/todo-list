@@ -106,4 +106,14 @@ def delete_task(id:int):
         DataBase.connection.commit()
         return "Task was successfully deleted from Database"
     else:
-        return "Task Not Found !" , 
+        return "Task Not Found !" 
+    
+
+
+@router.get('/api/todos/{id}')
+def find_task(id:int):
+    # Query in database
+    DataBase.cursor.execute(f"SELECT * FROM todos WHERE id = {id}")
+    task = DataBase.cursor.fetchone()
+    # 
+    return task
