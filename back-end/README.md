@@ -67,4 +67,4 @@ Upload Pic : POST >> `/api/upload`
 
 Update Task : PATCH >> `/api/todos/{id}`
 
-Find Task : GET >> `api/todos/{id}`
+Find Task : GET >> `api/todos/find/{id}`
