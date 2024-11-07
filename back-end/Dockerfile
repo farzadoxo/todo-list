@@ -1,0 +1,23 @@
+# Use the official Python image from the Docker Hub
+FROM python:3.9
+
+# Set the working directory inside the container
+WORKDIR /backend
+
+# Copy the requirements file into the container
+COPY requirements.txt .
+
+# Install any needed packages specified in requirements.txt
+RUN pip install --upgrade pip && pip install --trusted-host https://mirror-pypi.runflare.com -i https://mirror-pypi.runflare.com/simple/ -r requirements.txt
+
+# Copy the rest of your application code into the container
+COPY . .
+
+# Run the database initialization script
+RUN python ./DATABASE/init_db.py
+
+# Expose the port that Uvicorn will run on
+EXPOSE 8000
+
+# Command to run the FastAPI application using Uvicorn
+CMD ["python3", "main.py"]

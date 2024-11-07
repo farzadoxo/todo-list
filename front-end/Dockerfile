@@ -1,4 +1,3 @@
-
 FROM node:22-alpine AS node_app
 
 # Set the working directory in the container
@@ -14,7 +13,7 @@ RUN npm config set registry https://registry.yarnpkg.com && npm install
 COPY . .
 
 # Expose the port the app runs on
-EXPOSE 443
+EXPOSE 5173
 
 # Start the app
 CMD ["npm", "run", "dev"]
