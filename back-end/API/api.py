@@ -112,10 +112,22 @@ def delete_task(id:int):
 
 
 
-@router.get('/api/todos/{id}')
+@router.get('/api/todos/find/{id}')
 def find_task(id:int):
+
     # Query in database
-    DataBase.cursor.execute(f"SELECT * FROM todos WHERE id = {id}")
-    task = DataBase.cursor.fetchone()
-    # 
-    return task
+    try:
+        DataBase.cursor.execute(f"SELECT * FROM todos WHERE id = {id}")
+        task = DataBase.cursor.fetchone()
+    except Exception or HTTPException as error:
+        print(error)
+
+    # Make responive json model
+    response_model = {
+        "id": task[0],
+        "title" : task[1],
+        "completed" : task[2],
+        "dueDate" : task[3]
+    }
+
+    return response_model
