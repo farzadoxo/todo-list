@@ -26,7 +26,7 @@ const CustomDatePickerInput: React.FC<CustomDatePickerInputProps> = ({ value, on
       height={"30px"}
       viewBox="0 0 24 24"
       fill="currentColor"
-      className="fill-current hover:fill-blue-500" // Allow Tailwind classes for color
+      className="fill-current hover:fill-blue-500"
     >
       <path d="M20 10V7C20 5.89543 19.1046 5 18 5H6C4.89543 5 4 5.89543 4 7V10M20 10V19C20 20.1046 19.1046 21 18 21H6C4.89543 21 4 20.1046 4 19V10M20 10H4M8 3V7M16 3V7" stroke="#000000" strokeWidth="1" strokeLinecap="round" />
       <rect x="6" y="12" width="3" height="3" rx="0.5" fill="#000000" />
@@ -52,12 +52,8 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({ selectedDate, onDat
           onDateChange(todayDate); // Fallback to today’s date if date is null
         }
       }}
-      customInput={
-        <CustomDatePickerInput
-          value={selectedDate ? format(new Date(selectedDate), "yyyy-MM-dd") : ""} // Ensure value is a string
-          onClick={() => { }}
-        />
-      }
+      customInput={<CustomDatePickerInput value={selectedDate ? format(new Date(selectedDate), "yyyy-MM-dd") : ""} onClick={() => { }} />}
+      popperPlacement="left-start" // TODO: Adjust placement for mobile view based on screen size
     />
   );
 };
