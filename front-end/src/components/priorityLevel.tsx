@@ -23,7 +23,7 @@ const PriorityDropDownMenu: React.FC<PriorityDropDownMenuProps> = ({ selected = 
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 52 52"
           fill="currentColor"
-          className="w-8 h-8 min-w-8 sm:w-10 sm:h-10" // Responsive size
+          className="w-8 h-8 min-w-8 " // Responsive size
         >
           <g>
             <path d="M9,3.5C9,2.7,8.3,2,7.5,2h-3C3.7,2,3,2.7,3,3.5v45C3,49.3,3.7,50,4.5,50h3C8.3,50,9,49.3,9,48.5V3.5z" />

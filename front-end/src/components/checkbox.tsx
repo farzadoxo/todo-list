@@ -4,6 +4,7 @@ interface CheckboxProps {
   id: number;
   checked: boolean;
   onChange: (checked: boolean) => void;
+  className?: string;
 }
 
 const Checkbox: React.FC<CheckboxProps> = ({ id, checked, onChange }) => {

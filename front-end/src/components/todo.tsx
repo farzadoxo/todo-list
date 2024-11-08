@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Checkbox from "./checkbox";
-import { TodoType } from "../types";
+import Checkbox from "./checkbox"; // Ensure Checkbox has correct props
+import { TodoType } from "../types"; // Ensure TodoType is defined correctly
 import { useTodosListState } from "../store";
 import PhotoIconWithModal from "./choosePhotoModal";
 import { DeleteIcon, EditIcon } from "lucide-react";
 
 interface Option {
-  icon: React.FC;
+  icon: React.FC<React.SVGProps<SVGSVGElement>>;
   text: string;
   onClick: () => void;
 }
@@ -21,7 +21,7 @@ interface DropdownButtonProps {
 }
 
 const DropdownButton: React.FC<DropdownButtonProps> = ({ onEdit, onDelete }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const options: Options = {
@@ -41,10 +41,10 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({ onEdit, onDelete }) => 
         setIsOpen(false);
       }
     }
-  }
+  };
 
   const toggleDropdown = () => {
-    setIsOpen(!isOpen);
+    setIsOpen(prev => !prev);
   };
 
   const closeDropdown = () => {
@@ -53,7 +53,6 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({ onEdit, onDelete }) => 
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      // this function closes the dropdown if user clicks outside the dropdown div
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         closeDropdown();
       }
@@ -69,23 +68,25 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({ onEdit, onDelete }) => 
     <div className="relative inline-block text-left" ref={dropdownRef}>
       <button
         type="button"
-        className="flex items-center justify-center w-10 h-10 m-2 p-0 text-white bg-transparent rounded-full hover:bg-gray-600 transition duration-200"
+        className="flex items-center justify-center w-10 h-10 bg-transparent rounded-full hover:bg-gray-200 transition duration-200 focus:outline-none"
         onClick={toggleDropdown}
+        aria-haspopup="true"
+        aria-expanded={isOpen}
       >
-        ...
+        <span className="text-gray-600">...</span>
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 z-10 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-          <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+        <div className="absolute right-0 z-10 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+          <div className="py-1" role="menu" aria-orientation="vertical">
             {Object.entries(options).map(([key, option]) => (
               <button
                 key={key}
-                className="flex flex-row px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
                 onClick={option.onClick}
               >
-                <option.icon />
-                <span className="mx-2">{option.text}</span>
+                <option.icon className="w-4 h-4 mr-2" />
+                <span>{option.text}</span>
               </button>
             ))}
           </div>
@@ -93,13 +94,13 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({ onEdit, onDelete }) => 
       )}
     </div>
   );
-}
+};
 
 const Todo: React.FC<TodoType> = ({ id, title, completed, dueDate }) => {
   const taskStore = useTodosListState();
-  const [isCompleted, setIsCompleted] = useState(completed);
-  const [isEditing, setIsEditing] = useState(false);
-  const [editedTitle, setEditedTitle] = useState(title);
+  const [isCompleted, setIsCompleted] = useState<boolean>(completed);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [editedTitle, setEditedTitle] = useState<string>(title);
 
   const handleTodoToggle = () => {
     const updatedTask = {
@@ -115,18 +116,17 @@ const Todo: React.FC<TodoType> = ({ id, title, completed, dueDate }) => {
   const handleImageSelected = (file: File) => {
     console.log('Selected file:', file);
     const imageUrl = URL.createObjectURL(file);
-    console.log("image url: ", imageUrl)
+    console.log("image url:", imageUrl);
   };
 
   const handleEdit = () => {
     setIsEditing(true);
   };
 
-
   const handleDelete = () => {
-    taskStore.deleteTodo(id)
-    console.log("deleteTodo")
-  }
+    taskStore.deleteTodo(id);
+    console.log("deleteTodo");
+  };
 
   const handleSave = () => {
     const updatedTask = {
@@ -135,40 +135,41 @@ const Todo: React.FC<TodoType> = ({ id, title, completed, dueDate }) => {
       completed: isCompleted,
       dueDate,
     };
-    // this is should be replaced with api call and the result should be given to the modifyTodo method
-    taskStore.modifyTodo(id, updatedTask);
+    taskStore.modifyTodo(id, updatedTask); // Assuming this updates the state correctly
     setIsEditing(false);
   };
 
   return (
     <li
       key={id}
-      className={`flex items-center justify-between p-3 m-1 min-w-14 font-bold dark:text-white text-lg rounded border border-gray-600 ${isCompleted ? 'completeTask' : ''}`}
+      className={`flex items-center justify-between p-4 my-1 bg-white rounded-lg shadow-md transition-all duration-300 ${isCompleted ? 'bg-green-100' : 'bg-white'} border border-gray-300`}
     >
       <div className="flex items-center flex-grow">
         <Checkbox
           id={id}
           checked={isCompleted}
           onChange={handleTodoToggle}
+          className="mr-3"
         />
         {isEditing ? (
           <input
             type="text"
             value={editedTitle}
             onChange={(e) => setEditedTitle(e.target.value)}
-            className="ml-2 bg-transparent border-b border-gray-600 focus:outline-none"
+            className="flex-grow p-2 border-b border-gray-400 focus:outline-none focus:border-blue-500 transition duration-200"
             autoFocus
           />
         ) : (
-          <span className={`ml-2 ${isCompleted ? 'line-through font-light text-gray-200' : ''}`}>
+          <span className={`ml-2 text-lg ${isCompleted ? 'line-through text-gray-400' : 'text-gray-800'}`}>
             {title}
           </span>
         )}
       </div>
+
       {isEditing ? (
         <button
           onClick={handleSave}
-          className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+          className="px-3 py-1 ml-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-200"
         >
           Save
         </button>
@@ -184,6 +185,6 @@ const Todo: React.FC<TodoType> = ({ id, title, completed, dueDate }) => {
       )}
     </li>
   );
-}
+};
 
 export default Todo;
