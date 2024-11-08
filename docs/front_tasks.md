@@ -17,10 +17,14 @@
 - [x] pirority recognizer in new task
 - [x] editing tasks
 - [x] deleting tasks
-- [ ] mobile view
-- [ ] upload button function in add picture
+- [x] mobile view
+- [x] completed tasks component styles
+- [ ] connecting to the server
+- [-] style for pirority on todo component
+- [ ] confirm dialog for deleting a todo
 - [ ] changing the dueDate
-- [ ] adding notes to task
-- [ ] adding video to task as `completed video`
-- [ ] completed tasks component styles
 - [ ] flash when taking picture
+- [ ] seperating complete and uncomplete tasks
+- [ ] nav bar
+- [ ] adding video to task as `completed video`
+- [ ] adding notes to task

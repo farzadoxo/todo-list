@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Checkbox from "./checkbox"; // Ensure Checkbox has correct props
-import { TodoType } from "../types"; // Ensure TodoType is defined correctly
+import Checkbox from "./checkbox";
+import { TodoType } from "../types";
 import { useTodosListState } from "../store";
 import PhotoIconWithModal from "./choosePhotoModal";
 import { DeleteIcon, EditIcon } from "lucide-react";
@@ -96,7 +96,7 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({ onEdit, onDelete }) => 
   );
 };
 
-const Todo: React.FC<TodoType> = ({ id, title, completed, dueDate }) => {
+const Todo: React.FC<TodoType> = ({ id, title, completed, dueDate, priority }) => {
   const taskStore = useTodosListState();
   const [isCompleted, setIsCompleted] = useState<boolean>(completed);
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -108,6 +108,7 @@ const Todo: React.FC<TodoType> = ({ id, title, completed, dueDate }) => {
       title,
       completed: !isCompleted,
       dueDate,
+      priority,
     };
     taskStore.modifyTodo(id, updatedTask);
     setIsCompleted(!isCompleted);
@@ -134,6 +135,7 @@ const Todo: React.FC<TodoType> = ({ id, title, completed, dueDate }) => {
       title: editedTitle,
       completed: isCompleted,
       dueDate,
+      priority,
     };
     taskStore.modifyTodo(id, updatedTask); // Assuming this updates the state correctly
     setIsEditing(false);
@@ -142,7 +144,7 @@ const Todo: React.FC<TodoType> = ({ id, title, completed, dueDate }) => {
   return (
     <li
       key={id}
-      className={`flex items-center justify-between p-4 my-1 bg-white rounded-lg shadow-md transition-all duration-300 ${isCompleted ? 'bg-green-100' : 'bg-white'} border border-gray-300`}
+      className={`flex items-center justify-between p-4 my-1 bg-white rounded-lg shadow-md transition-all duration-300 ${isCompleted ? 'bg-green-100' : 'bg-white'} border border-gray-300 priority-${priority}`}
     >
       <div className="flex items-center flex-grow">
         <Checkbox
