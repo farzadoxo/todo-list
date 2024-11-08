@@ -4,6 +4,8 @@ import { TodoType } from "../types";
 import { useTodosListState } from "../store";
 import PhotoIconWithModal from "./choosePhotoModal";
 import { DeleteIcon, EditIcon } from "lucide-react";
+import { Modal } from 'react-responsive-modal'; // Importing Modal
+import 'react-responsive-modal/styles.css'; // Importing styles for the modal
 
 interface Option {
   icon: React.FC<React.SVGProps<SVGSVGElement>>;
@@ -102,6 +104,9 @@ const Todo: React.FC<TodoType> = ({ id, title, completed, dueDate, priority }) =
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [editedTitle, setEditedTitle] = useState<string>(title);
 
+  // State for delete confirmation modal
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
+
   const handleTodoToggle = () => {
     const updatedTask = {
       id,
@@ -124,9 +129,16 @@ const Todo: React.FC<TodoType> = ({ id, title, completed, dueDate, priority }) =
     setIsEditing(true);
   };
 
-  const handleDelete = () => {
-    taskStore.deleteTodo(id);
+  // Open delete confirmation modal
+  const handleDeleteModalOpen = () => {
+    setIsDeleteModalOpen(true); // Open confirmation modal
+  };
+
+  // Confirm deletion
+  const confirmDelete = () => {
+    taskStore.deleteTodo(id); // Call delete function
     console.log("deleteTodo");
+    setIsDeleteModalOpen(false); // Close modal after deletion
   };
 
   const handleSave = () => {
@@ -142,50 +154,72 @@ const Todo: React.FC<TodoType> = ({ id, title, completed, dueDate, priority }) =
   };
 
   return (
-    <li
-      key={id}
-      className={`flex items-center justify-between p-4 my-1 bg-white rounded-lg shadow-md transition-all duration-300 ${isCompleted ? 'bg-green-100' : 'bg-white'} border border-gray-300 priority-${priority}`}
-    >
-      <div className="flex items-center flex-grow">
-        <Checkbox
-          id={id}
-          checked={isCompleted}
-          onChange={handleTodoToggle}
-          className="mr-3"
-        />
-        {isEditing ? (
-          <input
-            type="text"
-            value={editedTitle}
-            onChange={(e) => setEditedTitle(e.target.value)}
-            className="flex-grow p-2 border-b border-gray-400 focus:outline-none focus:border-blue-500 transition duration-200"
-            autoFocus
+    <>
+      <li
+        key={id}
+        className={`flex items-center justify-between p-4 my-1 bg-white rounded-lg shadow-md transition-all duration-300 ${isCompleted ? 'bg-green-100' : 'bg-white'} border border-gray-300 priority-${priority}`}
+      >
+        <div className="flex items-center flex-grow">
+          <Checkbox
+            id={id}
+            checked={isCompleted}
+            onChange={handleTodoToggle}
+            className="mr-3"
           />
-        ) : (
-          <span className={`ml-2 text-lg ${isCompleted ? 'line-through text-gray-400' : 'text-gray-800'}`}>
-            {title}
-          </span>
-        )}
-      </div>
+          {isEditing ? (
+            <input
+              type="text"
+              value={editedTitle}
+              onChange={(e) => setEditedTitle(e.target.value)}
+              className="flex-grow p-2 border-b border-gray-400 focus:outline-none focus:border-blue-500 transition duration-200"
+              autoFocus
+            />
+          ) : (
+            <span className={`ml-2 text-lg ${isCompleted ? 'line-through text-gray-400' : 'text-gray-800'}`}>
+              {title}
+            </span>
+          )}
+        </div>
 
-      {isEditing ? (
-        <button
-          onClick={handleSave}
-          className="px-3 py-1 ml-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-200"
-        >
-          Save
-        </button>
-      ) : (
-        <>
-          <PhotoIconWithModal
-            size={32}
-            color="blue"
-            onImageSelected={handleImageSelected}
-          />
-          <DropdownButton onEdit={handleEdit} onDelete={handleDelete} />
-        </>
-      )}
-    </li>
+        {isEditing ? (
+          <button
+            onClick={handleSave}
+            className="px-3 py-1 ml-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-200"
+          >
+            Save
+          </button>
+        ) : (
+          <>
+            <PhotoIconWithModal
+              size={32}
+              color="blue"
+              onImageSelected={handleImageSelected}
+            />
+            <DropdownButton onEdit={handleEdit} onDelete={handleDeleteModalOpen} />
+          </>
+        )}
+      </li>
+
+      {/* Delete Confirmation Modal */}
+      <Modal open={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)} center>
+        <h2>Delete Task?</h2>
+        <p>Are you sure you want to delete this todo item?</p>
+        <div className="flex justify-end mt-4">
+          <button
+            onClick={() => setIsDeleteModalOpen(false)}
+            className="px-4 py-2 mr-2 text-gray-600 border border-gray-300 rounded hover:bg-gray-100"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={confirmDelete}
+            className="px-4 py-2 text-white bg-red-600 rounded hover:bg-red-700"
+          >
+            Delete
+          </button>
+        </div>
+      </Modal>
+    </>
   );
 };
 

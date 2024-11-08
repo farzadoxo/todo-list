@@ -19,9 +19,10 @@
 - [x] deleting tasks
 - [x] mobile view
 - [x] completed tasks component styles
+- [x] style for pirority on todo component
+- [x] style for pirority on pirorityLevel component
+- [x] confirm dialog for deleting a todo
 - [ ] connecting to the server
-- [-] style for pirority on todo component
-- [ ] confirm dialog for deleting a todo
 - [ ] changing the dueDate
 - [ ] flash when taking picture
 - [ ] seperating complete and uncomplete tasks
