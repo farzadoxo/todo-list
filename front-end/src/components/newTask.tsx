@@ -41,16 +41,16 @@ const NewTask: React.FC = () => {
     const today = new Date();
 
     if (textArray.includes("today")) {
-      dueDate = today
+      dueDate = today;
     } else if (textArray.includes("tomorrow")) {
-      dueDate = addDays(today, 1)
+      dueDate = addDays(today, 1);
     } else if (textArray.includes("next")) {
       const dayIndex = textArray.indexOf("next") + 1;
       if (dayIndex < textArray.length) {
         const day = textArray[dayIndex];
         const nextDay = getNextDayOfWeek(day);
         if (nextDay) {
-          dueDate = new Date(nextDay)
+          dueDate = new Date(nextDay);
         }
       }
     }
@@ -60,13 +60,12 @@ const NewTask: React.FC = () => {
       priority = priorityMatch[1].toLowerCase();
       setPriority(priority);
     }
+
     let formattedDueDate: string;
     if (dueDate) {
-
-      formattedDueDate = format(dueDate, "yyyy-MM-dd")
+      formattedDueDate = format(dueDate, "yyyy-MM-dd");
+      setSelectedDate(dueDate);
     }
-
-    setSelectedDate(dueDate);
 
     setTaskData(prevState => ({
       ...prevState,
@@ -111,21 +110,22 @@ const NewTask: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row my-3 mx-1 sm:mx-2 max-w-md w-full">
-      <div className="flex items-center border border-gray-300 rounded-md w-full">
-        <button type="submit" className="mr-2">
-          <img src="/add-circle-svgrepo-com.svg" width={"30px"} height={"30px"} className='w-8 h-8 min-w-8' alt='add task' />
+    <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row my-3 mx-1 sm:mx-2 max-w-md w-full bg-white shadow-lg rounded-lg">
+      <div className="flex items-center border border-gray-300 rounded-md w-full bg-gray-50 focus-within:ring-2 focus-within:ring-blue-500 transition duration-200">
+
+        <button type="submit" className="flex items-center justify-center p-2 bg-blue-500 text-white rounded-l-md hover:bg-blue-600 transition duration-200">
+          <img src="/add-circle-svgrepo-com.svg" width={"30px"} height={"30px"} alt='add task' />
         </button>
 
         <input
           type='text'
-          value={taskData.title} // Set value here
+          value={taskData.title}
           onChange={handleTextChange}
-          className="h-8 p-2 border-none bg-transparent focus:outline-none focus:ring-0 focus:ring-offset-0 flex-grow"
+          className="h-6 p-2 border-none bg-transparent focus:outline-none flex-grow placeholder-gray-400"
           placeholder="Add a new task..."
+          aria-label="New task input"
         />
 
-        {/* Uncomment and implement these components as needed */}
         <PrioritySelect selected={priority} onValueChangeSetter={setPriority} />
         <CustomDatePicker selectedDate={selectedDate} onDateChange={setSelectedDate} />
 
