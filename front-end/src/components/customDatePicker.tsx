@@ -33,7 +33,7 @@ const CustomDatePickerInput: React.FC<CustomDatePickerInputProps> = ({ value, on
       <rect x="10.5" y="12" width="3" height="3" rx="0.5" fill="#000000" />
       <rect x="15" y="12" width="3" height="3" rx="0.5" fill="#000000" />
     </svg>
-    <span className='text-sky-400 hover:text-blue-500 transition duration-300 ease-in-out'>
+    <span className='text-sky-400 hover:text-blue-700 font-bold transition duration-300 ease-in-out hidden sm:block'>
       {value || "Select Date"}
     </span>
   </button>

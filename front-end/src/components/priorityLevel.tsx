@@ -21,11 +21,9 @@ const PriorityDropDownMenu: React.FC<PriorityDropDownMenuProps> = ({ selected = 
       <DropdownMenuTrigger asChild>
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width={"30px"}
-          height={"30px"}
           viewBox="0 0 52 52"
           fill="currentColor"
-          className={`fill-current hover:fill-red-500`} // Allow Tailwind classes for color
+          className="w-8 h-8 min-w-8 sm:w-10 sm:h-10" // Responsive size
         >
           <g>
             <path d="M9,3.5C9,2.7,8.3,2,7.5,2h-3C3.7,2,3,2.7,3,3.5v45C3,49.3,3.7,50,4.5,50h3C8.3,50,9,49.3,9,48.5V3.5z" />

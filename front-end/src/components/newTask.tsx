@@ -111,10 +111,10 @@ const NewTask: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row my-3 mx-1 max-w-md w-full">
+    <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row my-3 mx-1 sm:mx-2 max-w-md w-full">
       <div className="flex items-center border border-gray-300 rounded-md w-full">
         <button type="submit" className="mr-2">
-          <img src="/add-circle-svgrepo-com.svg" width={"30px"} height={"30px"} className='w-6 h-6' alt='add task' />
+          <img src="/add-circle-svgrepo-com.svg" width={"30px"} height={"30px"} className='w-8 h-8 min-w-8 sm:w-10 sm:h-10' alt='add task' />
         </button>
 
         <input
