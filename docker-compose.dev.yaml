@@ -1,16 +1,17 @@
 services:
-  node_app:
+  frontend:
     build:
       context: ./front-end/
-      dockerfile: ./Dockerfile.dev
-    expose:
-      - "5173"
-
-  nginx:
-    build:
-      context: ./front-end/
-      dockerfile: ./Dockerfile.dev
-      target: nginx
     ports:
-      - "80:80"
-      - "443:443"
+      - "5173:5173"
+    volumes:
+      - .:/fron-end  # Mount current directory to /app in the container for live updates
+    command: npm run dev  # Override command to run in development mode
+
+  backend:
+    build:
+      context: ./back-end/
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/back-end  # Mount current directory to /app in the container for live updates

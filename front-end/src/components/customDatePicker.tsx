@@ -45,11 +45,17 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({ selectedDate, onDat
   return (
     <DatePicker
       selected={selectedDate ? new Date(selectedDate) : todayDate}
-      onChange={(date) => onDateChange(date ? format(date, "yyyy-MM-dd") : format(todayDate, "yyyy-MM-dd"))} // nul check for the date on change
+      onChange={(date) => {
+        if (date) {
+          onDateChange(date);
+        } else {
+          onDateChange(todayDate); // Fallback to today’s date if date is null
+        }
+      }}
       customInput={
         <CustomDatePickerInput
-          value={selectedDate || ""} // Ensure value is a string
-          onClick={() => { }} // Provide a valid click handler
+          value={selectedDate ? format(new Date(selectedDate), "yyyy-MM-dd") : ""} // Ensure value is a string
+          onClick={() => { }}
         />
       }
     />

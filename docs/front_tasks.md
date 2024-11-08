@@ -17,6 +17,7 @@
 - [x] pirority recognizer in new task
 - [x] editing tasks
 - [x] deleting tasks
+- [ ] upload button in picture 
 - [ ] mobile view
 - [ ] changing the dueDate
 - [ ] adding notes to task

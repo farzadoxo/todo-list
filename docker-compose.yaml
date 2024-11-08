@@ -1,0 +1,6 @@
+services:
+  front:
+    build:
+      context: ./front-end/
+    ports:
+      - "8080:3000"
