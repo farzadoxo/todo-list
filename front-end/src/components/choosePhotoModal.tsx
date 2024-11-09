@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { Modal } from 'react-responsive-modal';
 import Webcam from 'react-webcam';
 import 'react-responsive-modal/styles.css';
@@ -43,19 +43,36 @@ const ChoosePhotoIcon: React.FC<PhotoIconWithModalProps> = ({ size, color, onIma
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isCameraMode, setIsCameraMode] = useState(false);
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user');
+  const [isTorchOn, setIsTorchOn] = useState(false);
+  const [hasTorch, setHasTorch] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const webcamRef = useRef<Webcam>(null);
+
+  useEffect(() => {
+    const checkTorchAvailability = async () => {
+      if ('mediaDevices' in navigator && 'getSupportedConstraints' in navigator.mediaDevices) {
+        const supportedConstraints = navigator.mediaDevices.getSupportedConstraints();
+        const isTorchSupported = supportedConstraints.torch ? true : false
+        setHasTorch(isTorchSupported);
+      }
+    };
+
+    checkTorchAvailability();
+  }, []);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedImage(null);
     setIsCameraMode(false);
+    if (isTorchOn) {
+      toggleTorch();
+    }
   };
 
   const uploadImage = async (file: File | string) => {
     const formData = new FormData();
-    formData.append('image', file); // Adjust the key 'image' based on your backend requirements
+    formData.append('image', file);
 
     try {
       const response = await api.post('/api/upload/', formData, {
@@ -91,22 +108,42 @@ const ChoosePhotoIcon: React.FC<PhotoIconWithModalProps> = ({ size, color, onIma
     setFacingMode(prevMode => prevMode === 'user' ? 'environment' : 'user');
   };
 
+  const toggleTorch = async () => {
+    if (webcamRef.current && hasTorch) {
+      const stream = webcamRef.current.stream;
+      if (stream) {
+        const track = stream.getVideoTracks()[0];
+        try {
+          await track.applyConstraints({
+            advanced: [{ torch: !isTorchOn }]
+          });
+          setIsTorchOn(!isTorchOn);
+        } catch (err) {
+          console.error("Error toggling torch:", err);
+        }
+      }
+    }
+  };
+
   const capture = useCallback(() => {
     const imageSrc = webcamRef.current?.getScreenshot();
     if (imageSrc) {
       setSelectedImage(imageSrc);
       setIsCameraMode(false);
 
-      // Convert base64 to file
       fetch(imageSrc)
         .then(res => res.blob())
         .then(blob => {
           const file = new File([blob], "webcam-photo.jpg", { type: "image/jpeg" });
           onImageSelected(file);
-          uploadImage(file)
+          uploadImage(file);
         });
+
+      if (isTorchOn) {
+        toggleTorch();
+      }
     }
-  }, [webcamRef, onImageSelected]);
+  }, [webcamRef, onImageSelected, isTorchOn]);
 
   const videoConstraints = {
     facingMode: facingMode
@@ -155,7 +192,7 @@ const ChoosePhotoIcon: React.FC<PhotoIconWithModalProps> = ({ size, color, onIma
                 className="bg-black text-white p-3 rounded-full hover:bg-gray-800 transition duration-300 ease-in-out"
               >
                 <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path fill="none" stroke="currentColor" stroke-width="2" d="M20 6h-4l-2-2H10L8 6H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2z" />
+                  <path fill="none" stroke="currentColor" strokeWidth="2" d="M20 6h-4l-2-2H10L8 6H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
               </button>
@@ -164,11 +201,32 @@ const ChoosePhotoIcon: React.FC<PhotoIconWithModalProps> = ({ size, color, onIma
                 className="bg-black text-white p-3 rounded-full hover:bg-gray-800 transition duration-300 ease-in-out"
               >
                 <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path fill="none" stroke="currentColor" stroke-width="2" d="M20 6h-4l-2-2H10L8 6H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2z" />
-                  <path fill="none" stroke="currentColor" stroke-width="2" d="M14 15l2-2-2-2M10 15l-2-2 2-2" />
-                  <path fill="none" stroke="currentColor" stroke-width="2" d="M16 13H8" />
+                  <path fill="none" stroke="currentColor" strokeWidth="2" d="M20 6h-4l-2-2H10L8 6H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2z" />
+                  <path fill="none" stroke="currentColor" strokeWidth="2" d="M14 15l2-2-2-2M10 15l-2-2 2-2" />
+                  <path fill="none" stroke="currentColor" strokeWidth="2" d="M16 13H8" />
                 </svg>
               </button>
+              {hasTorch && (
+                <button
+                  onClick={toggleTorch}
+                  className="bg-black text-white p-3 rounded-full hover:bg-gray-800 transition duration-300 ease-in-out"
+                >
+                  {isTorchOn ? (
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M6 14L8 12V7C8 6.44772 8.44772 6 9 6H15C15.5523 6 16 6.44772 16 7V12L18 14V17C18 17.5523 17.5523 18 17 18H7C6.44772 18 6 17.5523 6 17V14Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M10 18V20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M14 18V20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M12 6V4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  ) : (
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M6 14L8 12V7C8 6.44772 8.44772 6 9 6H15C15.5523 6 16 6.44772 16 7V12L18 14V17C18 17.5523 17.5523 18 17 18H7C6.44772 18 6 17.5523 6 17V14Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M10 18V20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M14 18V20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  )}
+                </button>
+              )}
             </div>
           </div>
         )}

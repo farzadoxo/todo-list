@@ -5,3 +5,4 @@
 - [x] docker compose
 - [ ] nginx
 - [ ] running tests with github actions
+- [ ] ssl

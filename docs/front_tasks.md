@@ -22,9 +22,9 @@
 - [x] style for pirority on todo component
 - [x] style for pirority on pirorityLevel component
 - [x] confirm dialog for deleting a todo
+- [x] flash when taking picture
 - [ ] connecting to the server
 - [ ] changing the dueDate
-- [ ] flash when taking picture
 - [ ] seperating complete and uncomplete tasks
 - [ ] nav bar
 - [ ] adding video to task as `completed video`
