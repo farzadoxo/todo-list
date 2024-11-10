@@ -24,8 +24,8 @@
 - [x] confirm dialog for deleting a todo
 - [x] flash when taking picture
 - [x] changing the dueDate
+- [x] seperating complete and uncomplete tasks
 - [ ] connecting to the server
-- [ ] seperating complete and uncomplete tasks
 - [ ] nav bar
 - [ ] adding video to task as `completed video`
 - [ ] adding notes to task
