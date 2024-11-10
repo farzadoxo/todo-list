@@ -23,8 +23,8 @@
 - [x] style for pirority on pirorityLevel component
 - [x] confirm dialog for deleting a todo
 - [x] flash when taking picture
+- [x] changing the dueDate
 - [ ] connecting to the server
-- [ ] changing the dueDate
 - [ ] seperating complete and uncomplete tasks
 - [ ] nav bar
 - [ ] adding video to task as `completed video`

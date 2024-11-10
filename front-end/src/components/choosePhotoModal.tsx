@@ -52,6 +52,7 @@ const ChoosePhotoIcon: React.FC<PhotoIconWithModalProps> = ({ size, color, onIma
     const checkTorchAvailability = async () => {
       if ('mediaDevices' in navigator && 'getSupportedConstraints' in navigator.mediaDevices) {
         const supportedConstraints = navigator.mediaDevices.getSupportedConstraints();
+        //@ts-expect-error torch not found in supportedConstraints
         const isTorchSupported = supportedConstraints.torch ? true : false
         setHasTorch(isTorchSupported);
       }
@@ -115,6 +116,7 @@ const ChoosePhotoIcon: React.FC<PhotoIconWithModalProps> = ({ size, color, onIma
         const track = stream.getVideoTracks()[0];
         try {
           await track.applyConstraints({
+            //@ts-expect-error torch not found in supportedConstraints
             advanced: [{ torch: !isTorchOn }]
           });
           setIsTorchOn(!isTorchOn);

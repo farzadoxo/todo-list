@@ -6,6 +6,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 interface CustomDatePickerProps {
   selectedDate: Date | null;
   onDateChange: (date: Date) => void;
+  className?: string;
 }
 
 interface CustomDatePickerInputProps {
@@ -39,12 +40,13 @@ const CustomDatePickerInput: React.FC<CustomDatePickerInputProps> = ({ value, on
   </button>
 );
 
-const CustomDatePicker: React.FC<CustomDatePickerProps> = ({ selectedDate, onDateChange }) => {
+const CustomDatePicker: React.FC<CustomDatePickerProps> = ({ selectedDate, onDateChange, className }) => {
   const todayDate = new Date();
 
   return (
     <DatePicker
       selected={selectedDate ? new Date(selectedDate) : todayDate}
+      className={className}
       onChange={(date) => {
         if (date) {
           onDateChange(date);

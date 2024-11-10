@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { format } from 'date-fns';
 import Checkbox from "./checkbox";
 import { TodoType } from "../types";
 import { useTodosListState } from "../store";
 import PhotoIconWithModal from "./choosePhotoModal";
 import { DeleteIcon, EditIcon } from "lucide-react";
-import { Modal } from 'react-responsive-modal'; // Importing Modal
-import 'react-responsive-modal/styles.css'; // Importing styles for the modal
+import { Modal } from 'react-responsive-modal';
+import 'react-responsive-modal/styles.css';
+import CustomDatePicker from './customDatePicker';
 
 interface Option {
   icon: React.FC<React.SVGProps<SVGSVGElement>>;
@@ -103,6 +105,7 @@ const Todo: React.FC<TodoType> = ({ id, title, completed, dueDate, priority }) =
   const [isCompleted, setIsCompleted] = useState<boolean>(completed);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [editedTitle, setEditedTitle] = useState<string>(title);
+  const [editedDueDate, setEditedDueDate] = useState<string | null>(dueDate);
 
   // State for delete confirmation modal
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
@@ -141,15 +144,16 @@ const Todo: React.FC<TodoType> = ({ id, title, completed, dueDate, priority }) =
     setIsDeleteModalOpen(false); // Close modal after deletion
   };
 
-  const handleSave = () => {
+  const formattedDueDate = editedDueDate && format(editedDueDate, "yyyy-MM-dd");
+  const handleSave = () => { // handle edit save
     const updatedTask = {
       id,
       title: editedTitle,
       completed: isCompleted,
-      dueDate,
+      dueDate: formattedDueDate,
       priority,
     };
-    taskStore.modifyTodo(id, updatedTask); // Assuming this updates the state correctly
+    taskStore.modifyTodo(id, updatedTask);
     setIsEditing(false);
   };
 
@@ -160,24 +164,33 @@ const Todo: React.FC<TodoType> = ({ id, title, completed, dueDate, priority }) =
         className={`flex items-center justify-between p-4 my-1 bg-white rounded-lg shadow-md transition-all duration-300 ${isCompleted ? 'bg-green-100' : 'bg-white'} border border-gray-300 priority-${priority}`}
       >
         <div className="flex items-center flex-grow">
-          <Checkbox
-            id={id}
-            checked={isCompleted}
-            onChange={handleTodoToggle}
-            className="mr-3"
-          />
           {isEditing ? (
-            <input
-              type="text"
-              value={editedTitle}
-              onChange={(e) => setEditedTitle(e.target.value)}
-              className="flex-grow p-2 border-b border-gray-400 focus:outline-none focus:border-blue-500 transition duration-200"
-              autoFocus
-            />
+            <form>
+
+              <input
+                type="text"
+                value={editedTitle}
+                onChange={(e) => setEditedTitle(e.target.value)}
+                className="flex-grow p-1 border-b border-gray-400 focus:outline-none focus:border-blue-500 transition duration-200"
+                autoFocus
+              />
+              <CustomDatePicker selectedDate={editedDueDate as Date | null} onDateChange={setEditedDueDate} className="bottom" />
+
+            </form>
           ) : (
-            <span className={`ml-2 text-lg ${isCompleted ? 'line-through text-gray-400' : 'text-gray-800'}`}>
-              {title}
-            </span>
+
+            <>
+
+              <Checkbox
+                id={id}
+                checked={isCompleted}
+                onChange={handleTodoToggle}
+                className="mr-3"
+              />
+              <span className={`ml-2 text-lg ${isCompleted ? 'line-through text-gray-400' : 'text-gray-800'}`}>
+                {title}
+              </span>
+            </>
           )}
         </div>
 
