@@ -4,7 +4,7 @@ import NewTask from "./components/newTask";
 import TodoList from "./home/todos";
 import Nav from "./home/navBar";
 import './mockSetup'; // Import the mock setup
-import NotFound from "./components/notFound"; // Create a NotFound component for 404 pages
+import NotFound from "./components/notFound";
 
 function App() {
   const [deviceType, setDeviceType] = useState<"mobile" | "desktop">("mobile");
@@ -36,10 +36,10 @@ function App() {
       <div className="w-full h-full flex flex-row">
         <Nav deviceType={deviceType} />
         <div className="flex-grow"> {/* Allow this div to grow and fill available space */}
+          <NewTask />
           <Routes>
-            <Route path="/" element={<TodoList />} /> {/* Default route */}
-            <Route path="/new-task" element={<NewTask />} /> {/* New Task route */}
-            <Route path="*" element={<NotFound />} /> {/* Catch-all route for 404 */}
+            <Route path="/" element={<TodoList />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
       </div>

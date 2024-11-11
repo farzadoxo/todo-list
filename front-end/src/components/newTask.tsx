@@ -6,7 +6,11 @@ import type { TodoPostCallType } from '../types';
 import PrioritySelect from './priorityLevel';
 import CustomDatePicker from './customDatePicker';
 
-const NewTask: React.FC = () => {
+interface NewTaskProps {
+  className?: string
+}
+
+const NewTask: React.FC<NewTaskProps> = ({ className }) => {
   const [taskData, setTaskData] = useState<TodoPostCallType>({
     title: '',
     completed: false,
@@ -110,7 +114,7 @@ const NewTask: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row my-3 mx-1 sm:mx-2 max-w-md w-full bg-white shadow-lg rounded-lg">
+    <form onSubmit={handleSubmit} className={`flex flex-col sm:flex-row my-3 max-w-md w-full bg-white shadow-lg rounded-lg ${className}`}>
       <div className="flex items-center border border-gray-300 rounded-md w-full bg-gray-50 focus-within:ring-2 focus-within:ring-blue-500 transition duration-200">
 
         <button type="submit" className="flex items-center justify-center p-2 bg-blue-500 text-white rounded-l-md hover:bg-blue-600 transition duration-200">
