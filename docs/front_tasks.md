@@ -25,7 +25,8 @@
 - [x] flash when taking picture
 - [x] changing the dueDate
 - [x] seperating complete and uncomplete tasks
+- [x] nav bar
 - [ ] connecting to the server
-- [ ] nav bar
 - [ ] adding video to task as `completed video`
 - [ ] adding notes to task
+- [ ] unit tests
