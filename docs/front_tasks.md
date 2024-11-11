@@ -26,6 +26,7 @@
 - [x] changing the dueDate
 - [x] seperating complete and uncomplete tasks
 - [x] nav bar
+- [x] 404 not found page
 - [ ] connecting to the server
 - [ ] adding video to task as `completed video`
 - [ ] adding notes to task
