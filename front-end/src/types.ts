@@ -1,10 +1,14 @@
-type priority = 'low' | 'medium' | 'high';
+export type Priority = 'low' | 'medium' | 'high' | "none";
+
+export function isPriority(value: string): value is Priority {
+  return value === 'low' || value === 'medium' || value === 'high' || value === 'none';
+}
 
 export interface TodoPostCallType {
   title: string;
   completed: boolean;
   dueDate: string | null;
-  priority?: priority;
+  priority?: Priority;
 }
 
 export interface TodoType {
@@ -12,5 +16,5 @@ export interface TodoType {
   title: string;
   completed: boolean;
   dueDate: string | null;
-  priority?: priority;
+  priority?: Priority;
 }

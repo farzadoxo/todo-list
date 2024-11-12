@@ -2,13 +2,14 @@ import React, { useState, useRef, ChangeEvent } from 'react';
 import { addDays, format } from 'date-fns';
 import api from '../axios';
 import { useTodosListState } from '../store';
-import type { TodoPostCallType } from '../types';
+import { TodoPostCallType, priority, isPriority } from '../types';
 import PrioritySelect from './priorityLevel';
 import CustomDatePicker from './customDatePicker';
 
 interface NewTaskProps {
   className?: string
 }
+
 
 const NewTask: React.FC<NewTaskProps> = ({ className }) => {
   const [taskData, setTaskData] = useState<TodoPostCallType>({
@@ -17,14 +18,14 @@ const NewTask: React.FC<NewTaskProps> = ({ className }) => {
     dueDate: null,
   });
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
-  const [priority, setPriority] = useState<string>("none");
+  const [priority, setPriority] = useState<priority>("none");
   const taskStore = useTodosListState();
   const contentEditableRef = useRef<HTMLDivElement>(null);
 
   const handleTextChange = (evt: ChangeEvent<HTMLInputElement>) => {
     const text = evt.target.value;
     let dueDate: Date | null = null;
-    let priority: string | null = null;
+    const priority: string | null = null;
 
     // Helper function to get the next occurrence of a day
     const getNextDayOfWeek = (day: string): Date | null => {
@@ -59,10 +60,10 @@ const NewTask: React.FC<NewTaskProps> = ({ className }) => {
       }
     }
 
-    const priorityMatch = text.match(/~\s*(low|medium|high)/i);
+    const priorityMatch = text.match(/~\s*(low|medium|high|none)/i);
     if (priorityMatch) {
-      priority = priorityMatch[1].toLowerCase();
-      setPriority(priority);
+      const matchedPriority = priorityMatch[1].toLowerCase();
+      return isPriority(matchedPriority) ? matchedPriority : null;
     }
 
     let formattedDueDate: string;
@@ -75,7 +76,7 @@ const NewTask: React.FC<NewTaskProps> = ({ className }) => {
       ...prevState,
       title: text,
       dueDate: formattedDueDate,
-      priority: priority || null,
+      priority: priority || undefined,
     }));
   };
 
