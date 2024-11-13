@@ -1,4 +1,4 @@
-from API.bodyrequests import NewTaskReqBody, UpdateTaskReqBody, UploadReqBody , ResMod
+from API.bodyrequests import NewTaskReqBody, UpdateTaskReqBody, UploadReqBody , ResMod , SignUpReqBody
 from DATABASE.Db import DataBase
 from random import randint
 from fastapi import status, HTTPException, APIRouter
@@ -26,26 +26,30 @@ class IDGenerator:
                 return id
 
 
-@router.post('/main/sign_up',
+# ----------------------     USER SECTION      ---------------------
+
+
+@router.post('/api/signup',
              status_code=status.HTTP_201_CREATED,
              description="User successfully signed up !")
-def sign_up(email:str,password:str):
+def signup(reqbody : SignUpReqBody):
 
-    DataBase.cursor.execute(f"SELECT email FROM users WHERE email = {email}")
+    DataBase.cursor.execute(f"SELECT email FROM users WHERE email = '{reqbody.email}'")
     user = DataBase.cursor.fetchone()
     if user != None:
         return "This email is used before !!"
     else:
-        if len(password) < 8 or password.isalnum or password.isalpha:
+        if len(reqbody.password) < 8:
             return "Invalid password template !! >>> Password most be 8  charecter and maked from numbers , special char and alphabet !"
         else:
-            DataBase.cursor.execute("INSERT INTO users (?,?)",
-                                    (email,password))
+            DataBase.cursor.execute("INSERT INTO users VALUES (?,?)",
+                                    (reqbody.email,reqbody.password))
             DataBase.connection.commit()
             return "User signed Up ! :)"
         
 
 
+# --------------------       TASK SECTION         ----------------------
 
 @router.get("/api/todos", status_code=status.HTTP_200_OK)
 def all_todos():
@@ -119,7 +123,7 @@ def upload(reqbody: UploadReqBody):
 
     
 
-@router.patch("/api/todos/{id}", status_code=status.HTTP_200_OK)
+@router.patch("/api/todos/", status_code=status.HTTP_200_OK)
 def update_task(reqbody: UpdateTaskReqBody, id: int):
 
     response_body = {
@@ -136,7 +140,7 @@ def update_task(reqbody: UpdateTaskReqBody, id: int):
         # Update task :
         if reqbody.title != None and reqbody.title != task[1]:
             DataBase.cursor.execute(
-                f"UPDATE todos SET title = {reqbody.title} WHERE id = {id}"
+                f"UPDATE todos SET title = '{reqbody.title}' WHERE id = {id}"
             )
             DataBase.connection.commit()
 
@@ -159,7 +163,7 @@ def update_task(reqbody: UpdateTaskReqBody, id: int):
 
 
 
-@router.delete("/api/todos/{id}", status_code=status.HTTP_200_OK)
+@router.delete("/api/todos/", status_code=status.HTTP_204_NO_CONTENT)
 def delete_task(id: int):
 
     try:
@@ -186,21 +190,27 @@ def delete_task(id: int):
 
 
 
-@router.get("/api/todos/find/{id}")
+@router.get("/api/todos/")
 def find_task(id: int):
-    # Query in database
+    
     try:
+        # Query in database
         DataBase.cursor.execute(f"SELECT * FROM todos WHERE id = {id}")
         task = DataBase.cursor.fetchone()
-    except Exception or HTTPException as error:
-        return f"ERROR : >>> {error}"
 
-    # Make responive json model
-    response_model = {
+        # Make responive json model
+        response_model = {
         "id": id,
         "title": task[1],
         "completed": task[2],
-        "dueDate": task[3],
+        "dueDate": task[3]
     }
+        return response_model
+    
+    except Exception or HTTPException as error:
+        return f"ERROR : >>> {error}"
 
-    return response_model
+    
+    
+
+    

@@ -41,5 +41,8 @@ class UpdateTaskReqBody(BaseModel):
     completed : Optional[bool] = None
     dueDate : Optional[str] = None
 
+class SignUpReqBody(BaseModel):
+    """This request body use for signup to service"""
 
-
+    email : str 
+    password : str
