@@ -16,4 +16,4 @@ class DataBase:
 
 
 # Ready code for make todos table
-# DataBase.cursor.execute("CREATE TABLE todos (id INTEGER , title TEXT , completed BOOLEAN , dueDate TEXT)")
+DataBase.cursor.execute("CREATE TABLE todos (id INTEGER , title TEXT , completed BOOLEAN , dueDate TEXT)")
