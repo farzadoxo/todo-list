@@ -169,7 +169,7 @@ deletes the task data
 
 deleted task HTTP code
 
-#### Success Response (200 OK)
+#### Success Response (204 NO CONTENT)
 
 ```json
 {
@@ -179,3 +179,42 @@ deleted task HTTP code
   "dueDate": "2024-10-15"
 }
 ```
+
+# Find a Task
+Find a task (fetch from database)
+
+### Request
+
+`GET /api/todos/[id]`
+
+### Response
+
+```json
+{
+  "id" : 1,
+  "title" : "wash dishs",
+  "completed" : true ,
+  "dueDate" : null
+}
+```
+
+
+# Singup
+Signup a user 
+
+### Request 
+
+`POST /api/signup`
+
+### Request Body
+
+```json
+{
+  "email" : "test@yahoo.com" ,
+  "password" : "1254avfdf"
+}
+```
+
+### Response
+
+`User signed Up :)`
