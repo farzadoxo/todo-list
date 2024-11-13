@@ -15,7 +15,7 @@ class NewTaskReqBody(BaseModel):
 
 
 
-class TaskCompletedReqBody(BaseModel):
+class UploadReqBody(BaseModel):
     """This request body use for upload a picture from completed task
     template : task_id = required  ------   image = required
                  string                       Image"""
@@ -25,11 +25,11 @@ class TaskCompletedReqBody(BaseModel):
 
 
 
-# class ResMod(BaseModel):
-#     id : int
-#     title : str
-#     completed : bool = False
-#     dueDate : Optional[str] = None
+class ResMod(BaseModel):
+    id : int
+    title : str
+    completed : bool = False
+    dueDate : Optional[str] = None
 
 
 
