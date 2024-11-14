@@ -210,6 +210,7 @@ Signup a user
 
 ```json
 {
+  "full_name" : "John Watson",
   "email" : "test@yahoo.com" ,
   "password" : "1254avfdf"
 }
@@ -217,4 +218,29 @@ Signup a user
 
 ### Response
 
-`User signed Up :)`
+> `User signed Up :)`
+
+# Login
+Login to user account
+
+### Request 
+
+`GET /api/login`
+
+### Request Body
+
+```json
+{
+  "email" : "test@yahoo.com" ,
+  "password" : "1254avfdf"
+}
+```
+
+### Response
+
+> `User not found`
+
+> `Password invalid`
+
+> `Welcome to Todo App`
+
