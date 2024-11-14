@@ -25,11 +25,11 @@ class UploadReqBody(BaseModel):
 
 
 
-class ResMod(BaseModel):
-    id : int
-    title : str
-    completed : bool = False
-    dueDate : Optional[str] = None
+# class ResMod(BaseModel):
+#     id : int
+#     title : str
+#     completed : bool = False
+#     dueDate : Optional[str] = None
 
 
 
@@ -41,8 +41,19 @@ class UpdateTaskReqBody(BaseModel):
     completed : Optional[bool] = None
     dueDate : Optional[str] = None
 
+
+
 class SignUpReqBody(BaseModel):
     """This request body use for signup to service"""
+
+    full_name : str
+    email : str 
+    password : str
+
+
+
+class LoginReqBody(BaseModel):
+    """This request body use for login to account"""
 
     email : str 
     password : str

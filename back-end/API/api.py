@@ -1,4 +1,4 @@
-from API.bodyrequests import NewTaskReqBody, UpdateTaskReqBody, UploadReqBody , ResMod , SignUpReqBody
+from API.bodyrequests import NewTaskReqBody, UpdateTaskReqBody, UploadReqBody , ResMod , SignUpReqBody , LoginReqBody
 from DATABASE.Db import DataBase
 from random import randint
 from fastapi import status, HTTPException, APIRouter
@@ -31,7 +31,7 @@ class IDGenerator:
 
 @router.post('/api/signup',
              status_code=status.HTTP_201_CREATED,
-             description="User successfully signed up !")
+             description="Create account to service")
 def signup(reqbody : SignUpReqBody):
 
     DataBase.cursor.execute(f"SELECT email FROM users WHERE email = '{reqbody.email}'")
@@ -42,11 +42,32 @@ def signup(reqbody : SignUpReqBody):
         if len(reqbody.password) < 8:
             return "Invalid password template !! >>> Password most be 8  charecter and maked from numbers , special char and alphabet !"
         else:
-            DataBase.cursor.execute("INSERT INTO users VALUES (?,?)",
-                                    (reqbody.email,reqbody.password))
+            DataBase.cursor.execute("INSERT INTO users VALUES (?,?,?)",
+                                    (reqbody.full_name,reqbody.email,reqbody.password))
             DataBase.connection.commit()
             return "User signed Up ! :)"
-        
+
+
+
+@router.get(
+        '/api/login',
+        status_code=status.HTTP_200_OK,
+        description="Login to user account"
+)
+def login(reqbody : LoginReqBody):
+    DataBase.cursor.execute(
+        f"SELECT * FROM users WHERE email = '{reqbody.email}'"
+    )
+    user = DataBase.cursor.fetchone()
+
+    if user != None :
+        if reqbody.email == user[1] and reqbody.password == user[2]:
+            return f"Dear '{user[0]}' Welcome to Todo App :)"
+        else:
+            return "Password is invalid ! :("
+    else:
+        return "User not found :( "
+
 
 
 # --------------------       TASK SECTION         ----------------------
