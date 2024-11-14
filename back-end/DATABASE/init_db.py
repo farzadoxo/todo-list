@@ -30,8 +30,10 @@ def initialize_database(db_name: str = "database.db"):
         cursor = conn.cursor()
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS users (
+                full_name TEXT NOT NULL ,
                 email TEXT NOT NULL PRIMARY KEY,
                 password TEXT NOT NULL
+
             )
         """) 
         conn.commit()
