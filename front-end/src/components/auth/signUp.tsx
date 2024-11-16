@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from "react-router-dom"
 
 const SignUp: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -40,6 +41,8 @@ const SignUp: React.FC = () => {
         <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
           Sign Up
         </button>
+
+        <p>Already have an account? <Link to={"/login/"} className='text-blue-700'>Login</Link></p>
       </form>
     </div>
   );

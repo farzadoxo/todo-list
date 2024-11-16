@@ -1,25 +1,29 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router';
+import { Link } from 'react-router-dom';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string>('');
+  const navigate = useNavigate();
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(''); // Reset error message
+    setError('');
 
-    // Simulate an API call for login
     try {
-      // Replace with your actual login logic
-      if (email === 'test@example.com' && password === 'password') {
-        console.log('Login successful');
-        // Redirect or update state here
+      if (email === 'test@test.com' && password === 'test') {
+        localStorage.setItem("userName", "test");
+        console.log("logged in!");
+        navigate("/");
+        location.reload()
       } else {
         throw new Error('Invalid credentials');
       }
     } catch (err) {
-      setError(err.message);
+      setError(err instanceof Error ? err.message : 'An error occurred');
     }
   };
 
@@ -53,6 +57,7 @@ const Login: React.FC = () => {
         <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
           Login
         </button>
+        <p>no account? <Link to={"/sign-up/"} className='text-blue-700'>Sign up</Link></p>
       </form>
     </div>
   );

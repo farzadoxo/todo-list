@@ -3,66 +3,59 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import NewTask from "./components/newTask";
 import TodoList from "./home/todos";
 import Nav from "./home/navBar";
-import './mockSetup'; // Import the mock setup
+import './mockSetup';
 import NotFound from "./components/notFound";
 import SignUp from "./components/auth/signUp";
-import { useLoggedInUser } from "./components/hooks/useAuth";
 import Login from "./components/auth/login";
 
 function App() {
   const [deviceType, setDeviceType] = useState<"mobile" | "desktop">("mobile");
-  const userName = useLoggedInUser()
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(!!localStorage.getItem("userName"));
 
-  const getDeviceType = () => {
-    const width = window.innerWidth;
-
-    if (width < 768) {
-      setDeviceType('mobile');
-    } else {
-      setDeviceType('desktop');
-    }
-  };
-
+  // Effect to update login state based on local storage changes
   useEffect(() => {
-    getDeviceType();
-
-    const handleResize = () => {
-      getDeviceType();
+    const handleStorageChange = () => {
+      setIsLoggedIn(!!localStorage.getItem("userName"));
     };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener('storage', handleStorageChange);
 
-    return () => window.removeEventListener('resize', handleResize); // Cleanup
+    return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
-  if (!userName) {
-    return (
-      <Router>
-        <div className="w-full h-full flex flex-row">
-          <div className="flex-grow">
-            <Routes>
-              <Route path="sign-up/" element={<SignUp />} />
-              <Route path="login/" element={<Login />} />
-              <Route path="*" element={<Navigate to="login/" />} />
-            </Routes>
-          </div>
-        </div>
-      </Router>
-    )
+  // Function to determine device type based on window width
+  const getDeviceType = () => {
+    const width = window.innerWidth;
+    setDeviceType(width < 768 ? 'mobile' : 'desktop');
+  };
 
+  // Effect to handle window resizing
+  useEffect(() => {
+    getDeviceType();
+    window.addEventListener('resize', getDeviceType);
 
-  }
+    return () => window.removeEventListener('resize', getDeviceType); // Cleanup
+  }, []);
 
   return (
     <Router>
       <div className="w-full h-full flex flex-row">
-        <Nav deviceType={deviceType} />
-        <div className="flex-grow"> {/* Allow this div to grow and fill available space */}
-          <NewTask />
+        {isLoggedIn && <Nav deviceType={deviceType} />}
+        <div className="flex-grow">
           <Routes>
-            <Route path="/" element={<TodoList />} />
-            <Route path="sign-up/" element={<SignUp />} />
-            <Route path="*" element={<NotFound />} />
+            {!isLoggedIn ? (
+              <>
+                <Route path="sign-up/" element={<SignUp />} />
+                <Route path="login/" element={<Login />} />
+                <Route path="*" element={<Navigate to="login/" />} />
+              </>
+            ) : (
+              <>
+                <Route path="/" element={<TodoList />} />
+                <Route path="new-task/" element={<NewTask />} />
+                <Route path="*" element={<NotFound />} />
+              </>
+            )}
           </Routes>
         </div>
       </div>
