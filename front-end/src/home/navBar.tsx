@@ -1,17 +1,17 @@
 import { Sidebar, Menu, MenuItem } from 'react-pro-sidebar';
 import React from 'react';
-import { Home, Info, Phone } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Home, Info, Phone, LogOut } from 'lucide-react'; // Import LogOut icon
+import { Link, useNavigate } from 'react-router-dom';
 
 interface NavProps {
   deviceType: "mobile" | "desktop";
 }
 
 const colors = {
-  background: '#1f2937', // Darker background
-  text: 'black', // Softer text color
-  hover: '#4b5563', // Hover color
-  active: '#6b7280' // Active item color
+  background: '#1f2937',
+  text: 'black',
+  hover: '#4b5563',
+  active: '#6b7280'
 };
 
 const navLinks = [
@@ -22,6 +22,14 @@ const navLinks = [
 ];
 
 const MobileNavbar = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("userName"); // Clear user session
+    navigate('/login'); // Redirect to login page
+    location.reload()
+  };
+
   return (
     <nav className="fixed bottom-0 left-0 right-0 bg-gray-800 p-4 shadow-lg">
       <ul className="flex justify-around">
@@ -33,12 +41,26 @@ const MobileNavbar = () => {
             </Link>
           </li>
         ))}
+        <li className="text-white text-center">
+          <button onClick={handleLogout} className="flex flex-col items-center">
+            <LogOut size={24} />
+            <span className="text-xs">Logout</span>
+          </button>
+        </li>
       </ul>
     </nav>
   );
 };
 
 const VerticalNavBar: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("userName"); // Clear user session
+    navigate('/login'); // Redirect to login page
+    location.reload()
+  };
+
   const menuItemStyles = {
     button: {
       color: colors.text,
@@ -69,9 +91,12 @@ const VerticalNavBar: React.FC = () => {
         {navLinks.map(link => (
           <MenuItem key={link.title} icon={link.icon} component={<Link to={link.url} />}>
             {link.title}
-
           </MenuItem>
         ))}
+        {/* Logout Menu Item */}
+        <MenuItem icon={<LogOut size={24} />} onClick={handleLogout}>
+          Logout
+        </MenuItem>
       </Menu>
     </Sidebar>
   );

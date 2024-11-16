@@ -28,6 +28,7 @@
 - [x] nav bar
 - [x] 404 not found page
 - [x] user authentication
+- [x] logout
 - [ ] connecting to the server
 - [ ] adding video to task as `completed video`
 - [ ] adding notes to task
