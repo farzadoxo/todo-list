@@ -1,7 +1,7 @@
-from API.bodyrequests import NewTaskReqBody, UpdateTaskReqBody, UploadReqBody , ResMod , SignUpReqBody , LoginReqBody
+from API.requestbody import NewTask, UpdateTask, Upload , SignUp , Login , UpdateAccountInfo
 from DATABASE.Db import DataBase
 from random import randint
-from fastapi import status, HTTPException, APIRouter
+from fastapi import status, HTTPException, APIRouter , Response
 
 
 # router instanse
@@ -29,10 +29,10 @@ class IDGenerator:
 # ----------------------     USER SECTION      ---------------------
 
 
-@router.post('/api/signup',
+@router.post('/api/account/signup',
              status_code=status.HTTP_201_CREATED,
              description="Create account to service")
-def signup(reqbody : SignUpReqBody):
+def signup(reqbody : SignUp):
 
     DataBase.cursor.execute(f"SELECT email FROM users WHERE email = '{reqbody.email}'")
     user = DataBase.cursor.fetchone()
@@ -50,11 +50,11 @@ def signup(reqbody : SignUpReqBody):
 
 
 @router.get(
-        '/api/login',
+        '/api/account/login',
         status_code=status.HTTP_200_OK,
         description="Login to user account"
 )
-def login(reqbody : LoginReqBody):
+def login(reqbody : Login):
     DataBase.cursor.execute(
         f"SELECT * FROM users WHERE email = '{reqbody.email}'"
     )
@@ -67,7 +67,35 @@ def login(reqbody : LoginReqBody):
             return "Password is invalid ! :("
     else:
         return "User not found :( "
+    
 
+
+
+
+@router.patch(
+        '/api/account/edit',
+        status_code=status.HTTP_200_OK,
+        description="Edit account Info")
+def update_info(reqbody : UpdateAccountInfo , current_email : str):
+    DataBase.cursor.execute(f"SELECT * FROM users WHERE email = {current_email}")
+    current_user = DataBase.cursor.fetchone()
+
+    try:
+
+        if reqbody.full_name != None and reqbody.full_name != current_user[0]:
+            DataBase.cursor.execute(f"UPDATE users SET full_name = {reqbody.full_name} WHERE email = {current_email}")
+            DataBase.connection.commit()
+
+        elif reqbody.email != None and reqbody.email != current_user[1]:
+            DataBase.cursor.execute(f"UPDATE users SET email = {reqbody.email} WHERE email = {current_email}")
+            DataBase.connection.commit()
+
+        elif reqbody.password != None and reqbody.password != current_user[2]:
+            DataBase.cursor.execute(f"UPDATE users SET password = {reqbody.password} WHERE email = {current_email}")
+            DataBase.connection.commit()
+
+    except Exception or HTTPException as error:
+        return f"ERROR >>> {error}"
 
 
 # --------------------       TASK SECTION         ----------------------
@@ -87,7 +115,7 @@ def all_todos():
     description="Task successfully created (added)",
     status_code=status.HTTP_201_CREATED
 )
-def new_task(reqbody: NewTaskReqBody):
+def new_task(reqbody: NewTask):
     response_body = {
         "id": IDGenerator.generate_id(),  
         "title": reqbody.title,
@@ -124,7 +152,7 @@ def new_task(reqbody: NewTaskReqBody):
     status_code=status.HTTP_201_CREATED,
     description="Task was successfully completed"
 )
-def upload(reqbody: UploadReqBody):
+def upload(reqbody: Upload):
     try:
         DataBase.cursor.execute(
             f"SELECT * FROM todos WHERE id = {reqbody.task_id}"
@@ -145,7 +173,7 @@ def upload(reqbody: UploadReqBody):
     
 
 @router.patch("/api/todos/", status_code=status.HTTP_200_OK)
-def update_task(reqbody: UpdateTaskReqBody, id: int):
+def update_task(reqbody: UpdateTask, id: int):
 
     response_body = {
         "id" : id,
@@ -230,8 +258,3 @@ def find_task(id: int):
     
     except Exception or HTTPException as error:
         return f"ERROR : >>> {error}"
-
-    
-    
-
-    
