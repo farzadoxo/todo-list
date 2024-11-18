@@ -3,7 +3,7 @@ from typing import Optional
 
 
 
-class NewTaskReqBody(BaseModel):
+class NewTask(BaseModel):
     """this request body use for make a task or todo of a template 
     template : title = required  ------   completed = required  -------   dueDate = optional 
                string                       bool                           string or null"""
@@ -15,7 +15,7 @@ class NewTaskReqBody(BaseModel):
 
 
 
-class UploadReqBody(BaseModel):
+class Upload(BaseModel):
     """This request body use for upload a picture from completed task
     template : task_id = required  ------   image = required
                  string                       Image"""
@@ -34,7 +34,7 @@ class UploadReqBody(BaseModel):
 
 
 
-class UpdateTaskReqBody(BaseModel):
+class UpdateTask(BaseModel):
     """This request body use for deleting a task from database"""
 
     title : Optional[str] = None
@@ -43,7 +43,7 @@ class UpdateTaskReqBody(BaseModel):
 
 
 
-class SignUpReqBody(BaseModel):
+class SignUp(BaseModel):
     """This request body use for signup to service"""
 
     full_name : str
@@ -52,8 +52,17 @@ class SignUpReqBody(BaseModel):
 
 
 
-class LoginReqBody(BaseModel):
+class Login(BaseModel):
     """This request body use for login to account"""
 
     email : str 
     password : str
+
+
+class UpdateAccountInfo(BaseModel):
+    """This request bosy use fot update or change account info"""
+    
+    full_name = Optional[str] = None
+    email : Optional[str] = None
+    password : Optional[str] = None
+
