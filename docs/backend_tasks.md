@@ -1,9 +1,9 @@
 
 - [x] Database
 - [x] Task API
-- [ ] User API
-- [ ] User authentication
+- [X] User API
+- [X] User authentication
 - [x] `__tests__`
 - [x] API
 - [x] Task API(new-update-show-find-delte)
-- [ ] User API(signup-login-change)
+- [X] User API(signup-login-change)
