@@ -71,7 +71,7 @@ def login(reqbody:Login , response:Response):
     
     if user != None :
         if reqbody.email == user[1] and reqbody.password == user[2]:
-            return f"Dear '{user[0]}' Welcome to Todo App :)"
+            return f"Dear '{user[0]}' Welcome to Todo App :) \n {reqbody}"
         else:
             response.status_code = status.HTTP_400_BAD_REQUEST
             return "Password is invalid ! :("
