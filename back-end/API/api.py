@@ -1,4 +1,4 @@
-from API.requestbody import (NewTask, UpdateTask, Upload , SignUp , Login , UpdateAccountInfo)
+from API.models import (NewTask, UpdateTask, Upload , SignUp , Login , UpdateAccountInfo)
 from DATABASE.Db import DataBase
 from random import randint
 from fastapi import status, HTTPException, APIRouter , Response
@@ -93,19 +93,37 @@ def update_info(reqbody : UpdateAccountInfo , current_email : str , response : R
 
     try:
 
-        if reqbody.full_name != None and reqbody.full_name != current_user[0]:
-            DataBase.cursor.execute(f"UPDATE users SET full_name = '{reqbody.full_name}' WHERE email = '{current_email}'")
-            DataBase.connection.commit()
+        if current_user != None:
 
-        elif reqbody.email != None and reqbody.email != current_user[1]:
-            DataBase.cursor.execute(f"UPDATE users SET email = '{reqbody.email}' WHERE email = '{current_email}'")
-            DataBase.connection.commit()
+            if reqbody.full_name != None and reqbody.full_name != current_user[0]:
+                DataBase.cursor.execute(f"UPDATE users SET full_name = '{reqbody.full_name}' WHERE email = '{current_email}'")
+                DataBase.connection.commit()
 
-        elif reqbody.password != None and reqbody.password != current_user[2]:
-            DataBase.cursor.execute(f"UPDATE users SET password = '{reqbody.password}' WHERE email = '{current_email}'")
-            DataBase.connection.commit()
+            elif reqbody.email != None and reqbody.email != current_user[1]:
+                DataBase.cursor.execute(f"UPDATE users SET email = '{reqbody.email}' WHERE email = '{current_email}'")
+                DataBase.connection.commit()
 
-        return reqbody
+            elif reqbody.password != None and reqbody.password != current_user[2]:
+                DataBase.cursor.execute(f"UPDATE users SET password = '{reqbody.password}' WHERE email = '{current_email}'")
+                DataBase.connection.commit()
+                
+            # Fetch new user info from database
+            DataBase.cursor.execute(f"SELECT * FROM users WHERE email = '{current_email}'")
+            updated_uesr = DataBase.cursor.fetchone()
+
+            response_body = {
+                "full_name" : updated_uesr[0] ,
+                "emai" : updated_uesr[1] ,
+                "password" : updated_uesr[2]
+            }
+
+            return response_body
+        
+        else :
+            response.status_code  = status.HTTP_404_NOT_FOUND
+            return "User Not found !"
+
+  
 
     except Exception or HTTPException as error:
         response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
@@ -199,16 +217,13 @@ def upload(reqbody: Upload , response:Response):
 @router.patch("/api/todos", status_code=status.HTTP_200_OK)
 def update_task(reqbody: UpdateTask, id: int , response:Response):
 
-    response_body = {
-        "id" : id,
-        "title" : reqbody.title,
-        "completed" : reqbody.completed,
-        "dueDate" : reqbody.dueDate
-    }
+    
     
     try:
         DataBase.cursor.execute(f"SELECT * FROM todos WHERE id = {id}")
         task = DataBase.cursor.fetchone()
+
+        
 
         if task != None:
             # Update task :
@@ -229,6 +244,21 @@ def update_task(reqbody: UpdateTask, id: int , response:Response):
                     f"UPDATE todos SET dueDate = '{reqbody.dueDate}' WHERE id = {id}"
                 )
                 DataBase.connection.commit()
+
+
+
+            DataBase.cursor.execute(
+                f"SELECT * FROM todos WHERE id = {id}"
+                )
+            
+            updated_task = DataBase.cursor.fetchone()
+
+            response_body = {
+                "id" : id,
+                "title" : updated_task[1],
+                "completed" : updated_task[2],
+                "dueDate" : updated_task[3]
+            }
             
             return response_body
         
@@ -281,15 +311,16 @@ def search_task(id: int , response:Response):
         DataBase.cursor.execute(f"SELECT * FROM todos WHERE id = {id}")
         task = DataBase.cursor.fetchone()
 
-        # Make responive json model
-        response_model = {
-            "id": id,
-            "title": task[1],
-            "completed": task[2],
-            "dueDate": task[3]
-        }
         
-        if task != None:
+        
+        if task != None: 
+            # Make responive json model
+            response_model = {
+                "id": id,
+                "title": task[1],
+                "completed": task[2],
+                "dueDate": task[3]
+            }   
 
             return response_model
         
