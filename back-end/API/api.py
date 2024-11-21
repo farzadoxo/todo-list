@@ -1,29 +1,17 @@
 from API.models import (NewTask, UpdateTask, Upload , SignUp , Login , UpdateAccountInfo)
+from API.self_module import ResponseBody , IDGenerator
 from DATABASE.Db import DataBase
 from random import randint
 from fastapi import status, HTTPException, APIRouter , Response
 from fastapi.responses import JSONResponse
+
+
 
 # router instanse
 router = APIRouter()
 
 
 
-class IDGenerator:
-    def generate_id():
-        id = randint(1000034456, 9564564347821289237)
-
-        DataBase.cursor.execute(
-            "SELECT id from todos"
-        )
-        active_ids = DataBase.cursor.fetchall()
-
-        for id_countaner in active_ids:
-            if id_countaner == id:
-                id = randint(1000034456, 9564564347821289237)
-                return id
-            else:
-                return id
 
 
 # ----------------------     USER SECTION      ---------------------
@@ -44,7 +32,7 @@ def signup(reqbody : SignUp , response : Response):
         try:
             if len(reqbody.password) < 8:
                 response.status_code = status.HTTP_400_BAD_REQUEST
-                return "Invalid password template !! >>> Password most be 8  charecter and maked from numbers , special char and alphabet !"
+                return "Invalid password template !! >>> Password most be 8  charecter !"
             else:
                 DataBase.cursor.execute("INSERT INTO users VALUES (?,?,?)",
                                         (reqbody.full_name,reqbody.email,reqbody.password))
@@ -71,7 +59,14 @@ def login(reqbody:Login , response:Response):
     
     if user != None :
         if reqbody.email == user[1] and reqbody.password == user[2]:
-            return f"Dear '{user[0]}' Welcome to Todo App :) \n {reqbody}"
+            response_body = {
+                "full_name" : user[0],
+                "email" : user[1],
+                "password" : user[2]
+            }
+
+            return response_body
+        
         else:
             response.status_code = status.HTTP_400_BAD_REQUEST
             return "Password is invalid ! :("
@@ -83,51 +78,214 @@ def login(reqbody:Login , response:Response):
 
 
 
-@router.patch(
-        '/api/account/edit',
-        status_code=status.HTTP_200_OK,
-        description="Edit account Info")
-def update_info(reqbody : UpdateAccountInfo , current_email : str , response : Response):
-    DataBase.cursor.execute(f"SELECT * FROM users WHERE email = '{current_email}'")
-    current_user = DataBase.cursor.fetchone()
+# @router.patch(
+#         '/api/account/edit',
+#         status_code=status.HTTP_200_OK,
+#         description="Edit account Info")
+# def update_info(reqbody : UpdateAccountInfo , current_email : str , response : Response):
+#     DataBase.cursor.execute(f"SELECT * FROM users WHERE email = '{current_email}'")
+#     current_user = DataBase.cursor.fetchone()
+#     print(current_user)
 
-    try:
 
-        if current_user != None:
+#     try:
+#         # check user exists
+#         if current_user != None:
 
-            if reqbody.full_name != None and reqbody.full_name != current_user[0]:
-                DataBase.cursor.execute(f"UPDATE users SET full_name = '{reqbody.full_name}' WHERE email = '{current_email}'")
-                DataBase.connection.commit()
-
-            elif reqbody.email != None and reqbody.email != current_user[1]:
-                DataBase.cursor.execute(f"UPDATE users SET email = '{reqbody.email}' WHERE email = '{current_email}'")
-                DataBase.connection.commit()
-
-            elif reqbody.password != None and reqbody.password != current_user[2]:
-                DataBase.cursor.execute(f"UPDATE users SET password = '{reqbody.password}' WHERE email = '{current_email}'")
-                DataBase.connection.commit()
+#             # check and update fullname
+#             if reqbody.full_name != None and reqbody.full_name != current_user[0]:
+#                 DataBase.cursor.execute(f"UPDATE users SET full_name = '{reqbody.full_name}' WHERE email = '{current_email}'")
+#                 DataBase.connection.commit()
+#             else :
+#                 response.status_code = status.HTTP_400_BAD_REQUEST
+#                 return "The new name cannot be the same as the current name !"
+#             # check and update email
+#             if reqbody.email != None and reqbody.email != current_user[1]:
+#                 DataBase.cursor.execute(f"UPDATE users SET email = '{reqbody.email}' WHERE email = '{current_email}'")
+#                 DataBase.connection.commit()
+#             else:
+#                 response.status_code = status.HTTP_400_BAD_REQUEST
+#                 return "The new email cannot not be the same as the current email !"
+            
+#             # check and update password
+#             if reqbody.password != None and reqbody.password != current_user[2] and len(reqbody.password) >= 8:
+#                 DataBase.cursor.execute(f"UPDATE users SET password = '{reqbody.password}' WHERE email = '{current_email}'")
+#                 DataBase.connection.commit()
+#             else :
+#                response.status_code = status.HTTP_400_BAD_REQUEST
+#                return "The password must be 8 characters and not the same as the current password !"
                 
-            # Fetch new user info from database
-            DataBase.cursor.execute(f"SELECT * FROM users WHERE email = '{current_email}'")
-            updated_uesr = DataBase.cursor.fetchone()
+#             # Fetch new user info from database
+#             if reqbody.email != None :
+#                 DataBase.cursor.execute(f"SELECT * FROM users WHERE email = '{reqbody.email}'")
+#                 updated_uesr = DataBase.cursor.fetchone()
+#                 print(updated_uesr)
 
-            response_body = {
-                "full_name" : updated_uesr[0] ,
-                "emai" : updated_uesr[1] ,
-                "password" : updated_uesr[2]
-            }
+#                 response_body = {
+#                     "full_name" : updated_uesr[0] ,
+#                     "emai" : updated_uesr[1] ,
+#                     "password" : updated_uesr[2]
+#                 }
 
-            return response_body
+#                 return response_body
+#             else:
+#                 DataBase.cursor.execute(f"SELECT * FROM users WHERE email = '{current_email}'")
+#                 updated_uesr = DataBase.cursor.fetchone()
+#                 print(updated_uesr)
+
+#                 response_body = {
+#                     "full_name" : updated_uesr[0] ,
+#                     "emai" : updated_uesr[1] ,
+#                     "password" : updated_uesr[2]
+#                 }
+
+#                 return response_body
+
         
-        else :
-            response.status_code  = status.HTTP_404_NOT_FOUND
-            return "User Not found !"
+#         else :
+#             response.status_code  = status.HTTP_404_NOT_FOUND
+#             return "User Not found !"
 
   
 
+#     except Exception or HTTPException as error:
+#         response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+#         return f"ERROR >>> {error}"
+
+
+
+
+@router.patch(
+        '/api/account/edit_fullname',
+        status_code= status.HTTP_200_OK,
+        description="Change user Fullname"
+)
+def update_fullname(reqbody : UpdateAccountInfo.UpdateFullName , response : Response , email : str):
+
+    DataBase.cursor.execute(
+        f"SELECT * FROM users WHERE email = '{email}'"
+    )
+    user = DataBase.cursor.fetchone()
+
+    if user != None:
+        try:
+
+            if reqbody.full_name != user[0]:
+                DataBase.cursor.execute(
+                    f"UPDATE users SET full_name = '{reqbody.full_name}' WHERE email = '{email}'"
+                )
+                DataBase.connection.commit()
+            else:
+                response.status_code = status.HTTP_400_BAD_REQUEST
+                return "The new name cannot be the same as the current name !"
+
+
+            DataBase.cursor.execute(
+                f"SELECT * FROM users WHERE email = '{email}'"
+            )
+            updated_user = DataBase.cursor.fetchone()
+
+            return ResponseBody.UserResponseBody(updated_user)
+        
+
+        except Exception or HTTPException as error :
+            response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+            return f"ERROR >>> {error}"
+        
+    
+    else :
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return "User Not Found !"
+
+
+
+
+
+@router.patch(
+        '/api/account/edit_email',
+        status_code= status.HTTP_200_OK,
+        description= "Change user Email"
+)
+def update_email(reqbody : UpdateAccountInfo.UpdateEmail , response : Response , current_email : str):
+    try:
+        
+        DataBase.cursor.execute(
+            f"SELECT * FROM users WHERE email = '{current_email}'"
+        )
+        user = DataBase.cursor.fetchone()
+
+        if user != None:
+            
+            if reqbody.email != user[1]:
+                DataBase.cursor.execute(
+                    f"UPDATE users SET email = '{reqbody.email}' WHERE email = '{current_email}'"
+                    )
+                DataBase.connection.commit()
+            else:
+                response.status_code = status.HTTP_400_BAD_REQUEST
+                return "The new email should not be the same as the current email !"
+            
+            DataBase.cursor.execute(
+                f"SELECT * FROM users WHERE email = '{reqbody.email}'"
+            )
+            updated_user = DataBase.cursor.fetchone()
+
+            return ResponseBody.UserResponseBody(updated_user)
+        
+            
+        else:
+            response.status_code = status.HTTP_404_NOT_FOUND
+            return "User Not Found !"
+    
     except Exception or HTTPException as error:
         response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
         return f"ERROR >>> {error}"
+
+
+
+
+@router.patch(
+        '/api/account/edit_password',
+        status_code= status.HTTP_200_OK,
+        description="Change user Password"
+)
+def update_password(reqbody : UpdateAccountInfo.UpdatePassword , response : Response , email : str):
+
+    try:
+
+        DataBase.cursor.execute(
+            f"SELECT * FROM users WHERE email = '{email}'"
+        )
+        user = DataBase.cursor.fetchone()
+
+        if user != None:
+            
+            if reqbody.password != user[2] and len(reqbody.password) >= 8:
+                DataBase.cursor.execute(
+                    f"UPDATE users SET password = '{reqbody.password}' WHERE email = '{email}'"
+                )
+                DataBase.connection.commit()
+
+            else:
+                response.status_code = status.HTTP_400_BAD_REQUEST
+                return "The password must be 8 characters and not the same as the current password !"
+            
+            DataBase.cursor.execute(
+                f"SELECT * FROM users WHERE email = '{email}'"
+            )
+            updated_user = DataBase.cursor.fetchone()
+
+            return ResponseBody.UserResponseBody(updated_user)
+
+        else:
+            response.status_code = status.HTTP_404_NOT_FOUND
+            return "User Not Found !"
+        
+    
+    except Exception or HTTPException as error :
+        response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+        return f"ERROR >>> {error}"
+
 
 
 # --------------------       TASK SECTION         ----------------------
