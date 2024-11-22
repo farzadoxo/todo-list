@@ -96,22 +96,22 @@ Edit account info :
 <h4>API URL and Methods :</h4>
 <h5> Task endpoints : <h5>
 
-Show All Tasks : GET >> `/api/todos` 
+> Show All Tasks : GET >> `/api/todos` 
 
-New Task : POST >>`/api/todos`
+> New Task : POST >>`/api/todos`
 
-Upload Pic : POST >> `/api/upload`
+> Upload Pic : POST >> `/api/upload`
 
-Update Task : PATCH >> `/api/todos?={id}`
+> Update Task : PATCH >> `/api/todos?={id}`
 
-Delete Task : DELETE >> `/api/todos?={id}`
+> Delete Task : DELETE >> `/api/todos?={id}`
 
-Find Task : GET >> `api/todos/find?={id}`
+> Find Task : GET >> `api/todos/find?={id}`
 
 <h5> User endpoints : <h5>
 
-Signup : POST >> `/api/account/signup`
+> Signup : POST >> `/api/account/signup`
 
-Login : GET >> `/api/account/login`
+> Login : GET >> `/api/account/login`
 
-Update Account Info : PATCH >> `api/account/edit`
+> Update Account Info : PATCH >> `api/account/edit`
