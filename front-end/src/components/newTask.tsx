@@ -1,3 +1,4 @@
+// TaskModal.tsx
 import React, { useState, useRef, ChangeEvent } from 'react';
 import { addDays, format } from 'date-fns';
 import api from '../axios';
@@ -6,13 +7,12 @@ import { TodoPostCallType, Priority, isPriority } from '../types';
 import PrioritySelect from './priorityLevel';
 import CustomDatePicker from './customDatePicker';
 
-interface NewTaskProps {
-  className?: string
+interface TaskModalProps {
+  isOpen: boolean;
+  onClose: () => void;
 }
 
-
-const NewTask: React.FC<NewTaskProps> = ({ className }) => {
-  //BUG: the dueDate is null always
+const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose }) => {
   const [taskData, setTaskData] = useState<TodoPostCallType>({
     title: '',
     completed: false,
@@ -26,8 +26,6 @@ const NewTask: React.FC<NewTaskProps> = ({ className }) => {
   const handleTextChange = (evt: ChangeEvent<HTMLInputElement>) => {
     const text = evt.target.value;
     let dueDate: Date | null = null;
-    const priority: Priority = "none";
-
 
     // Helper function to get the next occurrence of a day
     const getNextDayOfWeek = (day: string): Date | null => {
@@ -65,20 +63,22 @@ const NewTask: React.FC<NewTaskProps> = ({ className }) => {
     const priorityMatch = text.match(/~\s*(low|medium|high|none)/i);
     if (priorityMatch) {
       const matchedPriority = priorityMatch[1].toLowerCase();
-      return isPriority(matchedPriority) ? matchedPriority : null;
+      setPriority(isPriority(matchedPriority) ? matchedPriority : "none");
     }
 
     let formattedDueDate: string;
     if (dueDate) {
       formattedDueDate = format(dueDate, "yyyy-MM-dd");
       setSelectedDate(dueDate);
+      setTaskData(prevState => ({
+        ...prevState,
+        dueDate: formattedDueDate,
+      }));
     }
 
     setTaskData(prevState => ({
       ...prevState,
       title: text,
-      dueDate: formattedDueDate,
-      priority: priority || undefined,
     }));
   };
 
@@ -91,7 +91,6 @@ const NewTask: React.FC<NewTaskProps> = ({ className }) => {
     }
 
     try {
-
       console.log(taskData)
       const res = await api.post("/api/todos/", taskData);
 
@@ -111,6 +110,9 @@ const NewTask: React.FC<NewTaskProps> = ({ className }) => {
         if (contentEditableRef.current) {
           contentEditableRef.current.innerHTML = '';
         }
+
+        // Close modal after submission
+        onClose();
       }
     } catch (error) {
       console.error("Error adding task:", error);
@@ -118,29 +120,37 @@ const NewTask: React.FC<NewTaskProps> = ({ className }) => {
     }
   };
 
+  if (!isOpen) return null; // Don't render anything if modal is not open
+
   return (
-    <form onSubmit={handleSubmit} className={`flex flex-col sm:flex-row my-3 max-w-md w-full bg-white shadow-lg rounded-lg ${className}`}>
-      <div className="flex items-center border border-gray-300 rounded-md w-full bg-gray-50 focus-within:ring-2 focus-within:ring-blue-500 transition duration-200">
+    <div className="fixed inset-0 flex items-center justify-center z-50">
+      <div className="fixed inset-0 bg-black opacity-50" onClick={onClose}></div>
 
-        <button type="submit" className="flex items-center justify-center p-2 bg-blue-500 text-white rounded-l-md hover:bg-blue-600 transition duration-200">
-          <img src="/add-circle-svgrepo-com.svg" width={"30px"} height={"30px"} alt='add task' />
-        </button>
+      <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-lg p-6 z-10 max-w-md w-full">
+        <h2 className="text-lg font-bold mb-4">Add New Task</h2>
 
-        <input
-          type='text'
-          value={taskData.title}
-          onChange={handleTextChange}
-          className="h-6 p-2 border-none bg-transparent focus:outline-none flex-grow placeholder-gray-400"
-          placeholder="Add a new task..."
-          aria-label="New task input"
-        />
+        <div className="flex items-center border border-gray-300 rounded-md w-full bg-gray-50 focus-within:ring-2 focus-within:ring-blue-500 transition duration-200">
+          <button type="submit" className="flex items-center justify-center p-2 bg-blue-500 text-white rounded-l-md hover:bg-blue-600 transition duration-200">
+            <img src="/add-circle-svgrepo-com.svg" width={"30px"} height={"30px"} alt='add task' />
+          </button>
 
-        <PrioritySelect selected={priority} onValueChangeSetter={setPriority} />
-        <CustomDatePicker selectedDate={selectedDate} onDateChange={setSelectedDate} />
+          <input
+            type='text'
+            value={taskData.title}
+            onChange={handleTextChange}
+            className="h-6 p-2 border-none bg-transparent focus:outline-none flex-grow placeholder-gray-400"
+            placeholder="Add a new task..."
+            aria-label="New task input"
+          />
 
-      </div>
-    </form>
+          <PrioritySelect selected={priority} onValueChangeSetter={setPriority} />
+          <CustomDatePicker selectedDate={selectedDate} onDateChange={setSelectedDate} />
+        </div>
+
+        <button type="button" onClick={onClose} className="mt-4 px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancel</button>
+      </form>
+    </div>
   );
 };
 
-export default NewTask;
+export default TaskModal;

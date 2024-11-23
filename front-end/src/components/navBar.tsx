@@ -3,9 +3,15 @@ import React, { useState } from 'react';
 import { Home, LogOut, Plus } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import LogoutConfirm from './logoutConfirm';
+import NewTaskModal from '../components/newTask.tsx'
 
 interface NavProps {
   deviceType: "mobile" | "desktop";
+}
+
+interface MobileNavBarProps {
+  onLogoutClick: () => void;
+  onNewTaskClick: () => void;
 }
 
 const colors = {
@@ -17,7 +23,9 @@ const colors = {
 
 
 
-const MobileNavbar = ({ onLogoutClick }: { onLogoutClick: () => void }) => {
+const MobileNavBar: React.FC<MobileNavBarProps> = ({ onLogoutClick, onNewTaskClick }) => {
+
+
   return (
     <nav className="fixed bottom-0 z-20 left-0 right-0 bg-gray-800 p-4 shadow-lg">
       <ul className="flex justify-around text-white text-center">
@@ -29,9 +37,9 @@ const MobileNavbar = ({ onLogoutClick }: { onLogoutClick: () => void }) => {
         </li>
 
         <li>
-          <Link to={"/new-task/"} className="flex flex-col items-center bg-blue-700 rounded-full p-2">
+          <button onClick={onNewTaskClick} className="flex flex-col items-center bg-blue-700 p-2 rounded-full">
             <Plus size={24} />
-          </Link>
+          </button>
         </li>
 
         <li>
@@ -99,9 +107,14 @@ const DesktopNav: React.FC<{ onLogoutClick: () => void }> = ({ onLogoutClick }) 
 
 const Nav: React.FC<NavProps> = ({ deviceType }) => {
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState<boolean>(false);
+  const [isNewTaskModalOpen, setIsNewTaskModalOpen] = useState<boolean>(false);
 
   const handleLogoutClick = () => {
     setIsLogoutModalOpen(true);
+  };
+
+  const handleNewTaskClick = () => {
+    setIsNewTaskModalOpen(true);
   };
 
   return (
@@ -109,12 +122,16 @@ const Nav: React.FC<NavProps> = ({ deviceType }) => {
       {deviceType === "desktop" ? (
         <DesktopNav onLogoutClick={handleLogoutClick} />
       ) : (
-        <MobileNavbar onLogoutClick={handleLogoutClick} />
+        <MobileNavBar onLogoutClick={handleLogoutClick} onNewTaskClick={handleNewTaskClick} />
       )}
 
       {/* Render the Logout Confirm Modal */}
       {isLogoutModalOpen && (
-        <LogoutConfirm onClose={() => setIsLogoutModalOpen(false)} />
+        <LogoutConfirm isOpen={isLogoutModalOpen} onClose={() => setIsLogoutModalOpen(false)} />
+      )}
+
+      {isNewTaskModalOpen && (
+        <NewTaskModal isOpen={isNewTaskModalOpen} onClose={() => setIsNewTaskModalOpen(false)} />
       )}
     </>
   );

@@ -31,9 +31,9 @@
 - [x] logout
 - [x] connecting to the server
 - [x] nav bar items and looks
-- [ ] put the new task component on a modal
-- [ ] adding tasks with voice
-- [ ] adding video to task as `completed video`
-- [ ] adding notes to task
+- [x] put the new task component on a modal
 - [ ] dark mode
+- [ ] adding tasks with voice
+- [ ] adding notes to task
+- [ ] adding video to task as `completed video`
 - [ ] unit tests

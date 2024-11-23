@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import NewTask from "./components/newTask";
 import TodoList from "./home/todos";
 import Nav from "./components/navBar";
 import './mockSetup';
@@ -52,7 +51,6 @@ function App() {
             ) : (
               <>
                 <Route path="/" element={<TodoList />} />
-                <Route path="new-task/" element={<NewTask />} />
                 <Route path="*" element={<NotFound />} />
               </>
             )}

@@ -2,10 +2,12 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 interface LogoutConfirmProps {
+  isOpen: boolean;
   onClose: () => void;
 }
 
-const LogoutConfirm: React.FC<LogoutConfirmProps> = ({ onClose }) => {
+const LogoutConfirm: React.FC<LogoutConfirmProps> = ({ isOpen, onClose }) => {
+
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -13,6 +15,12 @@ const LogoutConfirm: React.FC<LogoutConfirmProps> = ({ onClose }) => {
     navigate('/login'); // Redirect to login page
     location.reload(); // Reload the page
   };
+
+
+  // return null if isOpen is false
+  if (!isOpen) {
+    return null
+  }
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
