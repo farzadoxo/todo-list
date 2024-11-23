@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import NewTask from "./components/newTask";
 import TodoList from "./home/todos";
-import Nav from "./home/navBar";
+import Nav from "./components/navBar";
 import './mockSetup';
 import NotFound from "./components/notFound";
 import SignUp from "./components/auth/signUp";

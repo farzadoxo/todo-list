@@ -5,10 +5,10 @@ import { TodoType } from "../types";
 import { useTodosListState } from "../store";
 import PhotoIconWithModal from "./choosePhotoModal";
 import { DeleteIcon, EditIcon } from "lucide-react";
-import { Modal } from 'react-responsive-modal';
 import 'react-responsive-modal/styles.css';
 import CustomDatePicker from './customDatePicker';
 import api from '@/axios';
+import CustomConfirmModal from './customModals';
 
 interface Option {
   icon: React.FC<React.SVGProps<SVGSVGElement>>;
@@ -233,26 +233,14 @@ const Todo: React.FC<TodoType> = ({ id, title, completed, dueDate, priority }) =
           </>
         )}
       </li>
-
-      {/* Delete Confirmation Modal */}
-      <Modal open={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)} center>
-        <h2>Delete Task?</h2>
-        <p>Are you sure you want to delete this todo item?</p>
-        <div className="flex justify-end mt-4">
-          <button
-            onClick={() => setIsDeleteModalOpen(false)}
-            className="px-4 py-2 mr-2 text-gray-600 border border-gray-300 rounded hover:bg-gray-100"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={confirmDelete}
-            className="px-4 py-2 text-white bg-red-600 rounded hover:bg-red-700"
-          >
-            Delete
-          </button>
-        </div>
-      </Modal>
+      <CustomConfirmModal
+        open={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        title="Delete Task?"
+        content={<p>Are you sure you want to delete this todo item?</p>}
+        confirmLabel="Delete"
+        onConfirm={confirmDelete}
+      />
     </>
   );
 };
