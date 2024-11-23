@@ -8,7 +8,7 @@ import { DeleteIcon, EditIcon } from "lucide-react";
 import 'react-responsive-modal/styles.css';
 import CustomDatePicker from './customDatePicker';
 import api from '@/axios';
-import CustomConfirmModal from './customModals';
+import { CustomConfirmModal } from './customModals';
 
 interface Option {
   icon: React.FC<React.SVGProps<SVGSVGElement>>;
@@ -73,21 +73,21 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({ onEdit, onDelete }) => 
     <div className="relative inline-block text-left" ref={dropdownRef}>
       <button
         type="button"
-        className="flex items-center justify-center w-10 h-10 bg-transparent rounded-full hover:bg-gray-200 transition duration-200 focus:outline-none"
+        className="flex items-center justify-center w-10 h-10 bg-transparent rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition duration-200 focus:outline-none"
         onClick={toggleDropdown}
         aria-haspopup="true"
         aria-expanded={isOpen}
       >
-        <span className="text-gray-600">...</span>
+        <span className="text-gray-600 dark:text-gray-300">...</span>
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 z-10 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+        <div className="absolute right-0 z-10 mt-2 w-48 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5">
           <div className="py-1" role="menu" aria-orientation="vertical">
             {Object.entries(options).map(([key, option]) => (
               <button
                 key={key}
-                className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 w-full text-left"
                 onClick={option.onClick}
               >
                 <option.icon className="w-4 h-4 mr-2" />
@@ -111,6 +111,9 @@ const Todo: React.FC<TodoType> = ({ id, title, completed, dueDate, priority }) =
   // State for delete confirmation modal
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
 
+  // State for saving
+  const [isSaving, setIsSaving] = useState<boolean>(false);
+
   const handleTodoToggle = () => {
     const updatedTask = {
       id,
@@ -121,11 +124,11 @@ const Todo: React.FC<TodoType> = ({ id, title, completed, dueDate, priority }) =
     };
     try {
       taskStore.modifyTodo(id, updatedTask);
-      const response = api.patch(`/api/todos/${id}`, updatedTask)
-      console.log(response)
+      api.patch(`/api/todos/${id}`, updatedTask)
+        .then(response => console.log(response));
       setIsCompleted(!isCompleted);
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
   };
 
@@ -148,16 +151,17 @@ const Todo: React.FC<TodoType> = ({ id, title, completed, dueDate, priority }) =
   const confirmDelete = async () => {
     try {
       taskStore.deleteTodo(id); // Call delete function
-      const response = api.delete(`api/todos/${id}`)
-      console.log("deleteTodo response", response);
+      await api.delete(`api/todos/${id}`);
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
     setIsDeleteModalOpen(false); // Close modal after deletion
   };
 
   const formattedDueDate = editedDueDate && format(editedDueDate, "yyyy-MM-dd");
+
   const handleSave = async () => { // handle edit save
+    setIsSaving(true); // Set saving state to true
     const updatedTask = {
       id,
       title: editedTitle,
@@ -165,64 +169,62 @@ const Todo: React.FC<TodoType> = ({ id, title, completed, dueDate, priority }) =
       dueDate: formattedDueDate,
       priority,
     };
+
     try {
-
       taskStore.modifyTodo(id, updatedTask);
-
-      const response = await api.patch(`/api/todos/${id}`)
-      console.log(response)
-
+      await api.patch(`/api/todos/${id}`, updatedTask);
     } catch (error) {
-      console.error("error in updating task", error)
+      console.error("error in updating task", error);
     }
-    setIsEditing(false);
+
+    setIsSaving(false); // Reset saving state
+    setIsEditing(false); // Exit edit mode
   };
 
   return (
     <>
       <li
         key={id}
-        className={`flex items-center justify-between p-4 my-1 bg-white rounded-lg shadow-md transition-all duration-300 ${isCompleted ? 'bg-green-100' : 'bg-white'} border border-gray-300 priority-${priority}`}
+        className={`flex items-center justify-between p-4 my-1 mx-2 rounded-lg shadow-md transition-all duration-300 border border-gray-300 
+          ${isCompleted ? 'bg-green-100' : 'bg-white'} 
+          dark:bg-gray-800 dark:border-gray-700 ${isCompleted ? 'dark:bg-green-900' : ''} priority-${priority}`}
       >
         <div className="flex items-center flex-grow">
           {isEditing ? (
-            <form>
-
+            <form className="flex flex-row space-x-2">
               <input
                 type="text"
                 value={editedTitle}
                 onChange={(e) => setEditedTitle(e.target.value)}
-                className="flex-grow p-1 border-b border-gray-400 focus:outline-none focus:border-blue-500 transition duration-200"
+                className="p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 transition duration-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
                 autoFocus
               />
-              <CustomDatePicker selectedDate={editedDueDate as Date | null} onDateChange={setEditedDueDate} className="bottom" />
-
+              <CustomDatePicker selectedDate={editedDueDate as Date | null} onDateChange={setEditedDueDate} />
+              <button
+                type="button"
+                onClick={handleSave}
+                disabled={isSaving}
+                className={`px-3 py-1 rounded transition duration-200 ${isSaving ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-600'} text-white`}
+              >
+                {isSaving ? 'Saving...' : 'Save'}
+              </button>
             </form>
           ) : (
-
             <>
-
               <Checkbox
                 id={id}
                 checked={isCompleted}
                 onChange={handleTodoToggle}
                 className="mr-3"
               />
-              <span className={`ml-2 text-lg ${isCompleted ? 'line-through text-gray-400' : 'text-gray-800'}`}>
+              <span className={`ml-2 text-lg ${isCompleted ? 'line-through text-gray-400' : 'text-gray-800'} dark:text-gray-300`}>
                 {title}
               </span>
             </>
           )}
         </div>
 
-        {isEditing ? (
-          <button
-            onClick={handleSave}
-            className="px-3 py-1 ml-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-200"
-          >
-            Save
-          </button>
-        ) : (
+        {!isEditing && (
           <>
             <PhotoIconWithModal
               size={32}
@@ -233,6 +235,7 @@ const Todo: React.FC<TodoType> = ({ id, title, completed, dueDate, priority }) =
           </>
         )}
       </li>
+
       <CustomConfirmModal
         open={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}

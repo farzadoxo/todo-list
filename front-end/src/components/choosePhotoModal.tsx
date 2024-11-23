@@ -154,7 +154,7 @@ const ChoosePhotoIcon: React.FC<PhotoIconWithModalProps> = ({ size, color, onIma
   return (
     <>
       <AddPhotoIcon size={size} color={color} clickHandler={openModal} />
-      <Modal open={isModalOpen} onClose={closeModal} center>
+      <Modal open={isModalOpen} onClose={closeModal} center >
         <h2 className="text-2xl font-bold mb-4">Add Your Photo</h2>
         {!isCameraMode ? (
           <div className="flex mt-4 space-x-4">

@@ -25,13 +25,13 @@ const CustomConfirmModal: React.FC<CustomModalProps> = ({
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
       <div className="fixed inset-0 bg-black opacity-50" onClick={onClose}></div>
-      <div className="bg-white rounded shadow-lg p-6 z-10">
-        <h2 className="text-lg font-bold">{title}</h2>
-        <div className="mt-4">{content}</div>
+      <div className="bg-white dark:bg-gray-800 rounded shadow-lg p-6 z-10">
+        <h2 className="text-lg font-bold text-gray-800 dark:text-white">{title}</h2>
+        <div className="mt-4 text-gray-700 dark:text-gray-300">{content}</div>
         <div className="flex justify-end mt-4">
           <button
             onClick={onClose}
-            className="px-4 py-2 mr-2 text-gray-600 border border-gray-300 rounded hover:bg-gray-100"
+            className="px-4 py-2 mr-2 text-gray-600 border border-gray-300 rounded hover:bg-gray-100 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700"
           >
             Cancel
           </button>
@@ -42,7 +42,7 @@ const CustomConfirmModal: React.FC<CustomModalProps> = ({
               }
               onClose();
             }}
-            className="px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700"
+            className="px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
           >
             {confirmLabel}
           </button>
@@ -52,4 +52,4 @@ const CustomConfirmModal: React.FC<CustomModalProps> = ({
   );
 };
 
-export default CustomConfirmModal;
+export { CustomConfirmModal };

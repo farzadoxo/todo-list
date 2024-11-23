@@ -17,7 +17,7 @@ interface CustomDatePickerInputProps {
 // Custom input component for the DatePicker
 const CustomDatePickerInput: React.FC<CustomDatePickerInputProps> = ({ value, onClick }) => (
   <button
-    className="flex items-center rounded-md p-1 hover:bg-gray-100 transition duration-300 ease-in-out"
+    className="flex items-center rounded-md p-1 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-300 ease-in-out"
     type="button"
     onClick={onClick}
   >
@@ -27,14 +27,14 @@ const CustomDatePickerInput: React.FC<CustomDatePickerInputProps> = ({ value, on
       height={"30px"}
       viewBox="0 0 24 24"
       fill="currentColor"
-      className="fill-current hover:fill-blue-500"
+      className="fill-current hover:fill-blue-500 dark:hover:fill-blue-400"
     >
       <path d="M20 10V7C20 5.89543 19.1046 5 18 5H6C4.89543 5 4 5.89543 4 7V10M20 10V19C20 20.1046 19.1046 21 18 21H6C4.89543 21 4 20.1046 4 19V10M20 10H4M8 3V7M16 3V7" stroke="#000000" strokeWidth="1" strokeLinecap="round" />
       <rect x="6" y="12" width="3" height="3" rx="0.5" fill="#000000" />
       <rect x="10.5" y="12" width="3" height="3" rx="0.5" fill="#000000" />
       <rect x="15" y="12" width="3" height="3" rx="0.5" fill="#000000" />
     </svg>
-    <span className='text-sky-400 hover:text-blue-700 font-bold transition duration-300 ease-in-out hidden sm:block'>
+    <span className='text-sky-400 hover:text-blue-700 dark:text-sky-300 dark:hover:text-blue-500 font-bold transition duration-300 ease-in-out hidden sm:block'>
       {value || "Select Date"}
     </span>
   </button>
@@ -46,7 +46,7 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({ selectedDate, onDat
   return (
     <DatePicker
       selected={selectedDate ? new Date(selectedDate) : todayDate}
-      className={className}
+      className={`bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:text-white ${className}`}
       onChange={(date) => {
         if (date) {
           onDateChange(date);

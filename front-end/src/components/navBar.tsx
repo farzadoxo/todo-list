@@ -1,49 +1,37 @@
-import { Sidebar, Menu, MenuItem } from 'react-pro-sidebar';
 import React, { useState } from 'react';
-import { Home, LogOut, Plus } from 'lucide-react';
+import { Home, LogOut, Plus, Settings } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import LogoutConfirm from './logoutConfirm';
-import NewTaskModal from '../components/newTask.tsx'
+import NewTaskModal from '../components/newTask.tsx';
 
 interface NavProps {
   deviceType: "mobile" | "desktop";
 }
 
-interface MobileNavBarProps {
+interface NavBarProps {
   onLogoutClick: () => void;
   onNewTaskClick: () => void;
 }
 
-const colors = {
-  background: '#1f2937',
-  text: 'black',
-  hover: '#4b5563',
-  active: '#6b7280'
-};
-
-
-
-const MobileNavBar: React.FC<MobileNavBarProps> = ({ onLogoutClick, onNewTaskClick }) => {
-
-
+const MobileNavBar: React.FC<NavBarProps> = ({ onLogoutClick, onNewTaskClick }) => {
   return (
-    <nav className="fixed bottom-0 z-20 left-0 right-0 bg-gray-800 p-4 shadow-lg">
+    <nav className="fixed bottom-0 z-20 left-0 right-0 bg-gray-800 p-4 shadow-lg dark:bg-gray-900">
       <ul className="flex justify-around text-white text-center">
         <li>
-          <Link to={"/home/"} className="flex flex-col items-center ">
+          <Link to={"/"} className="flex flex-col items-center text-white">
             <Home size={24} />
-            <span className="text-xs text-white text-center">Home</span>
+            <span className="text-xs">Home</span>
           </Link>
         </li>
 
         <li>
-          <button onClick={onNewTaskClick} className="flex flex-col items-center bg-blue-700 p-2 rounded-full">
+          <button onClick={onNewTaskClick} className="flex flex-col items-center bg-blue-700 p-2 rounded-full hover:bg-blue-600 dark:bg-blue-800 dark:hover:bg-blue-700">
             <Plus size={24} />
           </button>
         </li>
 
         <li>
-          <button onClick={onLogoutClick} className="flex flex-col items-center">
+          <button onClick={onLogoutClick} className="flex flex-col items-center text-white">
             <LogOut size={24} />
             <span className="text-xs">Logout</span>
           </button>
@@ -53,57 +41,40 @@ const MobileNavBar: React.FC<MobileNavBarProps> = ({ onLogoutClick, onNewTaskCli
   );
 };
 
-const DesktopNav: React.FC<{ onLogoutClick: () => void }> = ({ onLogoutClick }) => {
-  const menuItemStyles = {
-    button: {
-      color: colors.text,
-      padding: '10px 20px',
-      transition: 'background-color 0.2s',
-      '&:hover': {
-        backgroundColor: colors.hover,
-      },
-      '&.active': {
-        backgroundColor: colors.active,
-        color: '#ffffff',
-      },
-    },
-  };
 
+const DesktopNav: React.FC<NavBarProps> = ({ onLogoutClick, onNewTaskClick }) => {
   return (
-    <>
-      <Sidebar
-        rootStyles={{
-          height: "100vh",
-          backgroundColor: colors.background,
-          color: colors.text,
-        }}
-      >
-        <div style={{ padding: '16px', textAlign: 'center', borderBottom: `1px solid ${colors.hover}` }}>
-          <h1 style={{ fontSize: '24px', fontWeight: 'bold' }}>Todo App</h1>
-        </div>
-        <Menu menuItemStyles={menuItemStyles} className='font-bold'>
-          <MenuItem>
-            <Link to={"/new-task/"} className="flex flex-col items-center bg-blue-700 rounded-full p-2">
-              {<Plus size={24} />}
-            </Link>
-          </MenuItem>
-          <MenuItem>
-            <Link to={"/"} className="flex flex-col items-center ">
-              {<Home size={24} />}
-              <span className="text-white text-center">Home</span>
-            </Link>
-          </MenuItem>
-
-          {/* Triggering the logout confirmation modal */}
-          <MenuItem onClick={onLogoutClick} className='flex flex-col items-center'>
-            <LogOut size={24} />
-            <span className="text-white">Logout</span>
-          </MenuItem>
-        </Menu>
-      </Sidebar>
-    </>
+    <div className='sidebar w-48 bg-gray-400 p-4 shadow-lg dark:bg-gray-900'>
+      <div className='header text-center'>
+        <h1 className='text-2xl font-bold text-black dark:text-white'>Todo App</h1>
+      </div>
+      <ul className='flex flex-col h-screen gap-5 font-bold bg-gray-400 p-4 dark:bg-gray-900'>
+        <li>
+          <button onClick={onNewTaskClick} className="flex flex-col items-center bg-blue-700 w-full p-2 rounded-full hover:bg-blue-600 dark:bg-blue-800 dark:hover:bg-blue-700">
+            <Plus size={24} />
+          </button>
+        </li>
+        <li>
+          <Link to={"/"} className="menu-item flex flex-col items-center text-black dark:text-white">
+            <Home size={24} />
+            <span className="">Home</span>
+          </Link>
+        </li>
+        <li>
+          <Link to={"preference/"} className="menu-item flex flex-col items-center text-black dark:text-white">
+            <Settings size={24} />
+            <span className="">Preference</span>
+          </Link>
+        </li>
+        <li onClick={onLogoutClick} className='menu-item flex flex-col text-black items-center cursor-pointer dark:text-white'>
+          <LogOut size={24} />
+          <span className="">Logout</span>
+        </li>
+      </ul>
+    </div>
   );
-}
+};
+
 
 const Nav: React.FC<NavProps> = ({ deviceType }) => {
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState<boolean>(false);
@@ -120,12 +91,12 @@ const Nav: React.FC<NavProps> = ({ deviceType }) => {
   return (
     <>
       {deviceType === "desktop" ? (
-        <DesktopNav onLogoutClick={handleLogoutClick} />
+        <DesktopNav onLogoutClick={handleLogoutClick} onNewTaskClick={handleNewTaskClick} />
       ) : (
         <MobileNavBar onLogoutClick={handleLogoutClick} onNewTaskClick={handleNewTaskClick} />
       )}
 
-      {/* Render the Logout Confirm Modal */}
+      {/* Render the Logout Confirm Modal and NewTaskModal*/}
       {isLogoutModalOpen && (
         <LogoutConfirm isOpen={isLogoutModalOpen} onClose={() => setIsLogoutModalOpen(false)} />
       )}

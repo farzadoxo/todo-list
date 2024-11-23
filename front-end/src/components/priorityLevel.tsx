@@ -30,20 +30,20 @@ const PriorityDropDownMenu: React.FC<PriorityDropDownMenuProps> = ({ selected = 
           </g>
         </svg>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56">
-        <DropdownMenuLabel>to ease my mind</DropdownMenuLabel>
-        <DropdownMenuSeparator />
+      <DropdownMenuContent className="w-56 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-200">
+        <DropdownMenuLabel className="text-gray-800 dark:text-gray-200">to ease my mind</DropdownMenuLabel>
+        <DropdownMenuSeparator className="dark:bg-gray-600" />
         <DropdownMenuRadioGroup value={selected} onValueChange={onValueChangeSetter}>
-          <DropdownMenuRadioItem value="none" >
+          <DropdownMenuRadioItem value="none" className="dark:bg-gray-800 dark:hover:bg-gray-700">
             none
           </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="low" >
+          <DropdownMenuRadioItem value="low" className="dark:bg-gray-800 dark:hover:bg-gray-700">
             low
           </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="medium" >
+          <DropdownMenuRadioItem value="medium" className="dark:bg-gray-800 dark:hover:bg-gray-700">
             medium
           </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="high" >
+          <DropdownMenuRadioItem value="high" className="dark:bg-gray-800 dark:hover:bg-gray-700">
             high
           </DropdownMenuRadioItem>
         </DropdownMenuRadioGroup>
@@ -51,6 +51,5 @@ const PriorityDropDownMenu: React.FC<PriorityDropDownMenuProps> = ({ selected = 
     </DropdownMenu >
   );
 }
-
 
 export default PriorityDropDownMenu;

@@ -35,5 +35,7 @@
 - [ ] dark mode
 - [ ] adding tasks with voice
 - [ ] adding notes to task
+- [ ] gestures on task component
+- [ ] drag and drop
 - [ ] adding video to task as `completed video`
 - [ ] unit tests

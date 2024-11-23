@@ -1,4 +1,3 @@
-// TaskModal.tsx
 import React, { useState, useRef, ChangeEvent } from 'react';
 import { addDays, format } from 'date-fns';
 import api from '../axios';
@@ -91,7 +90,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose }) => {
     }
 
     try {
-      console.log(taskData)
+      console.log(taskData);
       const res = await api.post("/api/todos/", taskData);
 
       if (res.data) {
@@ -126,19 +125,26 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose }) => {
     <div className="fixed inset-0 flex items-center justify-center z-50">
       <div className="fixed inset-0 bg-black opacity-50" onClick={onClose}></div>
 
-      <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-lg p-6 z-10 max-w-md w-full">
-        <h2 className="text-lg font-bold mb-4">Add New Task</h2>
+      <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 z-10 max-w-sm md:max-w-lg w-full">
+        <h2 className="text-lg font-bold mb-4 text-gray-800 dark:text-white">Add New Task</h2>
 
-        <div className="flex items-center border border-gray-300 rounded-md w-full bg-gray-50 focus-within:ring-2 focus-within:ring-blue-500 transition duration-200">
-          <button type="submit" className="flex items-center justify-center p-2 bg-blue-500 text-white rounded-l-md hover:bg-blue-600 transition duration-200">
-            <img src="/add-circle-svgrepo-com.svg" width={"30px"} height={"30px"} alt='add task' />
+        <div className="flex items-center border border-gray-300 dark:border-gray-600 rounded-md w-full bg-gray-50 dark:bg-gray-700 focus-within:ring-2 focus-within:ring-blue-500 transition duration-200">
+          <button
+            type="submit"
+            className="flex items-center justify-center p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-200 min-w-[40px] min-h-[40px]"
+          >
+            <img
+              src="/add-circle-svgrepo-com.svg"
+              alt='add task'
+              className="w-6 h-6 object-contain" // Ensures the image scales properly
+            />
           </button>
 
           <input
             type='text'
             value={taskData.title}
             onChange={handleTextChange}
-            className="h-6 p-2 border-none bg-transparent focus:outline-none flex-grow placeholder-gray-400"
+            className="h-6 p-2 border-none bg-transparent focus:outline-none flex-grow placeholder-gray-400 dark:placeholder-gray-500 text-gray-800 dark:text-white"
             placeholder="Add a new task..."
             aria-label="New task input"
           />
@@ -147,7 +153,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose }) => {
           <CustomDatePicker selectedDate={selectedDate} onDateChange={setSelectedDate} />
         </div>
 
-        <button type="button" onClick={onClose} className="mt-4 px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancel</button>
+        <button type="button" onClick={onClose} className="mt-4 px-4 py-2 bg-gray-300 dark:bg-gray-600 rounded hover:bg-gray-400 dark:hover:bg-gray-500">Cancel</button>
       </form>
     </div>
   );
