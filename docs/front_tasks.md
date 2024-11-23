@@ -29,7 +29,10 @@
 - [x] 404 not found page
 - [x] user authentication
 - [x] logout
-- [ ] connecting to the server
+- [-] connecting to the server
+- [ ] put the new task component on a modal
+- [ ] nav bar items and looks
+- [ ] adding tasks with voice
 - [ ] adding video to task as `completed video`
 - [ ] adding notes to task
 - [ ] unit tests

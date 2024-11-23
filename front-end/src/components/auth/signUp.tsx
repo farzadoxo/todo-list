@@ -1,15 +1,30 @@
+import api from '@/axios';
 import React, { useState } from 'react';
 import { Link } from "react-router-dom";
 
 const SignUp: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState<string>('');
+  const [fullName, setFullName] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle signup logic here
-    console.log('Email:', email);
-    console.log('Password:', password);
+
+    const signupData = {
+      full_name: fullName,
+      email: email,
+      password: password
+    }
+    try {
+      const response = await api.post("/api/signup", signupData)
+      console.log(response)
+
+
+    } catch (error) {
+      console.error(error)
+
+    }
+
   };
 
   return (
@@ -29,6 +44,17 @@ const SignUp: React.FC = () => {
           />
         </div>
 
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700" htmlFor="fullName">Full Name</label>
+          <input
+            type="fullName"
+            id="fullName"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+            required
+            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-500"
+          />
+        </div>
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700" htmlFor="password">Password</label>
           <input

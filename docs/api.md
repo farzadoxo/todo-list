@@ -19,13 +19,15 @@ Retrieves a list of all todo items.
       "id": 1,
       "title": "Complete project documentation",
       "completed": false,
-      "dueDate": "2024-10-15"
+      "dueDate": "2024-10-15",
+      priority: 'low' | 'medium' | 'high' | "none",
     },
     {
       "id": 2,
       "title": "Buy groceries",
       "completed": true,
-      "dueDate": null
+      "dueDate": null,
+      priority: 'low' | 'medium' | 'high' | "none",
     }
   ]
 }
@@ -58,7 +60,8 @@ The request body must be a JSON object containing the following fields:
 {
   "title": "Buy groceries",
   "completed": false,
-  "dueDate": "2024-10-07"
+  "dueDate": "2024-10-07", 
+  priority: 'low' | 'medium' | 'high' | "none",
 }
 ```
 
@@ -77,7 +80,8 @@ The request body must be a JSON object containing the following fields:
   "id": 1234567890,
   "title": "Buy groceries",
   "completed": false,
-  "dueDate": null
+  "dueDate": null,
+  priority: 'low' | 'medium' | 'high' | "none",
 }
 ```
 
@@ -136,7 +140,8 @@ updates the task data
 {
   "title": "Buy groceries",
   "completed": false,
-  "dueDate": null
+  "dueDate": null,
+  priority: 'low' | 'medium' | 'high' | "none",
 }
 ```
 
@@ -153,7 +158,9 @@ updated task data
   "id": 1,
   "title": "Complete project documentation",
   "completed": false,
-  "dueDate": "2024-10-15"
+  "dueDate": "2024-10-15",
+  priority: 'low' | 'medium' | 'high' | "none",
+
 }
 ```
 
@@ -181,6 +188,7 @@ deleted task HTTP code
 ```
 
 # Find a Task
+
 Find a task (fetch from database)
 
 ### Request
@@ -198,11 +206,11 @@ Find a task (fetch from database)
 }
 ```
 
-
 # Singup
-Signup a user 
 
-### Request 
+Signup a user
+
+### Request
 
 `POST /api/signup`
 
@@ -221,9 +229,10 @@ Signup a user
 > `User signed Up :)`
 
 # Login
+
 Login to user account
 
-### Request 
+### Request
 
 `GET /api/login`
 
@@ -243,4 +252,3 @@ Login to user account
 > `Password invalid`
 
 > `Welcome to Todo App`
-

@@ -9,11 +9,10 @@ const TodoList = () => {
 
   const fetchTasks = async () => {
     try {
-      const response = await api.get("/api/todos/");
+      const response = await api.get("/api/todos");
 
       if (Array.isArray(response.data.todos)) {
         tasksStore.setTodo(response.data.todos);
-        console.log("Fetched tasks:", response.data);
       } else {
         console.error("Fetched data is not an array:", response.data);
       }

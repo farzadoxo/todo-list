@@ -2,7 +2,7 @@ import React, { useState, useRef, ChangeEvent } from 'react';
 import { addDays, format } from 'date-fns';
 import api from '../axios';
 import { useTodosListState } from '../store';
-import { TodoPostCallType, priority, isPriority } from '../types';
+import { TodoPostCallType, Priority, isPriority } from '../types';
 import PrioritySelect from './priorityLevel';
 import CustomDatePicker from './customDatePicker';
 
@@ -12,20 +12,22 @@ interface NewTaskProps {
 
 
 const NewTask: React.FC<NewTaskProps> = ({ className }) => {
+  //BUG: the dueDate is null always
   const [taskData, setTaskData] = useState<TodoPostCallType>({
     title: '',
     completed: false,
     dueDate: null,
   });
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
-  const [priority, setPriority] = useState<priority>("none");
+  const [priority, setPriority] = useState<Priority>("none");
   const taskStore = useTodosListState();
   const contentEditableRef = useRef<HTMLDivElement>(null);
 
   const handleTextChange = (evt: ChangeEvent<HTMLInputElement>) => {
     const text = evt.target.value;
     let dueDate: Date | null = null;
-    const priority: string | null = null;
+    const priority: Priority = "none";
+
 
     // Helper function to get the next occurrence of a day
     const getNextDayOfWeek = (day: string): Date | null => {
@@ -89,6 +91,8 @@ const NewTask: React.FC<NewTaskProps> = ({ className }) => {
     }
 
     try {
+
+      console.log(taskData)
       const res = await api.post("/api/todos/", taskData);
 
       if (res.data) {

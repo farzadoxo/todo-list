@@ -76,7 +76,7 @@ const ChoosePhotoIcon: React.FC<PhotoIconWithModalProps> = ({ size, color, onIma
     formData.append('image', file);
 
     try {
-      const response = await api.post('/api/upload/', formData, {
+      const response = await api.post('/api/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

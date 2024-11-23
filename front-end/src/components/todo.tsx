@@ -8,6 +8,7 @@ import { DeleteIcon, EditIcon } from "lucide-react";
 import { Modal } from 'react-responsive-modal';
 import 'react-responsive-modal/styles.css';
 import CustomDatePicker from './customDatePicker';
+import api from '@/axios';
 
 interface Option {
   icon: React.FC<React.SVGProps<SVGSVGElement>>;
@@ -118,8 +119,14 @@ const Todo: React.FC<TodoType> = ({ id, title, completed, dueDate, priority }) =
       dueDate,
       priority,
     };
-    taskStore.modifyTodo(id, updatedTask);
-    setIsCompleted(!isCompleted);
+    try {
+      taskStore.modifyTodo(id, updatedTask);
+      const response = api.patch(`/api/todos/${id}`, updatedTask)
+      console.log(response)
+      setIsCompleted(!isCompleted);
+    } catch (error) {
+      console.error(error)
+    }
   };
 
   const handleImageSelected = (file: File) => {
@@ -138,14 +145,19 @@ const Todo: React.FC<TodoType> = ({ id, title, completed, dueDate, priority }) =
   };
 
   // Confirm deletion
-  const confirmDelete = () => {
-    taskStore.deleteTodo(id); // Call delete function
-    console.log("deleteTodo");
+  const confirmDelete = async () => {
+    try {
+      taskStore.deleteTodo(id); // Call delete function
+      const response = api.delete(`api/todos/${id}`)
+      console.log("deleteTodo response", response);
+    } catch (error) {
+      console.error(error)
+    }
     setIsDeleteModalOpen(false); // Close modal after deletion
   };
 
   const formattedDueDate = editedDueDate && format(editedDueDate, "yyyy-MM-dd");
-  const handleSave = () => { // handle edit save
+  const handleSave = async () => { // handle edit save
     const updatedTask = {
       id,
       title: editedTitle,
@@ -153,7 +165,16 @@ const Todo: React.FC<TodoType> = ({ id, title, completed, dueDate, priority }) =
       dueDate: formattedDueDate,
       priority,
     };
-    taskStore.modifyTodo(id, updatedTask);
+    try {
+
+      taskStore.modifyTodo(id, updatedTask);
+
+      const response = await api.patch(`/api/todos/${id}`)
+      console.log(response)
+
+    } catch (error) {
+      console.error("error in updating task", error)
+    }
     setIsEditing(false);
   };
 
