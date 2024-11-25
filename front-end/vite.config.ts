@@ -22,9 +22,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
       manifest: {
-        name: 'Your App Name',
-        short_name: 'ShortName',
-        description: 'Your app description',
+        name: 'Visual todo',
+        short_name: 'todo',
+        description: 'a Visual todo list that uses images insted of checking a box',
         theme_color: '#ffffff',
         icons: [
           {

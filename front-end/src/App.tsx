@@ -7,6 +7,8 @@ import NotFound from "./components/notFound";
 import SignUp from "./components/auth/signUp";
 import Login from "./components/auth/login";
 import DarkModeToggle from "./components/darkModeToggle";
+import TakePicture from "./components/takePicture";
+import SelectImage from "./components/selectImage";
 
 function App() {
   const [deviceType, setDeviceType] = useState<"mobile" | "desktop">("mobile");
@@ -76,6 +78,8 @@ function App() {
               <>
                 <Route path="/" element={<TodoList />} />
                 <Route path="preference/" element={<DarkModeToggle />} />
+                <Route path="selectImage/" element={<SelectImage />} />
+                <Route path="takePhoto/" element={<TakePicture />} key={"takePhoto"} />
                 <Route path="*" element={<NotFound />} />
               </>
             )}

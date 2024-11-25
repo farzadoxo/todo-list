@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite --host",
     "build": "tsc -b && vite build",
+    "buildJS": "vite build",
     "prod": "serve dist",
     "lint": "eslint .",
     "preview": "vite preview --host",
@@ -22,6 +23,7 @@
     "react-contenteditable": "^3.3.7",
     "react-datepicker": "^7.5.0",
     "react-dom": "^18.3.1",
+    "react-responsive-modal": "^6.4.2",
     "react-router": "^6.28.0",
     "react-router-dom": "^6.28.0",
     "react-webcam": "^7.2.0",

@@ -4,6 +4,13 @@ export function isPriority(value: string): value is Priority {
   return value === 'low' || value === 'medium' || value === 'high' || value === 'none';
 }
 
+export interface Icon {
+  size?: number;
+  color?: string;
+  className?: string;
+  onClick?: () => void;
+}
+
 export interface TodoPostCallType {
   title: string;
   completed: boolean;

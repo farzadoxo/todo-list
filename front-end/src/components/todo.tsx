@@ -3,7 +3,7 @@ import { format } from 'date-fns';
 import Checkbox from "./checkbox";
 import { TodoType } from "../types";
 import { useTodosListState } from "../store";
-import PhotoIconWithModal from "./choosePhotoModal";
+import AddPhoto from './addPhotoModal';
 import { DeleteIcon, EditIcon } from "lucide-react";
 import 'react-responsive-modal/styles.css';
 import CustomDatePicker from './customDatePicker';
@@ -132,11 +132,6 @@ const Todo: React.FC<TodoType> = ({ id, title, completed, dueDate, priority }) =
     }
   };
 
-  const handleImageSelected = (file: File) => {
-    console.log('Selected file:', file);
-    const imageUrl = URL.createObjectURL(file);
-    console.log("image url:", imageUrl);
-  };
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -226,11 +221,7 @@ const Todo: React.FC<TodoType> = ({ id, title, completed, dueDate, priority }) =
 
         {!isEditing && (
           <>
-            <PhotoIconWithModal
-              size={32}
-              color="blue"
-              onImageSelected={handleImageSelected}
-            />
+            <AddPhoto />
             <DropdownButton onEdit={handleEdit} onDelete={handleDeleteModalOpen} />
           </>
         )}

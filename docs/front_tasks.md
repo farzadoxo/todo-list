@@ -32,10 +32,13 @@
 - [x] connecting to the server
 - [x] nav bar items and looks
 - [x] put the new task component on a modal
-- [ ] dark mode
+- [x] dark mode
+- [ ] better performance
 - [ ] adding tasks with voice
 - [ ] adding notes to task
 - [ ] gestures on task component
 - [ ] drag and drop
+- [ ] third-party authentication
+- [ ] installable app
 - [ ] adding video to task as `completed video`
 - [ ] unit tests
