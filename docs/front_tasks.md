@@ -33,12 +33,20 @@
 - [x] nav bar items and looks
 - [x] put the new task component on a modal
 - [x] dark mode
-- [ ] better performance
-- [ ] adding tasks with voice
+- [ ] user profile page
+- [ ] adding profile picture
 - [ ] adding notes to task
-- [ ] gestures on task component
+- [ ] tags
+- [ ] shortcuts
+- [ ] pining a task to top of the list
 - [ ] drag and drop
 - [ ] third-party authentication
+- [ ] sort options
+- [ ] dedicated list
+- [ ] adding tasks with voice
+- [ ] gestures on task component
+- [ ] import data from other services
 - [ ] installable app
 - [ ] adding video to task as `completed video`
+- [ ] better performance
 - [ ] unit tests

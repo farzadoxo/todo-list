@@ -14,6 +14,7 @@ function App() {
   const [deviceType, setDeviceType] = useState<"mobile" | "desktop">("mobile");
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(!!localStorage.getItem("userName"));
   const [theme, setTheme] = useState<"dark" | "light">(localStorage.getItem("color-theme") as "dark" | "light");
+  const [userProfilePicture, setUserProfilePicture] = useState<string>("")
 
   // Type guard for theme
   const isValidTheme = (theme: string): theme is "dark" | "light" => {
@@ -54,6 +55,14 @@ function App() {
     setDeviceType(width < 768 ? 'mobile' : 'desktop');
   };
 
+  // Effect to fetch user profile pic
+  // TODO: cache this
+  useEffect(() => {
+
+    setUserProfilePicture("https://i.pravatar.cc/250")
+
+  }, [])
+
   // Effect to handle window resizing
   useEffect(() => {
     getDeviceType();
@@ -65,7 +74,7 @@ function App() {
   return (
     <Router>
       <div className="w-full h-full flex flex-row">
-        {isLoggedIn && <Nav deviceType={deviceType} />}
+        {isLoggedIn && <Nav deviceType={deviceType} avatarImage={userProfilePicture} />}
         <div className="flex-grow">
           <Routes>
             {!isLoggedIn ? (
