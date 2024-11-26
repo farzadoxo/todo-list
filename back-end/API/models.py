@@ -59,17 +59,15 @@ class Login(BaseModel):
     password : str
 
 
+
+
 class UpdateAccountInfo(BaseModel):
     """This request bosy use fot update or change account info"""
     
-    class UpdateFullName(BaseModel):
-        full_name : str
+    full_name : Optional[str]
+    email : Optional[str]
+    password : Optional[str]
 
-    class UpdateEmail(BaseModel):
-        email : str
-        
-    class UpdatePassword(BaseModel):
-        password : str
 
 
     
