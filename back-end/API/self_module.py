@@ -5,7 +5,11 @@ from DATABASE.Db import DataBase
 class ResponseBody:
 
     def UserResponseBody(user: tuple):
-        response_body = {"full_name": user[0], "email": user[1], "password": user[2]}
+        response_body = {
+            "fullname": user[0],
+            "email": user[1], 
+            "password": user[2]
+        }
 
         return response_body
 
