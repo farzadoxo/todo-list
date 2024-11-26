@@ -45,29 +45,26 @@ class UpdateTask(BaseModel):
 
 class SignUp(BaseModel):
     """This request body use for signup to service"""
-
-    full_name : str
+    
+    fullname : str
     email : str 
     password : str
+
+
 
 
 
 class Login(BaseModel):
     """This request body use for login to account"""
 
-    email : str 
+    email : str
     password : str
-
 
 
 
 class UpdateAccountInfo(BaseModel):
     """This request bosy use fot update or change account info"""
     
-    full_name : Optional[str]
+    fullname : Optional[str]
     email : Optional[str]
     password : Optional[str]
-
-
-
-    
