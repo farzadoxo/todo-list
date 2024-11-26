@@ -34,7 +34,7 @@
 - [x] put the new task component on a modal
 - [x] dark mode
 - [x] adding profile picture
-- [ ] user profile page
+- [x] user profile settings page
 - [ ] adding notes to task
 - [ ] tags
 - [ ] shortcuts

@@ -38,7 +38,27 @@ const useLoggedInUser = (): string | null => {
   return userName;
 };
 
-export default useLoggedInUser;
+
+const useLogOut = (): [() => Promise<void>, Error | null] => {
+  const [error, setError] = useState<Error | null>(null);
+
+  const logout = async (): Promise<void> => {
+    try {
+      localStorage.clear();
+      setError(null);
+      location.reload()
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err);
+      } else {
+        setError(new Error("An unknown error occurred during logout.",));
+      }
+    }
+  };
+
+  return [logout, error];
+};
 
 
-export { useLoggedInUser, useNewUserLogin }
+
+export { useLoggedInUser, useNewUserLogin, useLogOut }

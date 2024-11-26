@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { Switch } from './ui/switch';
+import { Label } from './ui/label';
 
 const DarkModeToggle: React.FC = () => {
   const [theme, setTheme] = useState<"dark" | "light">(localStorage.getItem("color-theme") as "dark" | "light");
+  //TODO: theme preference should presists across logins
 
   // Load dark mode preference from local storage
   useEffect(() => {
@@ -22,13 +25,14 @@ const DarkModeToggle: React.FC = () => {
   };
 
   return (
-    <button
-      onClick={toggleDarkMode}
-      className="flex items-center p-2 bg-gray-200 dark:bg-gray-700 rounded-md transition-colors duration-300"
-    >
-      <span className="mr-2">{theme === "light" ? '🌙' : '☀️'}</span>
-      <span>{theme === "light" ? 'Dark Mode' : 'Light Mode'}</span>
-    </button>
+    <div className='flex flex-col space-y-8 border border-gray-300 dark:border-gray-900 bg-gray-300 shadow-lg dark:shadow-md dark:shadow-sky-900 dark:bg-gray-900 rounded-lg p-3 m-16'>
+
+      <h2 className="text-xl font-bold text-gray-800 dark:text-white">User settings</h2>
+      <div className="flex items-center space-x-2 ">
+        <Label htmlFor="dark-mode">Dark Mode</Label>
+        <Switch id="dark-mode" className='data-[state=unchecked]:bg-gray-500 data-[state=checked]:bg-blue-800' checked={theme === "dark"} onClick={toggleDarkMode} />
+      </div>
+    </div>
   );
 };
 

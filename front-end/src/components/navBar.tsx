@@ -35,13 +35,6 @@ const MobileNavBar: React.FC<NavBarProps> = ({ onLogoutClick, onNewTaskClick, av
           </button>
         </li>
 
-        <li>
-          <button onClick={onLogoutClick} className="flex flex-col items-center text-white">
-            <LogOut size={24} />
-            <span className="text-xs">Logout</span>
-          </button>
-        </li>
-
         <Avatar className="w-10 h-10" imageSrc={avatarImage && avatarImage} onClick={onAvatarClick} />
 
       </ul>
@@ -68,16 +61,6 @@ const DesktopNav: React.FC<NavBarProps> = ({ onLogoutClick, onNewTaskClick, avat
             <Home size={24} />
             <span className="">Home</span>
           </Link>
-        </li>
-        <li>
-          <Link to={"preference/"} className="menu-item flex flex-col items-center text-black dark:text-white">
-            <Settings size={24} />
-            <span className="">Preference</span>
-          </Link>
-        </li>
-        <li onClick={onLogoutClick} className='menu-item flex flex-col text-black items-center cursor-pointer dark:text-white'>
-          <LogOut size={24} />
-          <span className="">Logout</span>
         </li>
       </ul>
     </div>

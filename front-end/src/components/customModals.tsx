@@ -118,4 +118,4 @@ const CustomConfirmModal: React.FC<CustomModalProps> = ({
   );
 };
 
-export { CustomConfirmModal, PhotoModal };
+export { CustomConfirmModal, PhotoModal }
