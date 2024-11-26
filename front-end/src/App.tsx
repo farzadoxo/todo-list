@@ -56,10 +56,10 @@ function App() {
   };
 
   // Effect to fetch user profile pic
-  // TODO: cache this
+  // TODO: save this on the localStorage and retrive it from backend if it doesnt exist on localStorage
   useEffect(() => {
 
-    setUserProfilePicture("https://i.pravatar.cc/250")
+    setUserProfilePicture("https://github.com/shadcn.png")
 
   }, [])
 

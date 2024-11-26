@@ -33,8 +33,8 @@
 - [x] nav bar items and looks
 - [x] put the new task component on a modal
 - [x] dark mode
+- [x] adding profile picture
 - [ ] user profile page
-- [ ] adding profile picture
 - [ ] adding notes to task
 - [ ] tags
 - [ ] shortcuts

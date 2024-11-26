@@ -3,7 +3,7 @@ import { Home, LogOut, Plus, Settings } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import LogoutConfirm from './logoutConfirm';
 import NewTaskModal from '../components/newTask.tsx';
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import Avatar from './avatar.tsx';
 
 interface NavProps {
   deviceType: "mobile" | "desktop";
@@ -42,10 +42,8 @@ const MobileNavBar: React.FC<NavBarProps> = ({ onLogoutClick, onNewTaskClick, av
           </button>
         </li>
 
-        <Avatar className=' w-8 h-8 mb-2'>
-          <AvatarImage src={avatarImage && avatarImage} onClick={onAvatarClick} />
-          <AvatarFallback>LocalHost</AvatarFallback>
-        </Avatar>
+        <Avatar className="w-10 h-10" imageSrc={avatarImage && avatarImage} onClick={onAvatarClick} />
+
       </ul>
     </nav>
   );
@@ -56,10 +54,7 @@ const DesktopNav: React.FC<NavBarProps> = ({ onLogoutClick, onNewTaskClick, avat
   return (
     <div className='sidebar w-48 bg-gray-400 p-4 shadow-lg dark:bg-gray-900'>
       <div className='header text-center mb-4'>
-        <Avatar className='mx-auto w-20 h-20 mb-2'>
-          <AvatarImage src={avatarImage} onClick={onAvatarClick} />
-          <AvatarFallback>LocalHost</AvatarFallback>
-        </Avatar>
+        <Avatar className="mx-auto w-20 h-20" imageSrc={avatarImage && avatarImage} onClick={onAvatarClick} />
         <h1 className='text-2xl font-bold text-black dark:text-white'>Todo App</h1>
       </div>
       <ul className='flex flex-col h-screen gap-5 font-bold bg-gray-400 p-4 dark:bg-gray-900'>
