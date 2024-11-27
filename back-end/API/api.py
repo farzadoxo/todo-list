@@ -29,26 +29,24 @@ def signup(reqbody:SignUp , response:Response):
         return "This email has already been used !"
     else:
         try:
-            if len(reqbody.password) >= 8:
-                # create a recorde (user signup)
-                DataBase.cursor.execute(
-                    f"INSERT INTO users VALUES (?,?,?)" , (reqbody.fullname,reqbody.email,reqbody.password)
-                )
-                DataBase.connection.commit()
+            # create a recorde (user signup)
+            DataBase.cursor.execute(
+                f"INSERT INTO users VALUES (?,?,?)" , (reqbody.fullname,reqbody.email,reqbody.password)
+            )
+            DataBase.connection.commit()
 
-                DataBase.cursor.execute(
-                    f"SELECT * FROM users WHERE email = '{reqbody.email}'"
-                )
-                user = DataBase.cursor.fetchone()
+            # refetch user from database
+            DataBase.cursor.execute(
+                f"SELECT * FROM users WHERE email = '{reqbody.email}'"
+            )
+            user = DataBase.cursor.fetchone()
 
-                # Returned 
-                return ResponseBody.UserResponseBody(user=user)
+            # Returned 
+            return ResponseBody.UserResponseBody(user=user)
             
 
-            else:
-                response.status_code = status.HTTP_400_BAD_REQUEST
-                return "The password must contain 8 characters or more and consist of numbers and letters"
             
         except Exception or HTTPException as error :
             response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
             return f"ERROR >>> {error}"
+
