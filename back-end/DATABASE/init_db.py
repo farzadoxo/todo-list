@@ -29,9 +29,10 @@ def initialize_database(db_name: str = "database.db"):
         cursor.execute(
             """
             CREATE TABLE IF NOT EXISTS users (
-                fullname TEXT NOT NULL ,
+                full_name TEXT NOT NULL ,
                 email TEXT NOT NULL PRIMARY KEY,
-                password TEXT NOT NULL
+                password TEXT NOT NULL ,
+                avatar TEXT
 
             )
         """

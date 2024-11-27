@@ -46,11 +46,9 @@ class UpdateTask(BaseModel):
 class SignUp(BaseModel):
     """This request body use for signup to service"""
     
-    fullname : str
-    email : str 
-    password : str = Field(min_length=8,max_length=60)
-
-
+    full_name : str
+    email : str
+    password : str
 
 
 
@@ -65,6 +63,13 @@ class Login(BaseModel):
 class UpdateAccountInfo(BaseModel):
     """This request bosy use fot update or change account info"""
     
-    fullname : Optional[str]
-    email : Optional[str]
-    password : Optional[str]
+    email : Optional[str] = None
+    password : Optional[str] = None
+
+
+
+class UpdateProfileInfo(BaseModel):
+    """This model uesd for update profile info"""
+
+    avatar : Optional[str]
+    full_name : Optional[str]
