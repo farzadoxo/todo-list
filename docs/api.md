@@ -206,15 +206,15 @@ Find a task (fetch from database)
 }
 ```
 
-# Singup
+# Signup
 
 Signup a user
 
 ### Request
 
-`POST /api/signup`
+`POST /api/account/signup`
 
-### Request Body
+### Request
 
 ```json
 {
@@ -225,18 +225,25 @@ Signup a user
 ```
 
 ### Response
+```201 CREATED```
+```json
+{
+  "full_name" : "John Watson",
+  "email" : "test@yahoo.com" ,
+  "password" : "1254avfdf"
+}
+```
 
-> `User signed Up :)`
 
 # Login
 
-Login to user account
+Login to account
 
 ### Request
 
-`GET /api/login`
+`GET /api/account/login`
 
-### Request Body
+### Request
 
 ```json
 {
@@ -246,9 +253,49 @@ Login to user account
 ```
 
 ### Response
+```200 OK```
+```json
+{
+  "email" : "test@yahoo.com" ,
+  "password" : "1254avfdf"
+}
+```
 
-> `User not found`
+# Edit Account Info
+Change or update Account Info
 
-> `Password invalid`
+### Request
+```json
+{
+  "email" : OPTIONAL ,
+  "password" : OPTIONAL
+}
+```
+### Response
+`201 CREATED`
+```json
+{
+  "full_name" : "John Watson",
+  "email" : "test@yahoo.com" ,
+  "password" : "1254avfdf"
+}
+```
 
-> `Welcome to Todo App`
+# Edit Profile Info
+Change or update profile info
+
+### Request
+```json
+{
+  "avatar" : OPTIONAL ,
+  "full_name" : OPTIONAL
+}
+```
+### Response
+```json
+{
+  "full_name" : "John Watson",
+  "email" : "test@yahoo.com" ,
+  "password" : "1254avfdf"
+}
+``` 
