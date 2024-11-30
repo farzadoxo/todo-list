@@ -32,13 +32,13 @@ def initialize_database(db_name: str = "database.db"):
                 full_name TEXT NOT NULL ,
                 email TEXT NOT NULL PRIMARY KEY,
                 password TEXT NOT NULL ,
-                avatar TEXT
+                avatar BLOB
 
             )
         """
         )
 
-        # inseting mock data
+        # inseting mock data into todos
         cursor.execute(
             """
             INSERT INTO todos (id, title, completed, dueDate) VALUES 
@@ -49,6 +49,21 @@ def initialize_database(db_name: str = "database.db"):
                 (5, 'Fix bugs reported by QA', 0, '2024-11-10'),
                 (6, 'Prepare presentation for stakeholders', 0, '2024-11-15'),
                 (7, 'Deploy application to production', 0, '2024-12-01');
+            """
+        )
+        conn.commit()
+
+        # inseting mock data into users
+        cursor.execute(
+            """
+            INSERT INTO users (full_name, email, password) VALUES 
+                ('mamad', 'mamad@gmail.com', 'sdfdfhg'),
+                ('ali', 'ali@gmail.com', 'fdhdfhdfhg'),
+                ('hosein', 'hosein@gmail.com', 'ssadasd'),
+                ('farzad', 'farzad@gmail.com', 'vcvv345435'),
+                ('farshid', 'farshid@gmail.com', '54df8g97we'),
+                ('zahra', 'zahra@gmail.com', '567cxbvvbdfg'),
+                ('anahita', 'anahita@gmail.com', '234234234234');
             """
         )
         conn.commit()
