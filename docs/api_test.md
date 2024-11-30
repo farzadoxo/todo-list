@@ -2,10 +2,10 @@
 
 ### User
 - [x] Signup
-- [x] Login
-- [x] Edit Fullname
-- [x] Edit Email
-- [x] Edit Password
+- [X] Login
+- [ ] Edit Account Info
+- [ ] Edit Profile Info
+
 
 ### Task
 - [ ] Show all todos
