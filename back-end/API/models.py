@@ -3,7 +3,7 @@ from typing import Optional
 
 
 
-class NewTask(BaseModel):
+class NewTodo(BaseModel):
     """this request body use for make a task or todo of a template 
     template : title = required  ------   completed = required  -------   dueDate = optional 
                string                       bool                           string or null"""
@@ -34,7 +34,7 @@ class Upload(BaseModel):
 
 
 
-class UpdateTask(BaseModel):
+class UpdateTodo(BaseModel):
     """This request body use for deleting a task from database"""
 
     title : Optional[str] = None
@@ -71,5 +71,5 @@ class UpdateAccountInfo(BaseModel):
 class UpdateProfileInfo(BaseModel):
     """This model uesd for update profile info"""
 
-    avatar : Optional[str]
-    full_name : Optional[str]
+    avatar : Optional[str] = None
+    full_name : Optional[str] = None
