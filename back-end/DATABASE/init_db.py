@@ -13,17 +13,8 @@ def initialize_database(db_name: str = "database.db"):
     # Establish a connection to the SQLite database
     with sqlite3.connect(db_path) as conn:
         cursor = conn.cursor()
-        # making the todos table
-        cursor.execute(
-            """
-            CREATE TABLE IF NOT EXISTS todos (
-                id INTEGER PRIMARY KEY,
-                title TEXT NOT NULL,
-                completed BOOLEAN NOT NULL,
-                dueDate TEXT
-            )
-        """
-        )
+        
+        
 
         # making the users table
         cursor.execute(
@@ -34,6 +25,20 @@ def initialize_database(db_name: str = "database.db"):
                 password TEXT NOT NULL ,
                 avatar BLOB
 
+            )
+        """
+        )
+
+        
+        # making the todos table
+        cursor.execute(
+            """
+            CREATE TABLE IF NOT EXISTS todos (
+                id INTEGER PRIMARY KEY,
+                title TEXT NOT NULL,
+                completed BOOLEAN NOT NULL,
+                dueDate TEXT
+                FOREIGN KEY (id) REFERENCES users(email)
             )
         """
         )

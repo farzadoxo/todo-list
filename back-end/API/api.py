@@ -208,3 +208,11 @@ def login(reqbody:Login , response : Response):
 
 # --------------------     Task Section      -------------------
 
+@router.get(
+    '/api/todos',
+    status_code= status.Ok,
+    summary="Show all user todos",
+    description="Fetch All user todos from database and show it"
+)
+def get_todos(email:str , response:Response):
+    ...
