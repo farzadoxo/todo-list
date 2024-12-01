@@ -1,5 +1,5 @@
-from API.models import NewTask, UpdateTask, Upload, SignUp, Login, UpdateAccountInfo , UpdateProfileInfo
-from API.self_module import ResponseBody, IDGenerator
+from API.models import NewTodo, UpdateTodo, Upload, SignUp, Login, UpdateAccountInfo , UpdateProfileInfo
+from API.self_module import ResponseBody
 from DATABASE.Db import DataBase
 from fastapi import status, HTTPException, APIRouter, Response , File , UploadFile
 from fastapi.responses import JSONResponse
@@ -210,9 +210,33 @@ def login(reqbody:Login , response : Response):
 
 @router.get(
     '/api/todos',
-    status_code= status.Ok,
+    status_code= status.HTTP_200_OK,
     summary="Show all user todos",
     description="Fetch All user todos from database and show it"
 )
-def get_todos(email:str , response:Response):
+def get_todos(response:Response):
+    try:
+        # Make a query and Fetch todos from database
+        DataBase.cursor.execute(
+            "SELECT * FROM todos"
+        )
+        todos = DataBase.cursor.fetchall()
+
+        # Return todos
+        return JSONResponse(content={"todos" : todos})
+    
+    except Exception or HTTPException as error:
+        response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+        return f"ERROR >>> {error}"
+    
+
+
+
+@router.post(
+    '/api/todos',
+    status_code= status.HTTP_201_CREATED,
+    summary="Create new todo",
+    description="Create a new task and save it on database"
+)
+def new_todo(reqbody:NewTodo , response:Response):
     ...
