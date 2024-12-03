@@ -38,7 +38,8 @@ def initialize_database(db_name: str = "database.db"):
                 title TEXT NOT NULL,
                 completed BOOLEAN NOT NULL,
                 dueDate TEXT
-                FOREIGN KEY (id) REFERENCES users(email)
+                priority TEXT 
+                FOREIGN KEY (id) REFERENCES users(email)  
             )
         """
         )
@@ -46,14 +47,14 @@ def initialize_database(db_name: str = "database.db"):
         # inseting mock data into todos
         cursor.execute(
             """
-            INSERT INTO todos (id, title, completed, dueDate) VALUES 
-                (1, 'Complete project documentation', 0, '2024-10-15'),
-                (2, 'Design user interface', 0, '2024-09-30'),
-                (3, 'Implement authentication module', 1, '2024-08-20'),
-                (4, 'Conduct user testing', 0, '2024-11-05'),
-                (5, 'Fix bugs reported by QA', 0, '2024-11-10'),
-                (6, 'Prepare presentation for stakeholders', 0, '2024-11-15'),
-                (7, 'Deploy application to production', 0, '2024-12-01');
+            INSERT INTO todos (id, title, completed, dueDate , priority) VALUES 
+                (1, 'Complete project documentation', 0, '2024-10-15' , 'low'),
+                (2, 'Design user interface', 0, '2024-09-30' ,'high'),
+                (3, 'Implement authentication module', 1, '2024-08-20' ,'low'),
+                (4, 'Conduct user testing', 0, '2024-11-05' ,'medium'),
+                (5, 'Fix bugs reported by QA', 0, '2024-11-10' ,null),
+                (6, 'Prepare presentation for stakeholders', 0, '2024-11-15' ,'high'),
+                (7, 'Deploy application to production', 0, '2024-12-01', 'medium');
             """
         )
         conn.commit()
