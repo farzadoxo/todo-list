@@ -1,5 +1,6 @@
 from random import randint
-from DATABASE.Db import DataBase
+# from DATABASE.Db import DataBase
+import logging
 
 
 class ResponseBody:
@@ -14,6 +15,7 @@ class ResponseBody:
         }
 
         return response_body
+
 
     def TodoResponseBody(task: tuple):
         response_body = {
@@ -40,6 +42,21 @@ class ResponseBody:
 #             else:
 #                 return id
 
+formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+
+def setup_logger(name, log_file, level=logging.INFO):
+    """To setup as many loggers as you want"""
+
+    handler = logging.FileHandler(log_file)        
+    handler.setFormatter(formatter)
+
+    logger = logging.getLogger(name)
+    logger.setLevel(level)
+    logger.addHandler(handler)
+
+    return logger
+
+
 
 class LogSystem:
     """Log all things happend in API and DATABASE
@@ -48,24 +65,35 @@ class LogSystem:
     class TodoLog:
         """Log todos status (users.log)"""
 
-        def on_todo_add():
-            ...
+        
 
-        def on_todo_remove():
+
+
+        def on_todo_add(id:str):
+            todo_logger = setup_logger(name="TodoLogger",log_file="./TODO.log")
+            todo_logger.info()
+
+        def on_todo_remove(id:str):
             ...
         
-        def on_todo_update():
+        def on_todo_update(id:str):
             ...
 
 
     class UserLog:
         """Log user status (todos.log)"""
 
-        def on_user_signup():
+
+        def on_user_signup(email:str):
+            user_logger = setup_logger(name="UserLogger",log_file='./USER.log')
+            user_logger.info("bye")
+
+        def on_user_login(email:str):
             ...
 
-        def on_user_login():
+        def on_account_deleted(email:str):
             ...
 
-        def on_account_deleted():
-            ...
+if __name__ == "__main__":
+    LogSystem.TodoLog.on_todo_add(id="sdfssdf")
+    LogSystem.UserLog.on_user_signup(email="sdfdsf")
