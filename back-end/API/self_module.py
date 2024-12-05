@@ -42,10 +42,12 @@ class ResponseBody:
 #             else:
 #                 return id
 
-formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+
+
 
 def setup_logger(name, log_file, level=logging.INFO):
     """To setup as many loggers as you want"""
+    formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
 
     handler = logging.FileHandler(log_file)        
     handler.setFormatter(formatter)
@@ -58,6 +60,17 @@ def setup_logger(name, log_file, level=logging.INFO):
 
 
 
+
+
+class LoggerSetup:
+
+    user_logger = setup_logger(name="UserLogger",log_file='./USER.log')
+    todo_logger = setup_logger(name="TodoLogger",log_file="./TODO.log")
+
+
+
+
+
 class LogSystem:
     """Log all things happend in API and DATABASE
        Log users acctivity and todos status"""
@@ -65,19 +78,15 @@ class LogSystem:
     class TodoLog:
         """Log todos status (users.log)"""
 
-        
 
-
-
-        def on_todo_add(id:str):
-            todo_logger = setup_logger(name="TodoLogger",log_file="./TODO.log")
-            todo_logger.info()
+        def on_todo_create(id:str):
+            LoggerSetup.todo_logger.info("➕ New todo created ! id = {}".format(id))
 
         def on_todo_remove(id:str):
-            ...
+            LoggerSetup.todo_logger.info("➖ A todo deleted ! id = {}".format(id))
         
         def on_todo_update(id:str):
-            ...
+            LoggerSetup.todo_logger.info("🔼 A todo updated ! id = {}".format(id))
 
 
     class UserLog:
@@ -85,15 +94,10 @@ class LogSystem:
 
 
         def on_user_signup(email:str):
-            user_logger = setup_logger(name="UserLogger",log_file='./USER.log')
-            user_logger.info("bye")
+            LoggerSetup.user_logger.info("📝 New user signed up ! email = {}".format(email))
 
         def on_user_login(email:str):
-            ...
+            LoggerSetup.user_logger.info("📲 User loged in ! email = {}".format(email))
 
-        def on_account_deleted(email:str):
-            ...
-
-if __name__ == "__main__":
-    LogSystem.TodoLog.on_todo_add(id="sdfssdf")
-    LogSystem.UserLog.on_user_signup(email="sdfdsf")
+        def on_user_deleted(email:str):
+            LoggerSetup.user_logger.info("🗑️ A account deleted = {}".format(email))
