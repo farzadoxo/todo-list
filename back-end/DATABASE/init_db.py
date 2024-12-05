@@ -37,9 +37,9 @@ def initialize_database(db_name: str = "database.db"):
                 id INTEGER PRIMARY KEY,
                 title TEXT NOT NULL,
                 completed BOOLEAN NOT NULL,
-                dueDate TEXT
-                priority TEXT 
-                FOREIGN KEY (id) REFERENCES users(email)  
+                dueDate TEXT ,
+                priority TEXT ,
+                FOREIGN KEY (id) REFERENCES users (email)  
             )
         """
         )

@@ -1,5 +1,5 @@
 from API.models import NewTodo, UpdateTodo, Upload, SignUp, Login, UpdateAccountInfo , UpdateProfileInfo
-from API.self_module import ResponseBody
+from API.self_module import ResponseBody , LogSystem
 from DATABASE.Db import DataBase
 from fastapi import status, HTTPException, APIRouter, Response , File , UploadFile
 from fastapi.responses import JSONResponse
@@ -36,6 +36,8 @@ def signup(reqbody:SignUp , response:Response):
                     f"INSERT INTO users VALUES (?,?,?)" , (reqbody.full_name,reqbody.email.lower(),reqbody.password)
                 )
                 DataBase.connection.commit()
+                # Log 
+                LogSystem.UserLog.on_user_signup(email=reqbody.email)
 
                 # refetch user from database
                 DataBase.cursor.execute(
@@ -79,10 +81,11 @@ def login(reqbody:Login , response : Response):
         
         else:
             if reqbody.email.lower() == user[1] and reqbody.password == user[2]:
-                response.status_code = status.HTTP_200_OK
+                # Log 
+                LogSystem.UserLog.on_user_login(email=reqbody.email)
 
                 return ResponseBody.UserResponseBody(user=user)
-            
+                         
             else:
                 response.status_code = status.HTTP_400_BAD_REQUEST
                 return "Password Invalid !"
@@ -239,4 +242,17 @@ def get_todos(response:Response):
     description="Create a new task and save it on database"
 )
 def new_todo(reqbody:NewTodo , response:Response):
-    ...
+    
+    try:
+        DataBase.cursor.execute(
+            f"INSERT INTO todos VALUES (?,?,?,?)",
+            (reqbody.title , reqbody.completed , reqbody.dueDate , reqbody.priority)
+        )
+        DataBase.connection.commit()
+
+        DataBase.cursor.execute
+
+        # Log 
+        LogSystem.TodoLog.on_todo_create()
+
+        return ResponseBody.
