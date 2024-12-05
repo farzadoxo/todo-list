@@ -11,6 +11,7 @@ class NewTodo(BaseModel):
     title : str
     completed : bool = False
     dueDate : Optional[str] = None
+    priority : Optional[str] = None
 
 
 
