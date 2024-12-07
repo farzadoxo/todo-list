@@ -1,5 +1,5 @@
 from API.models import NewTodo, UpdateTodo, Upload, SignUp, Login, UpdateAccountInfo , UpdateProfileInfo
-from API.self_module import ResponseBody , LogSystem
+from API.self_module import ResponseBody , LogSystem , IDGenerator
 from DATABASE.Db import DataBase
 from fastapi import status, HTTPException, APIRouter, Response , File , UploadFile
 from fastapi.responses import JSONResponse
@@ -244,15 +244,19 @@ def get_todos(response:Response):
 def new_todo(reqbody:NewTodo , response:Response):
     
     try:
+        id = IDGenerator.generate_id()
+        task_value = (id,reqbody.title , reqbody.completed , reqbody.dueDate , reqbody.priority)
         DataBase.cursor.execute(
-            f"INSERT INTO todos VALUES (?,?,?,?)",
-            (reqbody.title , reqbody.completed , reqbody.dueDate , reqbody.priority)
+            f"INSERT INTO todos VALUES (?,?,?,?,?)", task_value
         )
         DataBase.connection.commit()
-
-        DataBase.cursor.execute
+        
 
         # Log 
-        LogSystem.TodoLog.on_todo_create()
+        LogSystem.TodoLog.on_todo_create(id=id)
 
-        return ResponseBody.
+        return ResponseBody.TodoResponseBody(task=task_value)
+    
+    except Exception or HTTPException as error :
+        response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+        return f"ERROR >>> {error}"
