@@ -23,31 +23,29 @@ class ResponseBody:
             "title": task[1],
             "completed": task[2],
             "dueDate": task[3],
+            "priority" : task[4]
         }
 
         return response_body
 
 
-# class IDGenerator:
-#     # def generate_id():
-#     #     id = randint(1000034456, 9564564347821289237)
 
-#     #     DataBase.cursor.execute("SELECT id from todos")
-#     #     active_ids = DataBase.cursor.fetchall()
 
-#     #     for id_countaner in active_ids:
-#     #         if id_countaner == id:
-#     #             id = randint(1000034456, 9564564347821289237)
-#     #             return id
-#     #         else:
-#     #             return id
-            
-#     def generate_id():
-#         DataBase.cursor.execute(
-#             f"SELECT id FROM todos"
-#         )
-#         active_ids = DataBase.cursor.fetchall()
-#         print(active_ids)
+class IDGenerator:
+    def generate_id():
+        id = randint(1000034456, 956456434782128923)
+
+        DataBase.cursor.execute("SELECT id from todos")
+        active_ids = DataBase.cursor.fetchall()
+
+        for id_countaner in active_ids:
+            if id_countaner == id:
+                id = randint(1000034456, 956456434782128923)
+                return id
+            else:
+                return id
+
+
 
 
 
@@ -108,8 +106,3 @@ class LogSystem:
 
         def on_user_deleted(email:str):
             LoggerSetup.user_logger.info("🗑️ A account deleted = {}".format(email))
-
-
-
-if __name__ == "__main__":
-    IDGenerator.generate_id()
