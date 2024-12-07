@@ -92,3 +92,26 @@ Change or update profile info
   "password" : "1254avfdf"
 }
 ``` 
+
+# New Todo
+Create a todo and save to database
+
+### Request
+```json
+{
+  "title" : "Order Food",
+  "completed" : true ,
+  "dueDate" : "2024/01/02" OR NULL ,
+  "priority" : "LOW-MEDIUM-HIGH" OR NULL
+}
+```
+### Response
+```json
+{
+  "id" : 231648979789565 ,
+  "title" : "Order Food",
+  "completed" : true ,
+  "dueDate" : "2024/01/02" OR NULL ,
+  "priority" : "LOW-MEDIUM-HIGH" OR NULL
+}
+```
