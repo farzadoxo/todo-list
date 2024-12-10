@@ -23,7 +23,7 @@ def initialize_database(db_name: str = "database.db"):
                 full_name TEXT NOT NULL ,
                 email TEXT NOT NULL PRIMARY KEY,
                 password TEXT NOT NULL ,
-                avatar BLOB
+                avatar_url TEXT
 
             )
         """

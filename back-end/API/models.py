@@ -16,16 +16,6 @@ class NewTodo(BaseModel):
 
 
 
-class Upload(BaseModel):
-    """This request body use for upload a picture from completed task
-    template : task_id = required  ------   image = required
-                 string                       Image"""
-    
-    task_id : str
-    image : str
-
-
-
 # class ResMod(BaseModel):
 #     id : int
 #     title : str

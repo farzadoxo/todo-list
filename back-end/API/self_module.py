@@ -24,7 +24,8 @@ class ResponseBody:
             "title": task[1],
             "completed": task[2],
             "dueDate": task[3],
-            "priority" : task[4]
+            "priority" : task[4],
+            "image_url" : task[5]
         }
 
         return response_body
