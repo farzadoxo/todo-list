@@ -39,6 +39,7 @@ def initialize_database(db_name: str = "database.db"):
                 completed BOOLEAN NOT NULL,
                 dueDate TEXT ,
                 priority TEXT ,
+                image_url TEXT ,
                 FOREIGN KEY (id) REFERENCES users (email)  
             )
         """
