@@ -1,6 +1,6 @@
 
 - [x] Database
-- [x] Task API
+- [ ] Task API
 - [X] User API
 - [X] User authentication
 - [x] `__tests__`

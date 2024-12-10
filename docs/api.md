@@ -3,7 +3,7 @@
 
 Signup a user
 
-### Request
+### Endpoint Details :
 
 `POST /api/account/signup`
 
@@ -32,7 +32,7 @@ Signup a user
 
 Login to account
 
-### Request
+### Endpoint Details :
 
 `GET /api/account/login`
 
@@ -92,10 +92,15 @@ Change or update profile info
   "password" : "1254avfdf"
 }
 ``` 
+# Get todos
+### Endpoint Details :
+`GET /api/todos`
+
 
 # New Todo
 Create a todo and save to database
-
+### Endpoint Details :
+`POST /api/todos`
 ### Request
 ```json
 {
@@ -111,7 +116,22 @@ Create a todo and save to database
   "id" : 231648979789565 ,
   "title" : "Order Food",
   "completed" : true ,
-  "dueDate" : "2024/01/02" OR NULL ,
-  "priority" : "LOW-MEDIUM-HIGH" OR NULL
+  "dueDate" : "2024/01/02" ,
+  "priority" : "LOW-MEDIUM-HIGH"
 }
+```
+
+# Upload
+### Endpoint Details :
+`POST /api/todos/upload?task_id=98745879651236&image=Binery_File`
+### Response
+```json
+{
+  "id" : 231648979789565 ,
+  "title" : "Order Food",
+  "completed" : true ,
+  "dueDate" : "2024/01/02" ,
+  "priority" : "LOW-MEDIUM-HIGH" ,
+  "image_url" : "url of uploaded image"
+  }
 ```

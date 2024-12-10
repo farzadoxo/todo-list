@@ -8,9 +8,9 @@
 
 
 ### Task
-- [ ] Show all todos
+- [X] Show all todos
 - [ ] Search todo
-- [ ] New todo
-- [ ] Upload
+- [X] New todo
+- [X] Upload
 - [ ] Edit todo
 - [ ] Delete todo
