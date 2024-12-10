@@ -1,9 +1,9 @@
-from API.models import NewTodo, UpdateTodo, Upload, SignUp, Login, UpdateAccountInfo , UpdateProfileInfo
-from API.self_module import ResponseBody , LogSystem , IDGenerator
+from API.models import (NewTodo, UpdateTodo, Upload, SignUp, Login, UpdateAccountInfo , UpdateProfileInfo)
+from API.self_module import (ResponseBody , LogSystem , IDGenerator)
 from DATABASE.Db import DataBase
-from fastapi import status, HTTPException, APIRouter, Response , File , UploadFile
+from fastapi import (status, HTTPException, APIRouter, Response , File , UploadFile)
 from fastapi.responses import JSONResponse
-import base64
+import os
 
 
 # router instanse
@@ -260,3 +260,52 @@ def new_todo(reqbody:NewTodo , response:Response):
     except Exception or HTTPException as error :
         response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
         return f"ERROR >>> {error}"
+    
+
+
+
+
+@router.post(
+    '/api/todos/upload',
+    status_code=status.HTTP_201_CREATED,
+    summary="Upload picture",
+    description="Upload a picture from completed task"
+)
+async def upload(response:Response , task_id:int , image:UploadFile = File(...)):
+    DataBase.cursor.execute(
+        f"SELECT * FROM todos WHERE id = {task_id}"
+    )
+    task = DataBase.cursor.fetchone()
+
+
+    # Saving file
+    unique_filename = f"file_{os.urandom(16).hex()}"
+    with open(f"./ASSETS/Todos/{unique_filename}.{list(image.content_type.split('/'))[1]}" , "wb") as buffer :
+        content = await image.read()
+        buffer.write(content)
+
+    if task != None:
+        try:
+            DataBase.cursor.execute(
+                f"UPDATE todos SET completed = true , image_url = '/ASSETS/Todos/{unique_filename}.{list(image.content_type.split('/'))[1]}' WHERE id = {task_id}"
+            )
+            DataBase.connection.commit()
+
+
+            DataBase.cursor.execute(
+                f"SELECT * FROM todos WHERE id = {task_id}"
+            )
+            updated_task = DataBase.cursor.fetchone()
+
+            # Return
+            return ResponseBody.TodoResponseBody(task=updated_task)
+        
+        
+        
+        except Exception or HTTPException as error:
+            response.status_code=status.HTTP_500_INTERNAL_SERVER_ERROR
+            return f"ERROR >>> {error}"
+        
+    else:
+        response.status_code=status.HTTP_404_NOT_FOUND
+        return "Task Not Found !"

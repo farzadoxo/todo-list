@@ -1,6 +1,7 @@
 from random import randint
 from DATABASE.Db import DataBase
 import logging
+import os
 
 
 class ResponseBody:
@@ -106,3 +107,11 @@ class LogSystem:
 
         def on_user_deleted(email:str):
             LoggerSetup.user_logger.info("🗑️ A account deleted = {}".format(email))
+
+
+async def file_saver(file):
+    unique_filename = f"file_{os.urandom(16).hex()}"
+
+    with open(f"{unique_filename}.bin" , "wb") as buffer :
+        content = await file.read()
+        buffer.write(content)
