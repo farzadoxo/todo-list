@@ -32,8 +32,9 @@ def signup(reqbody:SignUp , response:Response):
         try:
             if len(reqbody.password) >= 8:
                 # create a recorde (user signup)
+                user_values = (reqbody.full_name,reqbody.email.lower(),reqbody.password,None)
                 DataBase.cursor.execute(
-                    f"INSERT INTO users VALUES (?,?,?)" , (reqbody.full_name,reqbody.email.lower(),reqbody.password)
+                    f"INSERT INTO users VALUES (?,?,?,?)" , user_values
                 )
                 DataBase.connection.commit()
                 # Log 
@@ -245,9 +246,9 @@ def new_todo(reqbody:NewTodo , response:Response):
     
     try:
         id = IDGenerator.generate_id()
-        task_value = (id,reqbody.title , reqbody.completed , reqbody.dueDate , reqbody.priority)
+        task_value = (id,reqbody.title , reqbody.completed , reqbody.dueDate , reqbody.priority , None)
         DataBase.cursor.execute(
-            f"INSERT INTO todos VALUES (?,?,?,?,?)", task_value
+            f"INSERT INTO todos VALUES (?,?,?,?,?,?)", task_value
         )
         DataBase.connection.commit()
         
@@ -297,6 +298,9 @@ async def upload(response:Response , task_id:int , image:UploadFile = File(...))
             )
             updated_task = DataBase.cursor.fetchone()
 
+            # Log
+            LogSystem.TodoLog.on_todo_update(id=task_id)
+
             # Return
             return ResponseBody.TodoResponseBody(task=updated_task)
         
@@ -309,3 +313,46 @@ async def upload(response:Response , task_id:int , image:UploadFile = File(...))
     else:
         response.status_code=status.HTTP_404_NOT_FOUND
         return "Task Not Found !"
+    
+
+
+
+@router.delete(
+    '/api/todos',
+    status_code=status.HTTP_200_OK,
+    summary="Delete a todo",
+    description="Delete a todo from database by id"
+)
+def delete_todo(task_id:int , response:Response):
+    # fetch todo
+    DataBase.cursor.execute(
+        f"SELECT * FROM todos WHERE id = '{task_id}'"
+    )
+    todo = DataBase.cursor.fetchone()
+
+    if todo != None:
+        try:
+            # Delete task
+            DataBase.cursor.execute(
+                f"DELETE FROM todos WHERE id = '{task_id}'"
+            )
+            DataBase.connection.commit()
+
+            # Log
+            LogSystem.TodoLog.on_todo_remove(id=task_id)
+
+            # Return
+            return "Todo Deleted Successfully !"
+
+
+        except Exception or HTTPException as error:
+            response.status_code = status.WS_1011_INTERNAL_ERROR
+            return f"ERROR >>> {error}"
+         
+    else:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return "Task Not Found !"
+    
+
+
+

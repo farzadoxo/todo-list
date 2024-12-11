@@ -31,6 +31,7 @@ class UpdateTodo(BaseModel):
     title : Optional[str] = None
     completed : Optional[bool] = None
     dueDate : Optional[str] = None
+    priority : Optional[str] = None
 
 
 

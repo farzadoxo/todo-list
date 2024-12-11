@@ -71,6 +71,7 @@ def setup_logger(name, log_file, level=logging.INFO):
 
 class LoggerSetup:
 
+    server_logger = setup_logger(name="ServerLogger",log_file='./API.log')
     user_logger = setup_logger(name="UserLogger",log_file='./USER.log')
     todo_logger = setup_logger(name="TodoLogger",log_file="./TODO.log")
 
