@@ -12,7 +12,8 @@ class ResponseBody:
         response_body = {
             "fullname": user[0],
             "email": user[1], 
-            "password": user[2]
+            "password": user[2],
+            "avatar_url": user[3]
         }
 
         return response_body
@@ -88,13 +89,13 @@ class LogSystem:
 
 
         def on_todo_create(id:str):
-            LoggerSetup.todo_logger.info("➕ New todo created ! id = {}".format(id))
+            LoggerSetup.todo_logger.info("➕ New todo created! id : {}".format(id))
 
         def on_todo_remove(id:str):
-            LoggerSetup.todo_logger.info("➖ A todo deleted ! id = {}".format(id))
+            LoggerSetup.todo_logger.info("➖ Todo deleted! id : {}".format(id))
         
         def on_todo_update(id:str):
-            LoggerSetup.todo_logger.info("🔼 A todo updated ! id = {}".format(id))
+            LoggerSetup.todo_logger.info("🔝 Todo updated! id : {}".format(id))
 
 
     class UserLog:
@@ -102,18 +103,13 @@ class LogSystem:
 
 
         def on_user_signup(email:str):
-            LoggerSetup.user_logger.info("📝 New user signed up ! email = {}".format(email))
+            LoggerSetup.user_logger.info("📝 New user signed up! email : {}".format(email))
 
         def on_user_login(email:str):
-            LoggerSetup.user_logger.info("📲 User loged in ! email = {}".format(email))
+            LoggerSetup.user_logger.info("📲 User logedin! email : {}".format(email))
 
         def on_user_deleted(email:str):
-            LoggerSetup.user_logger.info("🗑️ A account deleted = {}".format(email))
-
-
-async def file_saver(file):
-    unique_filename = f"file_{os.urandom(16).hex()}"
-
-    with open(f"{unique_filename}.bin" , "wb") as buffer :
-        content = await file.read()
-        buffer.write(content)
+            LoggerSetup.user_logger.info("🗑️ Account deleted! email : {}".format(email))
+        
+        def on_user_update(email:str):
+            LoggerSetup.user_logger.info("🔝 User Updated! email : {}".format(email))
