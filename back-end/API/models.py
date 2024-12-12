@@ -57,11 +57,3 @@ class UpdateAccountInfo(BaseModel):
     
     email : Optional[str] = None
     password : Optional[str] = None
-
-
-
-class UpdateProfileInfo(BaseModel):
-    """This model uesd for update profile info"""
-
-    avatar : Optional[str] = None
-    full_name : Optional[str] = None

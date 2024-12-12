@@ -1,4 +1,4 @@
-from API.models import (NewTodo, UpdateTodo, SignUp, Login, UpdateAccountInfo , UpdateProfileInfo)
+from API.models import (NewTodo, UpdateTodo, SignUp, Login, UpdateAccountInfo)
 from API.self_module import (ResponseBody , LogSystem , IDGenerator)
 from DATABASE.Db import DataBase
 from fastapi import (status, HTTPException, APIRouter, Response , File , UploadFile)
@@ -163,50 +163,62 @@ def login(reqbody:Login , response : Response):
 
 
 
-# @router.patch(
-#     '/api/profile/edit',
-#     status_code=status.HTTP_201_CREATED,
-#     summary="Change profile info",
-#     description="Change profile info like FullName or Avatar"
-# )
-# def edit_profile_info(reqbody:UpdateProfileInfo , email : str , response : Response):
-#     # fetch user from database
-#     DataBase.cursor.execute(
-#         f"SELECT * FROM user WHERE email = '{email.lower()}'"
-#     )
-#     user = DataBase.cursor.fetchone()
+@router.patch(
+    '/api/profile/edit',
+    status_code=status.HTTP_201_CREATED,
+    summary="Change profile info",
+    description="Change profile info like FullName or Avatar"
+)
+async def edit_profile_info(email:str ,response:Response ,full_name:str=None, image:UploadFile = File(default=None)):
+    # fetch user from database
+    DataBase.cursor.execute(
+        f"SELECT * FROM users WHERE email = '{email.lower()}'"
+    )
+    user = DataBase.cursor.fetchone()
 
-#     if user != None:
+    if user != None:
         
-#         if reqbody.full_name != None:
-#             if reqbody.full_name != user[0]:
-#                 DataBase.cursor.execute(
-#                     f"UPDATE users SET full_name = '{reqbody.full_name}' WHERE email = '{email.lower()}')"
-#                 )
-#                 DataBase.connection.commit()
-#             else:
-#                 response.status_code = status.HTTP_400_BAD_REQUEST
-#                 return "New name cannot be the same as the current name !"
+        try:
+            if full_name != None:
+                DataBase.cursor.execute(
+                    f"UPDATE users SET full_name = '{full_name}' WHERE email = '{email.lower()}'"
+                )
+                DataBase.connection.commit()
+        
+
+            if image != None:
+                # Saving file
+                unique_filename = f"file_{os.urandom(16).hex()}"
+                with open(f"./ASSETS/Profiles/{unique_filename}.{list(image.content_type.split('/'))[1]}" , "wb") as buffer :
+                    content = await image.read()
+                    buffer.write(content)
+
+                DataBase.cursor.execute(
+                    f"UPDATE users SET avatar_url = '/ASSETS/Profiles/{unique_filename}' WHERE email = '{email.lower()}'"
+                )
+                DataBase.connection.commit()
+
+        except Exception or HTTPException as error:
+            response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+            return f"ERROR >>> {error}"
+        
+
+
+        DataBase.cursor.execute(
+            f"SELECT * FROM users WHERE email = '{email.lower()}'"
+        )
+        updated_user = DataBase.cursor.fetchone()
+
+
+        # Log
+        LogSystem.UserLog.on_user_update(email=email)
+        # Return
+        return ResponseBody.UserResponseBody(user=updated_user)
     
-
-#         if reqbody.avatar != None:
-#             DataBase.cursor.execute(
-#                 f"UPDATE users SET avatar = '{reqbody.avatar}' WHERE email = '{email.lower()}'"
-#             )
-#             DataBase.connection.commit()
-
-
-
-#         DataBase.cursor.execute(
-#             f"SELECT * FROM users WHERE email = '{email.lower()}'"
-#         )
-#         user = DataBase.cursor.fetchone()
-
-#         return ResponseBody.UserResponseBody(user=user)
     
-#     else:
-#         response.status_code = status.HTTP_404_NOT_FOUND
-#         return "User Not Found !"
+    else:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return "User Not Found !"
 
 
 
@@ -425,4 +437,16 @@ def update_todo(reqbody:UpdateTodo , task_id:int , response:Response):
         response.status_code = status.HTTP_404_NOT_FOUND
         return "Task Not Found !"
         
-        
+
+
+
+
+
+@router.get(
+    '/api/todos/search',
+    status_code= status.HTTP_302_FOUND,
+    summary="Search Task",
+    description="Search todo in database using id"
+)
+def search_todo(task_id:int , response:Response):
+    ...
