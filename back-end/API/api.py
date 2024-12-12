@@ -328,9 +328,9 @@ def delete_todo(task_id:int , response:Response):
     DataBase.cursor.execute(
         f"SELECT * FROM todos WHERE id = '{task_id}'"
     )
-    todo = DataBase.cursor.fetchone()
+    task = DataBase.cursor.fetchone()
 
-    if todo != None:
+    if task != None:
         try:
             # Delete task
             DataBase.cursor.execute(
@@ -356,3 +356,73 @@ def delete_todo(task_id:int , response:Response):
 
 
 
+
+@router.patch(
+    '/api/todos',
+    status_code=status.HTTP_200_OK,
+    summary="Update todo",
+    description="Change or update task info like : title-priority-dueDate and etc ..."
+)
+def update_todo(reqbody:UpdateTodo , task_id:int , response:Response):
+    # fetch task from database
+    DataBase.cursor.execute(
+        f"SELECT * FROM todos WHERE id = {task_id}"
+    )
+    task = DataBase.cursor.fetchone()
+
+    if task != None:
+
+        try:
+            # Update Title
+            if reqbody.title != None:  
+                DataBase.cursor.execute(
+                    f"UPDATE todos SET title = '{reqbody.title}' WHERE id = {task_id}"
+                )
+                DataBase.connection.commit()
+                
+            
+            # Update Completed
+            if reqbody.completed != None:
+                DataBase.cursor.execute(
+                    f"UPDATE todos SET completed = {reqbody.completed} WHERE id = {task_id}"
+                )
+                DataBase.connection.commit()
+                
+                
+            # Update dueDate
+            if reqbody.dueDate != None:
+                DataBase.cursor.execute(
+                    f"UPDATE todos SET dueDate = '{reqbody.dueDate}' WHERE id = {task_id}"
+                )
+                DataBase.connection.commit()
+                
+            
+            # Update Priority
+            if reqbody.priority != None:
+                DataBase.cursor.execute(
+                    f"UPDATE todos SET priority = '{reqbody.priority}' WHERE id = {task_id}"
+                )
+                DataBase.connection.commit()
+        
+        except Exception or HTTPException as error:
+            response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+            return f"ERROR >>> {error}"
+            
+
+        DataBase.cursor.execute(
+            f"SELECT * FROM todos WHERE id = {task_id}"
+        )
+        updated_task = DataBase.cursor.fetchone()
+
+        # Log
+        LogSystem.TodoLog.on_todo_update(id=task_id)
+
+        # Return
+        return ResponseBody.TodoResponseBody(task=updated_task)
+        
+    
+    else:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return "Task Not Found !"
+        
+        
