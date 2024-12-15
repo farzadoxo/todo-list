@@ -55,5 +55,5 @@ class Login(BaseModel):
 class UpdateAccountInfo(BaseModel):
     """This request bosy use fot update or change account info"""
     
-    email : Optional[str] = None
+    new_email : Optional[str] = None
     password : Optional[str] = None

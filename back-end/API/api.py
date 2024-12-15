@@ -126,10 +126,10 @@ def edit_account_info(reqbody:UpdateAccountInfo , email:str , response:Response)
                 
 
             # Set new email
-            if reqbody.email != None:
-                if reqbody.email.lower() != user[1]:
+            if reqbody.new_email != None:
+                if reqbody.new_email.lower() != user[1]:
                     DataBase.cursor.execute(
-                        f"UPDATE users SET email = '{reqbody.email.lower()}' WHERE email = '{email.lower()}'"
+                        f"UPDATE users SET email = '{reqbody.new_email.lower()}' WHERE email = '{email.lower()}'"
                     )
                     DataBase.connection.commit()
                 else:
@@ -138,14 +138,14 @@ def edit_account_info(reqbody:UpdateAccountInfo , email:str , response:Response)
             
 
             
-            if reqbody.email != None:
+            if reqbody.new_email != None:
                 DataBase.cursor.execute(
-                    f"SELECT * FROM users WHERE email = '{reqbody.email.lower()}'"
+                    f"SELECT * FROM users WHERE email = '{reqbody.new_email.lower()}'"
                 )
                 user = DataBase.cursor.fetchone()
 
                 #Log
-                LogSystem.UserLog.on_user_update(email=reqbody.email.lower())
+                LogSystem.UserLog.on_user_update(email=reqbody.new_email.lower())
                 # Return
                 return ResponseBody.UserResponseBody(user=user)
 

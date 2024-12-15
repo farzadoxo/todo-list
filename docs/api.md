@@ -1,67 +1,62 @@
-# API
+# API Endpoints Docs
+________________________________
 # Signup
-
 Signup a user
-
 ### Endpoint Details :
-
 `POST /api/account/signup`
-
 ### Request
-
 ```json
 {
-  "full_name" : "John Watson",
-  "email" : "test@yahoo.com" ,
-  "password" : "1254avfdf"
+  "full_name" : "STRING",
+  "email" : "STRING" ,
+  "password" : "STRING"
 }
 ```
-
 ### Response
 ```201 CREATED```
 ```json
 {
   "full_name" : "John Watson",
   "email" : "test@yahoo.com" ,
-  "password" : "1254avfdf"
+  "password" : "1254avfdf" ,
+  "avatar_url" : null
 }
 ```
 
 
 # Login
-
 Login to account
-
 ### Endpoint Details :
-
 `GET /api/account/login`
-
 ### Request
-
+`200 OK`
 ```json
 {
-  "email" : "test@yahoo.com" ,
-  "password" : "1254avfdf"
+  "email" : "STRING" ,
+  "password" : "STRING"
 }
 ```
-
 ### Response
-```200 OK```
 ```json
 {
+  "full_name" : "John Watson",
   "email" : "test@yahoo.com" ,
-  "password" : "1254avfdf"
+  "password" : "1254avfdf" ,
+  "avatar_url" : "/ASSETS/Profiles/..."
 }
 ```
+
 
 # Edit Account Info
 Change or update Account Info
-
+### Endpoint Details :
+`PATCH /api/account/edit?email=STRING`
 ### Request
 ```json
+OPTIONAL
 {
-  "email" : OPTIONAL ,
-  "password" : OPTIONAL
+  "email" : "STRING" ,
+  "password" : "STRING"
 }
 ```
 ### Response
@@ -70,18 +65,22 @@ Change or update Account Info
 {
   "full_name" : "John Watson",
   "email" : "test@yahoo.com" ,
-  "password" : "1254avfdf"
+  "password" : "1254avfdf" ,
+  "avatar_url" : "/ASSETS/Profiles/..."
 }
 ```
 
+
 # Edit Profile Info
 Change or update profile info
-
+### Endpoint Details :
+`PATCH /api/profile/edit`
 ### Request
 ```json
+OPTIONAL
 {
-  "avatar" : OPTIONAL ,
-  "full_name" : OPTIONAL
+  "avatar" : "STRING" ,
+  "full_name" : "STRING"
 }
 ```
 ### Response
