@@ -98,67 +98,75 @@ def login(reqbody:Login , response : Response):
 
 
 
-# @router.patch(
-#     '/api/account/edit',
-#     status_code= status.HTTP_201_CREATED,
-#     summary="Change account info",
-#     description="Change account info or update profile info"
-# )
-# def edit_account_info(reqbody:UpdateAccountInfo , email : str , response:Response):
-#     # fetch data from database
-#     DataBase.cursor.execute(
-#         f"SELECT * FROM users WHERE email = '{email.lower()}'"
-#     )
-#     user = DataBase.cursor.fetchone()
+@router.patch(
+    '/api/account/edit',
+    status_code= status.HTTP_200_OK,
+    summary="Change account info",
+    description="Change account info or update account info"
+)
+def edit_account_info(reqbody:UpdateAccountInfo , email:str , response:Response):
+    # fetch data from database
+    DataBase.cursor.execute(
+        f"SELECT * FROM users WHERE email = '{email.lower()}'"
+    )
+    user = DataBase.cursor.fetchone()
 
-#     try:
-#         if user != None:
-#             # Set new email
-#             if reqbody.email != None:
-#                 if reqbody.email.lower() != user[1]:
-#                     DataBase.cursor.execute(
-#                         f"UPDATE users SET email = '{reqbody.email.lower()}' WHERE email = '{email.lower()}'"
-#                     )
-#                     DataBase.connection.commit()
-#                 else:
-#                     response.status_code = status.HTTP_409_CONFLICT
-#                     return "New email cannot be the same as the current email!"
+    try:
+        if user != None:
+            # Set new password
+            if reqbody.password != None:
+                if reqbody.password != user[2] and len(reqbody.password) >= 8:
+                    DataBase.cursor.execute(
+                        f"UPDATE users SET password = '{reqbody.password}' WHERE email = '{email.lower()}'"
+                    )
+                    DataBase.connection.commit()
+                else:
+                    response.status_code = status.HTTP_400_BAD_REQUEST
+                    return "The new password must be 8 characters long and cannot be the same as the current password!"
+                
+
+            # Set new email
+            if reqbody.email != None:
+                if reqbody.email.lower() != user[1]:
+                    DataBase.cursor.execute(
+                        f"UPDATE users SET email = '{reqbody.email.lower()}' WHERE email = '{email.lower()}'"
+                    )
+                    DataBase.connection.commit()
+                else:
+                    response.status_code = status.HTTP_409_CONFLICT
+                    return "New email cannot be the same as the current email!"
             
-#             # Set new password
-#             if reqbody.password != None:
-#                 if reqbody.password != user[2] and len(reqbody.password) >= 8:
-#                     DataBase.cursor.execute(
-#                         f"UPDATE users SET password = '{reqbody.password}' WHERE email = '{email.lower()}'"
-#                     )
-#                     DataBase.connection.commit()
-#                 else:
-#                     response.status_code = status.HTTP_400_BAD_REQUEST
-#                     return "The new password must be 8 characters long and cannot be the same as the current password!"
+
             
-            
-#             if reqbody.email != None:
-#                 DataBase.cursor.execute(
-#                     f"SELECT * FROM users WHERE email = '{reqbody.email.lower()}'"
-#                 )
-#                 user = DataBase.cursor.fetchone()
+            if reqbody.email != None:
+                DataBase.cursor.execute(
+                    f"SELECT * FROM users WHERE email = '{reqbody.email.lower()}'"
+                )
+                user = DataBase.cursor.fetchone()
 
-#                 return ResponseBody.UserResponseBody(user=user)
+                #Log
+                LogSystem.UserLog.on_user_update(email=reqbody.email.lower())
+                # Return
+                return ResponseBody.UserResponseBody(user=user)
 
-#             else:
-#                 DataBase.cursor.execute(
-#                     f"SELECT * FROM users WHERE email = '{email.lower()}'"
-#                 )
-#                 user = DataBase.cursor.fetchone()
+            else:
+                DataBase.cursor.execute(
+                    f"SELECT * FROM users WHERE email = '{email.lower()}'"
+                )
+                user = DataBase.cursor.fetchone()
 
-#                 return ResponseBody.UserResponseBody(user=user)
+                # Log
+                LogSystem.UserLog.on_user_update(email=email)
+                # Return
+                return ResponseBody.UserResponseBody(user=user)
 
-#         else:
-#             response.status_code = status.HTTP_404_NOT_FOUND
-#             return "User Not Found !"
+        else:
+            response.status_code = status.HTTP_404_NOT_FOUND
+            return "User Not Found !"
     
-#     except Exception or HTTPException as error:
-#         response.status_code = status.WS_1011_INTERNAL_ERROR
-#         return f"ERROR >>> {error}"
+    except Exception or HTTPException as error:
+        response.status_code = status.WS_1011_INTERNAL_ERROR
+        return f"ERROR >>> {error}"
 
 
 
