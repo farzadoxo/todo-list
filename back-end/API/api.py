@@ -114,10 +114,10 @@ def edit_account_info(reqbody:UpdateAccountInfo , email:str , response:Response)
     try:
         if user != None:
             # Set new password
-            if reqbody.password != None:
-                if reqbody.password != user[2] and len(reqbody.password) >= 8:
+            if reqbody.new_password != None:
+                if reqbody.new_password != user[2] and len(reqbody.new_password) >= 8:
                     DataBase.cursor.execute(
-                        f"UPDATE users SET password = '{reqbody.password}' WHERE email = '{email.lower()}'"
+                        f"UPDATE users SET password = '{reqbody.new_password}' WHERE email = '{email.lower()}'"
                     )
                     DataBase.connection.commit()
                 else:
@@ -173,11 +173,11 @@ def edit_account_info(reqbody:UpdateAccountInfo , email:str , response:Response)
 
 @router.patch(
     '/api/profile/edit',
-    status_code=status.HTTP_201_CREATED,
+    status_code=status.HTTP_200_OK,
     summary="Change profile info",
     description="Change profile info like FullName or Avatar"
 )
-async def edit_profile_info(email:str ,response:Response ,full_name:str=None, image:UploadFile = File(default=None)):
+async def edit_profile_info(email:str ,response:Response ,new_full_name:str=None, image:UploadFile = File(default=None)):
     # fetch user from database
     DataBase.cursor.execute(
         f"SELECT * FROM users WHERE email = '{email.lower()}'"
@@ -187,9 +187,9 @@ async def edit_profile_info(email:str ,response:Response ,full_name:str=None, im
     if user != None:
         
         try:
-            if full_name != None:
+            if new_full_name != None:
                 DataBase.cursor.execute(
-                    f"UPDATE users SET full_name = '{full_name}' WHERE email = '{email.lower()}'"
+                    f"UPDATE users SET full_name = '{new_full_name}' WHERE email = '{email.lower()}'"
                 )
                 DataBase.connection.commit()
         
@@ -457,4 +457,16 @@ def update_todo(reqbody:UpdateTodo , task_id:int , response:Response):
     description="Search todo in database using id"
 )
 def search_todo(task_id:int , response:Response):
-    ...
+    # Make a query to find todo in database
+    DataBase.cursor.execute(
+        f"SELECT * FROM todos WHERE id = {task_id}"
+    )
+    todo = DataBase.cursor.fetchone()
+
+    if todo != None:
+        # Return
+        return ResponseBody.TodoResponseBody(task=todo)
+     
+    else:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return "Task Not Found !"
