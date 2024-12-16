@@ -55,12 +55,12 @@ Change or update Account Info
 ```json
 OPTIONAL
 {
-  "email" : "STRING" ,
-  "password" : "STRING"
+  "new_email" : "STRING" ,
+  "new_password" : "STRING"
 }
 ```
 ### Response
-`201 CREATED`
+`200 OK`
 ```json
 {
   "full_name" : "John Watson",
@@ -74,26 +74,32 @@ OPTIONAL
 # Edit Profile Info
 Change or update profile info
 ### Endpoint Details :
-`PATCH /api/profile/edit`
-### Request
-```json
-OPTIONAL
-{
-  "avatar" : "STRING" ,
-  "full_name" : "STRING"
-}
-```
+`PATCH /api/profile/edit?new_full_name=STRING&image=BINERY_IMAGE_FiLE`
 ### Response
+`200 OK`
 ```json
 {
   "full_name" : "John Watson",
   "email" : "test@yahoo.com" ,
-  "password" : "1254avfdf"
+  "password" : "1254avfdf" ,
+  "avatar_url" : "/ASSETS/Profiles/..."
 }
-``` 
+```
+
+
 # Get todos
+Fetch all todos from database and show
 ### Endpoint Details :
 `GET /api/todos`
+### Response
+`200 OK`
+```json
+{
+  "todos" : {
+    "List of Todos"
+  }
+}
+```
 
 
 # New Todo
@@ -103,27 +109,32 @@ Create a todo and save to database
 ### Request
 ```json
 {
-  "title" : "Order Food",
-  "completed" : true ,
-  "dueDate" : "2024/01/02" OR NULL ,
-  "priority" : "LOW-MEDIUM-HIGH" OR NULL
+  "title" : "STRING",
+  "completed" : BOOLEAN ,
+  "dueDate" : "STRING" OR NULL ,
+  "priority" : "STRING" OR NULL
 }
 ```
 ### Response
+`201 CREATED`
 ```json
 {
   "id" : 231648979789565 ,
   "title" : "Order Food",
   "completed" : true ,
   "dueDate" : "2024/01/02" ,
-  "priority" : "LOW-MEDIUM-HIGH"
+  "priority" : "LOW-MEDIUM-HIGH" ,
+  "image_url" : null
 }
 ```
 
+
 # Upload
+Upload a image for completed task
 ### Endpoint Details :
-`POST /api/todos/upload?task_id=98745879651236&image=Binery_File`
+`POST /api/todos/upload?task_id=INT&image=Binery_File`
 ### Response
+`200 OK`
 ```json
 {
   "id" : 231648979789565 ,
