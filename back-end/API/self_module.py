@@ -137,3 +137,14 @@ class LogSystem:
         
         def on_user_update(email:str):
             LoggerSetup.user_logger.info("🔝 User Updated! email : {}".format(email))
+
+
+
+
+
+def setup_directories():
+    try:
+        os.makedirs(os.path.join('ASSETS' , 'Profiles'),exist_ok=True)
+        os.makedirs(os.path.join('ASSETS' , 'Todos'),exist_ok=True)
+    except:
+        pass

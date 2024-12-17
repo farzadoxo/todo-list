@@ -1,4 +1,4 @@
-from API.models import (NewTodo, UpdateTodo, SignUp, Login, UpdateAccountInfo)
+from API.schemas import (NewTodo, UpdateTodo, SignUp, Login, UpdateAccountInfo)
 from API.self_module import (ResponseBody , LogSystem , IDGenerator)
 from DATABASE.Db import DataBase
 from fastapi import (status, HTTPException, APIRouter, Response , File , UploadFile)
