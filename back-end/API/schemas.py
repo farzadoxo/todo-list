@@ -4,9 +4,7 @@ from typing import Optional
 
 
 class NewTodo(BaseModel):
-    """this request body use for make a task or todo of a template 
-    template : title = required  ------   completed = required  -------   dueDate = optional 
-               string                       bool                           string or null"""
+    """this request body use for make a task or todo of a template"""
     
     title : str
     completed : bool = False
