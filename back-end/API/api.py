@@ -247,7 +247,7 @@ def get_todos(response:Response):
         todos = DataBase.cursor.fetchall()
 
         # Return todos
-        return JSONResponse(content={"todos" : todos})
+        return ResponseBody.AllTodoResponseBody(todos)
     
     except Exception or HTTPException as error:
         response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR

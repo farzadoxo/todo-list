@@ -2,6 +2,7 @@ from random import randint
 from DATABASE.Db import DataBase
 import logging
 import os
+import json
 
 
 class ResponseBody:
@@ -30,6 +31,29 @@ class ResponseBody:
         }
 
         return response_body
+
+
+    def AllTodoResponseBody(todos:list):
+        temp_dict = {}
+        resault_dict = """{"todos" :[]}"""
+
+        data = json.loads(resault_dict)
+
+        for i in todos:
+            temp_dict = {
+                "id" : i[0],
+                "title" : i[1],
+                "completed" : i[2],
+                "dueDate" : i[3],
+                "priority" : i[4],
+                "image_url" : i[5]
+            }
+            
+            data["todos"].append(temp_dict)
+
+        return(data)
+
+        
 
 
 
