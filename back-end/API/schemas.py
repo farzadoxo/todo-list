@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel , Field
 from typing import Optional
 
 
@@ -37,7 +37,7 @@ class SignUp(BaseModel):
     """This request body use for signup to service"""
     
     full_name : str
-    email : str
+    email : str = Field(min_length=10)
     password : str
 
 

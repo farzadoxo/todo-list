@@ -84,7 +84,7 @@ def login(reqbody:Login , response : Response):
             if reqbody.email.lower() == user[1] and reqbody.password == user[2]:
                 # Log 
                 LogSystem.UserLog.on_user_login(email=reqbody.email)
-
+                # Return
                 return ResponseBody.UserResponseBody(user=user)
                          
             else:
@@ -202,7 +202,7 @@ async def edit_profile_info(email:str ,response:Response ,new_full_name:str=None
                     buffer.write(content)
 
                 DataBase.cursor.execute(
-                    f"UPDATE users SET avatar_url = '/ASSETS/Profiles/{unique_filename}' WHERE email = '{email.lower()}'"
+                    f"UPDATE users SET avatar_url = '/ASSETS/Profiles/{unique_filename}.{list(image.content_type.split('/'))[1]}' WHERE email = '{email.lower()}'"
                 )
                 DataBase.connection.commit()
 
@@ -233,16 +233,16 @@ async def edit_profile_info(email:str ,response:Response ,new_full_name:str=None
 # --------------------     Task Section      -------------------
 
 @router.get(
-    '/api/todos',
+    '/api/todos/{email}',
     status_code= status.HTTP_200_OK,
     summary="Show all user todos",
     description="Fetch All user todos from database and show it"
 )
-def get_todos(response:Response):
+def get_todos(email:str , response:Response):
     try:
         # Make a query and Fetch todos from database
         DataBase.cursor.execute(
-            "SELECT * FROM todos"
+            f"SELECT * FROM todos WHERE owner = '{email}'"
         )
         todos = DataBase.cursor.fetchall()
 
@@ -262,13 +262,12 @@ def get_todos(response:Response):
     summary="Create new todo",
     description="Create a new task and save it on database"
 )
-def new_todo(reqbody:NewTodo , response:Response):
-    
+def new_todo(reqbody:NewTodo ,email:str, response:Response): 
     try:
         id = IDGenerator.generate_id()
-        task_value = (id,reqbody.title , reqbody.completed , reqbody.dueDate , reqbody.priority , None)
+        task_value = (id , email , reqbody.title , reqbody.completed , reqbody.dueDate , reqbody.priority , None)
         DataBase.cursor.execute(
-            f"INSERT INTO todos VALUES (?,?,?,?,?,?)", task_value
+            f"INSERT INTO todos VALUES (?,?,?,?,?,?,?)", task_value
         )
         DataBase.connection.commit()
         
@@ -451,7 +450,7 @@ def update_todo(reqbody:UpdateTodo , task_id:int , response:Response):
 
 
 @router.get(
-    '/api/todos/search',
+    '/api/search/todo',
     status_code= status.HTTP_302_FOUND,
     summary="Search Task",
     description="Search todo in database using id"
