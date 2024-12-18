@@ -14,6 +14,7 @@ installed modules and libraries : ***`fastapi - uvicorn - pydantic - typing - ji
 | Name | Type |
 | -------- | ------- |
 | `id` | `INTEGER` |
+| `owner` | `STRING` |
 | `title`  | `STRING` |
 | `completed` | `BOOLEAN` |
 | `dueDate` | `STRING-NULL` |

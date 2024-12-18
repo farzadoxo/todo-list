@@ -90,14 +90,19 @@ Change or update profile info
 # Get todos
 Fetch all todos from database and show
 ### Endpoint Details :
-`GET /api/todos`
+`GET /api/todos?email=STRING`
 ### Response
 `200 OK`
 ```json
 {
-  "todos" : {
-    "List of Todos"
+  "todos" :[
+  {
+    // Json
+  },
+  {
+    // Json
   }
+  ]
 }
 ```
 
@@ -105,7 +110,7 @@ Fetch all todos from database and show
 # New Todo
 Create a todo and save to database
 ### Endpoint Details :
-`POST /api/todos`
+`POST /api/todos?email=STRING`
 ### Request
 ```json
 {
@@ -120,6 +125,7 @@ Create a todo and save to database
 ```json
 {
   "id" : 231648979789565 ,
+  "owner" : "joe@gmail.com" ,
   "title" : "Order Food",
   "completed" : true ,
   "dueDate" : "2024/01/02" ,
@@ -145,3 +151,48 @@ Upload a image for completed task
   "image_url" : "url of uploaded image"
   }
 ```
+
+# Update Todo
+Update todo info like title , priority , data and etc ...
+### Endpoint Details :
+`PATCH /api/todos?task_id=INT`
+### Response
+`200 OK`
+```json
+{
+  "id" : 231648979789565 ,
+  "title" : "Order Food",
+  "completed" : true ,
+  "dueDate" : "2024/01/02" ,
+  "priority" : "LOW-MEDIUM-HIGH" ,
+  "image_url" : "url of uploaded image"
+  }
+```
+
+# Delte Todo
+Delete a todo
+### Endpoint Details :
+`DELETE /api/todos?task_id=INT`
+### Response
+`200 OK`
+```json
+Task Successfully Deleted!
+```
+
+# Search Todo
+Find a Todo
+### Endpoint Details :
+`GET /api/search/todo?task_id=INT`
+### Response
+`Found 302`
+```json
+{
+  "id" : 231648979789565 ,
+  "title" : "Order Food",
+  "completed" : true ,
+  "dueDate" : "2024/01/02" ,
+  "priority" : "LOW-MEDIUM-HIGH" ,
+  "image_url" : "url of uploaded image"
+  }
+```
+
