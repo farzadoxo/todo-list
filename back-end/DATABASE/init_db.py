@@ -35,12 +35,13 @@ def initialize_database(db_name: str = "database.db"):
             """
             CREATE TABLE IF NOT EXISTS todos (
                 id INTEGER PRIMARY KEY,
+                owner TEXT ,
                 title TEXT NOT NULL,
                 completed BOOLEAN NOT NULL,
                 dueDate TEXT ,
                 priority TEXT ,
                 image_url TEXT ,
-                FOREIGN KEY (id) REFERENCES users (email)  
+                FOREIGN KEY (owner) REFERENCES users (email)  
             )
         """
         )

@@ -23,11 +23,12 @@ class ResponseBody:
     def TodoResponseBody(task: tuple):
         response_body = {
             "id": task[0],
-            "title": task[1],
-            "completed": task[2],
-            "dueDate": task[3],
-            "priority" : task[4],
-            "image_url" : task[5]
+            "owner" : task[1], 
+            "title": task[2],
+            "completed": task[3],
+            "dueDate": task[4],
+            "priority" : task[5],
+            "image_url" : task[6]
         }
 
         return response_body
@@ -42,11 +43,11 @@ class ResponseBody:
         for i in todos:
             temp_dict = {
                 "id" : i[0],
-                "title" : i[1],
-                "completed" : i[2],
-                "dueDate" : i[3],
-                "priority" : i[4],
-                "image_url" : i[5]
+                "title" : i[2],
+                "completed" : i[3],
+                "dueDate" : i[4],
+                "priority" : i[5],
+                "image_url" : i[6]
             }
             
             data["todos"].append(temp_dict)
