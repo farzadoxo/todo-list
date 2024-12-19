@@ -51,7 +51,19 @@ class Login(BaseModel):
 
 
 class UpdateAccountInfo(BaseModel):
-    """This request bosy use fot update or change account info"""
+    """This request body use for update or change account info"""
     
     new_email : Optional[str] = None
     new_password : Optional[str] = None
+
+
+class UpdateProfileInfo(BaseModel):
+    """This request body use for update or change profile info """
+
+    new_full_name: Optional[str] = None
+
+
+class DeleteAccount(BaseModel):
+    """This request body use for delete account and user todos"""
+
+    password : str
