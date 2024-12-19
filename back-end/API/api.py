@@ -1,4 +1,4 @@
-from API.schemas import (NewTodo, UpdateTodo, SignUp, Login, UpdateAccountInfo)
+from API.schemas import (NewTodo, UpdateTodo, SignUp, Login, UpdateAccountInfo , UpdateProfileInfo , DeleteAccount)
 from API.self_module import (ResponseBody , LogSystem , IDGenerator)
 from DATABASE.Db import DataBase
 from fastapi import (status, HTTPException, APIRouter, Response , File , UploadFile)
@@ -13,7 +13,7 @@ router = APIRouter()
 # --------------------     User Section     --------------------
 
 @router.post(
-    '/api/account/signup',
+    '/api/register',
     status_code=status.HTTP_201_CREATED,
     summary="Create Account",
     description="Create account need a request body with 3 item (username , email , password)"
@@ -62,8 +62,8 @@ def signup(reqbody:SignUp , response:Response):
 
 
 
-@router.get(
-    '/api/account/login',
+@router.post(
+    '/api/login',
     status_code= status.HTTP_200_OK,
     summary="Login to account",
     description="Login to a account using email and password"
@@ -99,7 +99,7 @@ def login(reqbody:Login , response : Response):
 
 
 @router.patch(
-    '/api/account/edit',
+    '/api/account/{email}',
     status_code= status.HTTP_200_OK,
     summary="Change account info",
     description="Change account info or update account info"
@@ -172,12 +172,12 @@ def edit_account_info(reqbody:UpdateAccountInfo , email:str , response:Response)
 
 
 @router.patch(
-    '/api/profile/edit',
+    '/api/profile/{email}',
     status_code=status.HTTP_200_OK,
     summary="Change profile info",
     description="Change profile info like FullName or Avatar"
 )
-async def edit_profile_info(email:str ,response:Response ,new_full_name:str=None, image:UploadFile = File(default=None)):
+async def edit_profile_info(email:str , reqbody:UpdateProfileInfo ,response:Response , image:UploadFile = File(default=None)):
     # fetch user from database
     DataBase.cursor.execute(
         f"SELECT * FROM users WHERE email = '{email.lower()}'"
@@ -187,9 +187,9 @@ async def edit_profile_info(email:str ,response:Response ,new_full_name:str=None
     if user != None:
         
         try:
-            if new_full_name != None:
+            if reqbody.new_full_name != None:
                 DataBase.cursor.execute(
-                    f"UPDATE users SET full_name = '{new_full_name}' WHERE email = '{email.lower()}'"
+                    f"UPDATE users SET full_name = '{reqbody.new_full_name}' WHERE email = '{email.lower()}'"
                 )
                 DataBase.connection.commit()
         
@@ -230,6 +230,55 @@ async def edit_profile_info(email:str ,response:Response ,new_full_name:str=None
 
 
 
+
+
+@router.delete(
+        '/api/account/{email}',
+        status_code=status.HTTP_200_OK,
+        summary="Delete account",
+        description="Delete Account info and all user todos"
+)
+def delete_account(reqbody:DeleteAccount ,email:str, response:Response):
+    DataBase.cursor.execute(
+        f"SELECT * FROM users WHERE email = '{email.lower()}'"
+    )
+    user = DataBase.cursor.fetchone()
+
+    if user != None:
+        if reqbody.password == user[2]:
+            try:
+                # ------- Delete Account -------
+                DataBase.cursor.execute(
+                    f"DELETE FROM users WHERE email = '{reqbody.email.lower()}'"
+                )
+                DataBase.connection.commit()
+
+                # ------- Delete Todos --------
+                DataBase.cursor.execute(
+                    f"DELETE FROM todos WHERE owner = '{reqbody.email.lower()}'"
+                )
+                DataBase.connection.commit()
+
+                
+                # Log
+                LogSystem.UserLog.on_user_deleted(email=email)
+                # Return 
+                return f"Account and all its todos were successfully deleted."
+                
+            
+            except Exception or HTTPException as error:
+                response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+                return f"ERROR >>> {error}"
+        
+        else:
+            response.status_code = status.HTTP_400_BAD_REQUEST
+            return "Password Invalid !"
+    
+    else:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return "Account Not Found!"
+
+
 # --------------------     Task Section      -------------------
 
 @router.get(
@@ -247,7 +296,7 @@ def get_todos(email:str , response:Response):
         todos = DataBase.cursor.fetchall()
 
         # Return todos
-        return ResponseBody.AllTodoResponseBody(todos)
+        return ResponseBody.AllTodoResponseBody(todos=todos)
     
     except Exception or HTTPException as error:
         response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
@@ -286,7 +335,7 @@ def new_todo(reqbody:NewTodo ,email:str, response:Response):
 
 
 @router.post(
-    '/api/todos/upload',
+    '/api/upload/{task_id}',
     status_code=status.HTTP_201_CREATED,
     summary="Upload picture",
     description="Upload a picture from completed task"
@@ -298,14 +347,15 @@ async def upload(response:Response , task_id:int , image:UploadFile = File(...))
     task = DataBase.cursor.fetchone()
 
 
-    # Saving file
-    unique_filename = f"file_{os.urandom(16).hex()}"
-    with open(f"./ASSETS/Todos/{unique_filename}.{list(image.content_type.split('/'))[1]}" , "wb") as buffer :
-        content = await image.read()
-        buffer.write(content)
-
     if task != None:
         try:
+            # Saving file
+            unique_filename = f"file_{os.urandom(16).hex()}"
+            with open(f"./ASSETS/Todos/{unique_filename}.{list(image.content_type.split('/'))[1]}" , "wb") as buffer :
+                content = await image.read()
+                buffer.write(content)
+
+            # Save to database
             DataBase.cursor.execute(
                 f"UPDATE todos SET completed = true , image_url = '/ASSETS/Todos/{unique_filename}.{list(image.content_type.split('/'))[1]}' WHERE id = {task_id}"
             )
@@ -337,7 +387,7 @@ async def upload(response:Response , task_id:int , image:UploadFile = File(...))
 
 
 @router.delete(
-    '/api/todos',
+    '/api/todos/{task_id}',
     status_code=status.HTTP_200_OK,
     summary="Delete a todo",
     description="Delete a todo from database by id"
@@ -377,7 +427,7 @@ def delete_todo(task_id:int , response:Response):
 
 
 @router.patch(
-    '/api/todos',
+    '/api/todos/{task_id}',
     status_code=status.HTTP_200_OK,
     summary="Update todo",
     description="Change or update task info like : title-priority-dueDate and etc ..."
@@ -450,7 +500,7 @@ def update_todo(reqbody:UpdateTodo , task_id:int , response:Response):
 
 
 @router.get(
-    '/api/search/todo',
+    '/api/search/{task_id}',
     status_code= status.HTTP_302_FOUND,
     summary="Search Task",
     description="Search todo in database using id"

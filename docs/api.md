@@ -3,7 +3,7 @@ ________________________________
 # Signup
 Signup a user
 ### Endpoint Details :
-`POST /api/account/signup`
+`POST /api/register`
 ### Request
 ```json
 {
@@ -27,7 +27,7 @@ Signup a user
 # Login
 Login to account
 ### Endpoint Details :
-`GET /api/account/login`
+`POST /api/login`
 ### Request
 `200 OK`
 ```json
@@ -50,7 +50,7 @@ Login to account
 # Edit Account Info
 Change or update Account Info
 ### Endpoint Details :
-`PATCH /api/account/edit?email=STRING`
+`PATCH /api/account?email=STRING`
 ### Request
 ```json
 OPTIONAL
@@ -84,6 +84,16 @@ Change or update profile info
   "password" : "1254avfdf" ,
   "avatar_url" : "/ASSETS/Profiles/..."
 }
+```
+
+# Delete Account
+Delete account
+### Endpoint Details :
+`DELETE /api/account?email=STRING`
+### Response
+`200 OK`
+```json
+Account Successfully Deleted!
 ```
 
 
