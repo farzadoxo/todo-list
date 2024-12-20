@@ -311,10 +311,10 @@ def get_todos(email:str , response:Response):
     summary="Create new todo",
     description="Create a new task and save it on database"
 )
-def new_todo(reqbody:NewTodo ,email:str, response:Response): 
+def new_todo(reqbody:NewTodo , response:Response): 
     try:
         id = IDGenerator.generate_id()
-        task_value = (id , email , reqbody.title , reqbody.completed , reqbody.dueDate , reqbody.priority , None)
+        task_value = (id , reqbody.owner , reqbody.title , reqbody.completed , reqbody.dueDate , reqbody.priority , None)
         DataBase.cursor.execute(
             f"INSERT INTO todos VALUES (?,?,?,?,?,?,?)", task_value
         )
@@ -336,7 +336,7 @@ def new_todo(reqbody:NewTodo ,email:str, response:Response):
 
 @router.post(
     '/api/upload/{task_id}',
-    status_code=status.HTTP_201_CREATED,
+    status_code=status.HTTP_200_OK,
     summary="Upload picture",
     description="Upload a picture from completed task"
 )
@@ -388,7 +388,7 @@ async def upload(response:Response , task_id:int , image:UploadFile = File(...))
 
 @router.delete(
     '/api/todos/{task_id}',
-    status_code=status.HTTP_200_OK,
+    status_code=status.HTTP_204_NO_CONTENT,
     summary="Delete a todo",
     description="Delete a todo from database by id"
 )
