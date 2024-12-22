@@ -1,10 +1,10 @@
 
 - [x] Database
-- [ ] Task API
+- [X] Task API
 - [X] User API
 - [X] User authentication
 - [x] `__tests__`
 - [x] API
 - [x] Task API(new-update-show-find-delte)
 - [X] User API(signup-login-change)
-- [ ] Make a relaship between Uesrs and todos 
+- [X] Make a relaship between Uesrs and todos 
