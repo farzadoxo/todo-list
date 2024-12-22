@@ -11,6 +11,6 @@
 - [X] Show all todos
 - [X] Search todo
 - [X] New todo
-- [X] Upload
+- [X] Upload 
 - [X] Edit todo
 - [X] Delete todo
