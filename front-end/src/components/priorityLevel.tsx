@@ -7,14 +7,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { isPriority, Priority } from "@/types";
 import React from "react";
 
 type PriorityDropDownMenuProps = {
   selected: string;
-  onValueChangeSetter: (value: string) => void; // Updated type definition
+  onValueChangeSetter: (value: Priority) => void;
 }
 
 const PriorityDropDownMenu: React.FC<PriorityDropDownMenuProps> = ({ selected = "none", onValueChangeSetter }) => {
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -33,7 +35,7 @@ const PriorityDropDownMenu: React.FC<PriorityDropDownMenuProps> = ({ selected = 
       <DropdownMenuContent className="w-56 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-200">
         <DropdownMenuLabel className="text-gray-800 dark:text-gray-200">to ease my mind</DropdownMenuLabel>
         <DropdownMenuSeparator className="dark:bg-gray-600" />
-        <DropdownMenuRadioGroup value={selected} onValueChange={onValueChangeSetter}>
+        <DropdownMenuRadioGroup value={selected} onValueChange={(value) => isPriority(value) && onValueChangeSetter}>
           <DropdownMenuRadioItem value="none" className="dark:bg-gray-800 dark:hover:bg-gray-700">
             none
           </DropdownMenuRadioItem>
