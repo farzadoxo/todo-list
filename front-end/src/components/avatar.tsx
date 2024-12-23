@@ -15,13 +15,14 @@ import { useNavigate } from 'react-router';
 interface CustomAvatarProps {
   imageSrc: string;
   className?: string;
+  onClick?: () => void;
 }
 
 
 const CustomAvatar: React.FC<CustomAvatarProps> = ({ imageSrc, className }) => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate()
-  const [logout, error] = useLogOut();
+  const [logout, logoutError] = useLogOut();
 
   //TODO: implement this handler
   const handleProfilePictureUpload = () => {
@@ -29,6 +30,13 @@ const CustomAvatar: React.FC<CustomAvatarProps> = ({ imageSrc, className }) => {
 
   }
 
+  const handleLogout = () => {
+    if (logoutError) {
+      console.log("there was an error on logout: ", logoutError)
+      return;
+    }
+    logout()
+  }
 
   return (
 
@@ -48,7 +56,7 @@ const CustomAvatar: React.FC<CustomAvatarProps> = ({ imageSrc, className }) => {
         <DropdownMenuItem onClick={() => navigate("preference")}>
           Settings
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={logout}>
+        <DropdownMenuItem onClick={handleLogout}>
           Logout
         </DropdownMenuItem>
       </DropdownMenuContent>

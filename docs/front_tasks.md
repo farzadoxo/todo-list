@@ -35,18 +35,19 @@
 - [x] dark mode
 - [x] adding profile picture
 - [x] user profile settings page
-- [ ] adding notes to task
-- [ ] tags
-- [ ] shortcuts
-- [ ] pining a task to top of the list
-- [ ] drag and drop
-- [ ] third-party authentication
-- [ ] sort options
 - [ ] dedicated list
+- [ ] sort and filter options
+- [ ] pining a task to top of the list
+- [ ] adding notes to task
+- [ ] drag and drop
+- [ ] tags
+- [ ] third-party authentication
+- [ ] search
+- [ ] unit tests
 - [ ] adding tasks with voice
 - [ ] gestures on task component
 - [ ] import data from other services
 - [ ] installable app
 - [ ] adding video to task as `completed video`
 - [ ] better performance
-- [ ] unit tests
+- [ ] shortcuts

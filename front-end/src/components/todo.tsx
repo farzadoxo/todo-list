@@ -106,7 +106,7 @@ const Todo: React.FC<TodoType> = ({ id, title, completed, dueDate, priority }) =
   const [isCompleted, setIsCompleted] = useState<boolean>(completed);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [editedTitle, setEditedTitle] = useState<string>(title);
-  const [editedDueDate, setEditedDueDate] = useState<string | null>(dueDate);
+  const [editedDueDate, setEditedDueDate] = useState<Date | null>(dueDate ? new Date(Date.parse(dueDate)) : null);
 
   // State for delete confirmation modal
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
