@@ -8,7 +8,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from fastapi.testclient import TestClient
 from API.config import Api
-from DATABASE.init_db import create_database
+from DATABASE.init_db import initialize_database
 
 
 # @pytest.fixture(scope="session")
