@@ -2,11 +2,7 @@
 
 Use `requirements.txt` for install module and libraries or use following command :
 
-`pip install fastapi[standard]`
-
-(All libraries are installed by use this command)
-
-installed modules and libraries : ***`fastapi - uvicorn - pydantic - typing - jinja2`***
+```pip install fastapi[standard]```
 
 # DataBase
 ### Todos Table
@@ -32,5 +28,5 @@ installed modules and libraries : ***`fastapi - uvicorn - pydantic - typing - ji
 
 # How to run server/API
 1. Install package and libraries 
-2. Create database file and make table
-3. Run `main.py` file
+2. run db_init.py file to create database file and make tables
+3. Run `main.py` file to make ASSETS and run API server 
