@@ -2,7 +2,9 @@
 
 Use `requirements.txt` for install module and libraries or use following command :
 
-```pip install fastapi[standard]```
+```bash
+pip install fastapi[standard]
+```
 
 # DataBase
 ### Todos Table
@@ -28,5 +30,5 @@ Use `requirements.txt` for install module and libraries or use following command
 
 # How to run server/API
 1. Install package and libraries 
-2. run db_init.py file to create database file and make tables
-3. Run `main.py` file to make ASSETS and run API server 
+2. run `db_init.py` file to create database file and make tables
+3. run `main.py` file to make ASSETS and run API server 
