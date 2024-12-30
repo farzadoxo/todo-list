@@ -16,7 +16,7 @@ const SignUp: React.FC = () => {
       password: password
     }
     try {
-      const response = await api.post("/api/signup", signupData)
+      const response = await api.post("/api/register", signupData)
       console.log(response)
 
 
