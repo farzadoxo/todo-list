@@ -13,7 +13,7 @@ What distinguishes this todo app from other todo apps is that instead of checkin
 - Upload Mechanism 📤
 - Additional details of Todo 📝
 - Auth system 📇
-- Beautiful GUI 🎨
+- Beautiful GUI 🎨 
 
 # How to use 
 - <a href="https://github.com/farzadoxo/todo-list/tree/master/back-end"> BackEnd </a>
