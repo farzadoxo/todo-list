@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 
-const useNewUserLogin = (userName: string): string => {
+const addNewUserLogin = (userEmail: string): string => {
   const isItemSet = (key: string) => localStorage.getItem(key) !== null;
-  localStorage.setItem("userName", userName)
+  localStorage.setItem("userEmail", userEmail)
 
-  if (!isItemSet("userName")) {
+  if (!isItemSet("userEmail")) {
     return "failed"
   }
 
@@ -14,13 +14,18 @@ const useNewUserLogin = (userName: string): string => {
 
 
 
-const useLoggedInUser = (): string | null => {
-  const [userName, setUserName] = useState<string | null>(null);
+const useLoggedInUser = (): string => {
+  const [userName, setUserName] = useState<string>("");
 
   useEffect(() => {
     const updateUserName = () => {
       const storedUserName = localStorage.getItem("userName");
-      setUserName(storedUserName);
+
+      if (storedUserName) {
+
+        setUserName(storedUserName);
+      }
+
     };
 
     // Initial check for userName in localStorage
@@ -61,4 +66,4 @@ const useLogOut = (): [() => Promise<void>, Error | null] => {
 
 
 
-export { useLoggedInUser, useNewUserLogin, useLogOut }
+export { useLoggedInUser, addNewUserLogin, useLogOut }

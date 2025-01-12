@@ -1,6 +1,9 @@
+import api from '@/axios';
+import { HttpStatusCode } from 'axios';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
+import { addNewUserLogin } from '../hooks/AuthHooks';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>('');
@@ -12,9 +15,21 @@ const Login: React.FC = () => {
     e.preventDefault();
     setError('');
 
+    const handleLogin = async (email: string, password: string): Promise<HttpStatusCode> => {
+
+      const res = await api.post("api/login/", {
+        email: email,
+        password: password
+      })
+
+      return res.status
+    }
+
     try {
-      if (email === 'test@test.com' && password === 'test') {
-        localStorage.setItem("userName", "test");
+      const loginStatus = await handleLogin(email, password)
+
+      if (loginStatus === 200) {
+        addNewUserLogin(email)
         console.log("logged in!");
         navigate("/");
         location.reload();
