@@ -85,7 +85,7 @@ def login(reqbody:Login , response : Response):
                 # Log 
                 LogSystem.UserLog.on_user_login(email=reqbody.email)
                 # Return
-                return ResponseBody.UserResponseBody(user=user)
+                return
                          
             else:
                 response.status_code = status.HTTP_400_BAD_REQUEST
