@@ -15,6 +15,7 @@ export interface TodoPostCallType {
   title: string;
   completed: boolean;
   dueDate: string | null;
+  owner: string;
   priority?: Priority;
 }
 
@@ -23,5 +24,6 @@ export interface TodoType {
   title: string;
   completed: boolean;
   dueDate: string | null;
+  owner: string;
   priority?: Priority;
 }

@@ -12,7 +12,7 @@ import SelectImage from "./components/selectImage";
 
 function App() {
   const [deviceType, setDeviceType] = useState<"mobile" | "desktop">("mobile");
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(!!localStorage.getItem("userName"));
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(!!localStorage.getItem("userEmail"));
   const [theme, setTheme] = useState<"dark" | "light">(localStorage.getItem("color-theme") as "dark" | "light");
   const [userProfilePicture, setUserProfilePicture] = useState<string>("")
 
