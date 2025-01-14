@@ -2,6 +2,7 @@ from random import randint
 from DATABASE.Db import DataBase
 import logging
 import os
+import jwt
 import json
 
 
@@ -11,9 +12,9 @@ class ResponseBody:
 
     def UserResponseBody(user: tuple):
         response_body = {
-            "fullname": user[0],
-            "email": user[1], 
-            "password": user[2],
+            "full_name": jwt.decode(user[0],"secret",algorithms="HS256")['full_name'],
+            "email": jwt.decode(user[1],"secret",algorithms="HS256")['email'], 
+            "password": jwt.decode(user[2],"secret",algorithms="HS256")['password'],
             "avatar_url": user[3]
         }
 
@@ -149,3 +150,27 @@ def setup_directories():
         os.makedirs(os.path.join('ASSETS' , 'Todos'),exist_ok=True)
     except:
         pass
+
+
+
+
+class Encrypt:
+
+    class Signup:
+
+        def encode(request_body:dict) -> dict:
+            template = {
+                'name':request_body['full_name'],
+                'email':request_body['email'],
+                'password':request_body['password'],
+                'avatar_url':request_body['avatar_url']
+            }
+
+            encoded = tuple(jwt.encode(template,"secret",algorithm="HS256"))
+
+            return encoded
+        
+        def decode(user:tuple):
+            decoded = jwt.decode(user,"secret",algorithms="HS256")
+
+            return decoded

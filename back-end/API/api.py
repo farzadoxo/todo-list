@@ -4,6 +4,7 @@ from DATABASE.Db import DataBase
 from fastapi import (status, HTTPException, APIRouter, Response , File , UploadFile)
 from fastapi.responses import JSONResponse
 import os
+import jwt
 
 
 # router instanse
@@ -20,8 +21,9 @@ router = APIRouter()
 )
 def signup(reqbody:SignUp , response:Response):
     # fetch availeble user from database
+    email = {'email':reqbody.email.lower()}
     DataBase.cursor.execute(
-        f"SELECT * FROM users WHERE email = '{reqbody.email.lower()}'"
+        f"SELECT * FROM users WHERE email = '{jwt.encode(email,"secret",algorithm="HS256")}'"
     )
     user = DataBase.cursor.fetchone()
 
@@ -29,10 +31,13 @@ def signup(reqbody:SignUp , response:Response):
         response.status_code = status.HTTP_409_CONFLICT
         return "This email has already been used !"
     else:
-        try:
+        # try:
             if len(reqbody.password) >= 8:
                 # create a recorde (user signup)
-                user_values = (reqbody.full_name,reqbody.email.lower(),reqbody.password,None)
+                user_values = (jwt.encode({'full_name':reqbody.full_name},"secret",algorithm="HS256"),
+                               jwt.encode({'email':reqbody.email.lower()},"secret",algorithm="HS256"),
+                               jwt.encode({'password':reqbody.password},"secret",algorithm="HS256"),
+                               None)
                 DataBase.cursor.execute(
                     f"INSERT INTO users VALUES (?,?,?,?)" , user_values
                 )
@@ -42,7 +47,7 @@ def signup(reqbody:SignUp , response:Response):
 
                 # refetch user from database
                 DataBase.cursor.execute(
-                    f"SELECT * FROM users WHERE email = '{reqbody.email.lower()}'"
+                    f"SELECT * FROM users WHERE email = '{jwt.encode(email,"secret",algorithm="HS256")}'"
                 )
                 user = DataBase.cursor.fetchone()
 
@@ -54,9 +59,9 @@ def signup(reqbody:SignUp , response:Response):
             
 
             
-        except Exception or HTTPException as error :
-            response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
-            return f"ERROR >>> {error}"
+        # except Exception or HTTPException as error :
+        #     response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+        #     return f"ERROR >>> {error}"
 
 
 

@@ -4,7 +4,10 @@ from DATABASE.init_db import initialize_database
 
 if __name__ == "__main__":
     # Setup database file and tables
-    initialize_database()
+    try:
+        initialize_database()
+    except:
+        pass
     # Setup directories and assets
     setup_directories()
     # Run API server
