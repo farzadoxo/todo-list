@@ -21,9 +21,8 @@ router = APIRouter()
 )
 def signup(reqbody:SignUp , response:Response):
     # fetch availeble user from database
-    email = {'email':reqbody.email.lower()}
     DataBase.cursor.execute(
-        f"SELECT * FROM users WHERE email = '{jwt.encode(email,"secret",algorithm="HS256")}'"
+        f"SELECT * FROM users WHERE email = '{jwt.encode({'email':reqbody.email.lower()},"secret",algorithm="HS256")}'"
     )
     user = DataBase.cursor.fetchone()
 
@@ -31,7 +30,7 @@ def signup(reqbody:SignUp , response:Response):
         response.status_code = status.HTTP_409_CONFLICT
         return "This email has already been used !"
     else:
-        # try:
+        try:
             if len(reqbody.password) >= 8:
                 # create a recorde (user signup)
                 user_values = (jwt.encode({'full_name':reqbody.full_name},"secret",algorithm="HS256"),
@@ -47,7 +46,7 @@ def signup(reqbody:SignUp , response:Response):
 
                 # refetch user from database
                 DataBase.cursor.execute(
-                    f"SELECT * FROM users WHERE email = '{jwt.encode(email,"secret",algorithm="HS256")}'"
+                    f"SELECT * FROM users WHERE email = '{jwt.encode({'email':reqbody.email.lower()},"secret",algorithm="HS256")}'"
                 )
                 user = DataBase.cursor.fetchone()
 
@@ -59,9 +58,9 @@ def signup(reqbody:SignUp , response:Response):
             
 
             
-        # except Exception or HTTPException as error :
-        #     response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
-        #     return f"ERROR >>> {error}"
+        except Exception or HTTPException as error :
+            response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+            return f"ERROR >>> {error}"
 
 
 
@@ -76,7 +75,7 @@ def signup(reqbody:SignUp , response:Response):
 def login(reqbody:Login , response : Response):
     # Fetch user info from database
     DataBase.cursor.execute(
-        f"SELECT * FROM users WHERE email = '{reqbody.email.lower()}'"
+        f"SELECT * FROM users WHERE email = '{jwt.encode({'email':reqbody.email.lower()},'secret',algorithm='HS256')}'"
     )
     user = DataBase.cursor.fetchone()
 
@@ -86,7 +85,7 @@ def login(reqbody:Login , response : Response):
             return "User Not Found !"
         
         else:
-            if reqbody.email.lower() == user[1] and reqbody.password == user[2]:
+            if reqbody.email.lower() == jwt.decode(user[1],'secret',algorithms='HS256')['email'] and reqbody.password == jwt.decode(user[2],'secret',algorithms='HS256')['password']:
                 # Log 
                 LogSystem.UserLog.on_user_login(email=reqbody.email)
                 # Return
@@ -112,7 +111,7 @@ def login(reqbody:Login , response : Response):
 def edit_account_info(reqbody:UpdateAccountInfo , email:str , response:Response):
     # fetch data from database
     DataBase.cursor.execute(
-        f"SELECT * FROM users WHERE email = '{email.lower()}'"
+        f"SELECT * FROM users WHERE email = '{jwt.encode({'email':email.lower()},'secret',algorithm='HS256')}'"
     )
     user = DataBase.cursor.fetchone()
 
@@ -120,9 +119,9 @@ def edit_account_info(reqbody:UpdateAccountInfo , email:str , response:Response)
         if user != None:
             # Set new password
             if reqbody.new_password != None:
-                if reqbody.new_password != user[2] and len(reqbody.new_password) >= 8:
+                if reqbody.new_password != jwt.decode(user[2],'secret',algorithms='HS256')['password'] and len(reqbody.new_password) >= 8:
                     DataBase.cursor.execute(
-                        f"UPDATE users SET password = '{reqbody.new_password}' WHERE email = '{email.lower()}'"
+                        f"UPDATE users SET password = '{jwt.encode({'password':reqbody.new_password},'secret',algorithm='HS256')}' WHERE email = '{jwt.encode({'email':email.lower()},'secret',algorithm='HS256')}'"
                     )
                     DataBase.connection.commit()
                 else:
@@ -132,31 +131,31 @@ def edit_account_info(reqbody:UpdateAccountInfo , email:str , response:Response)
 
             # Set new email
             if reqbody.new_email != None:
-                if reqbody.new_email.lower() != user[1]:
+                if reqbody.new_email.lower() != jwt.decode(user[1],'secret',algorithms='HS256'):
                     DataBase.cursor.execute(
-                        f"UPDATE users SET email = '{reqbody.new_email.lower()}' WHERE email = '{email.lower()}'"
+                        f"UPDATE users SET email = '{jwt.encode({'email':reqbody.new_email.lower()},'secret',algorithm='HS256')}' WHERE email = '{jwt.encode({'email':email.lower()},'secret',algorithm='HS256')}'"
                     )
                     DataBase.connection.commit()
                 else:
                     response.status_code = status.HTTP_409_CONFLICT
-                    return "New email cannot be the same as the current email!"
+                    return "New email can not be the same as the current email!"
             
 
             
             if reqbody.new_email != None:
                 DataBase.cursor.execute(
-                    f"SELECT * FROM users WHERE email = '{reqbody.new_email.lower()}'"
+                    f"SELECT * FROM users WHERE email = '{jwt.encode({'email':reqbody.new_email.lower()},'secret',algorithm='HS256')}'"
                 )
                 user = DataBase.cursor.fetchone()
 
                 #Log
-                LogSystem.UserLog.on_user_update(email=reqbody.new_email.lower())
+                LogSystem.UserLog.on_user_update(email=reqbody.new_email)
                 # Return
                 return ResponseBody.UserResponseBody(user=user)
 
             else:
                 DataBase.cursor.execute(
-                    f"SELECT * FROM users WHERE email = '{email.lower()}'"
+                    f"SELECT * FROM users WHERE email = '{jwt.encode({'email':email.lower()},'secret',algorithm='HS256')}'"
                 )
                 user = DataBase.cursor.fetchone()
 
