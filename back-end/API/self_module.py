@@ -2,7 +2,6 @@ from random import randint
 from DATABASE.Db import DataBase
 import logging
 import os
-import jwt
 import json
 
 
@@ -150,27 +149,3 @@ def setup_directories():
         os.makedirs(os.path.join('ASSETS' , 'Todos'),exist_ok=True)
     except:
         pass
-
-
-
-
-class Encrypt:
-
-    class Signup:
-
-        def encode(request_body:dict) -> dict:
-            template = {
-                'name':request_body['full_name'],
-                'email':request_body['email'],
-                'password':request_body['password'],
-                'avatar_url':request_body['avatar_url']
-            }
-
-            encoded = tuple(jwt.encode(template,"secret",algorithm="HS256"))
-
-            return encoded
-        
-        def decode(user:tuple):
-            decoded = jwt.decode(user,"secret",algorithms="HS256")
-
-            return decoded
