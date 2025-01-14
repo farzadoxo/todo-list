@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 const addNewUserLogin = (userEmail: string): string => {
   const isItemSet = (key: string) => localStorage.getItem(key) !== null;
@@ -14,34 +14,23 @@ const addNewUserLogin = (userEmail: string): string => {
 
 
 
+
+
 const useLoggedInUser = (): string => {
-  const [userName, setUserName] = useState<string>("");
 
-  useEffect(() => {
-    const updateUserName = () => {
-      const storedUserName = localStorage.getItem("userName");
+  const email = localStorage.getItem("userEmail")
 
-      if (storedUserName) {
 
-        setUserName(storedUserName);
-      }
+  if (email) {
 
-    };
+    return email
+  } else {
+    return "none"
+  }
 
-    // Initial check for userName in localStorage
-    updateUserName();
 
-    // Set up storage event listener
-    window.addEventListener('storage', updateUserName);
-
-    // Clean up the event listener on component unmount
-    return () => {
-      window.removeEventListener('storage', updateUserName);
-    };
-  }, []);
-
-  return userName;
 };
+
 
 
 const useLogOut = (): [() => Promise<void>, Error | null] => {

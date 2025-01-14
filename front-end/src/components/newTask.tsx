@@ -5,6 +5,7 @@ import { useTodosListState } from '../store';
 import { TodoPostCallType, Priority, isPriority } from '../types';
 import PrioritySelect from './priorityLevel';
 import CustomDatePicker from './customDatePicker';
+import { useLoggedInUser } from './hooks/AuthHooks';
 
 interface TaskModalProps {
   isOpen: boolean;
@@ -12,15 +13,18 @@ interface TaskModalProps {
 }
 
 const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose }) => {
+  const user = useLoggedInUser()
   const [taskData, setTaskData] = useState<TodoPostCallType>({
     title: '',
     completed: false,
     dueDate: null,
+    owner: user
   });
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
   const [priority, setPriority] = useState<Priority>("none");
   const taskStore = useTodosListState();
   const contentEditableRef = useRef<HTMLDivElement>(null);
+
 
   const handleTextChange = (evt: ChangeEvent<HTMLInputElement>) => {
     const text = evt.target.value;
@@ -102,6 +106,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose }) => {
           title: "",
           completed: false,
           dueDate: null,
+          owner: user
         });
         setSelectedDate(null);
 

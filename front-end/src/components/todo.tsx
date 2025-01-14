@@ -101,12 +101,13 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({ onEdit, onDelete }) => 
   );
 };
 
-const Todo: React.FC<TodoType> = ({ id, title, completed, dueDate, priority }) => {
+const Todo: React.FC<TodoType> = ({ id, title, completed, dueDate, priority, owner }) => {
   const taskStore = useTodosListState();
   const [isCompleted, setIsCompleted] = useState<boolean>(completed);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [editedTitle, setEditedTitle] = useState<string>(title);
   const [editedDueDate, setEditedDueDate] = useState<Date | null>(dueDate ? new Date(Date.parse(dueDate)) : null);
+
 
   // State for delete confirmation modal
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
@@ -120,6 +121,7 @@ const Todo: React.FC<TodoType> = ({ id, title, completed, dueDate, priority }) =
       title,
       completed: !isCompleted,
       dueDate,
+      owner,
       priority,
     };
     try {
@@ -162,6 +164,7 @@ const Todo: React.FC<TodoType> = ({ id, title, completed, dueDate, priority }) =
       title: editedTitle,
       completed: isCompleted,
       dueDate: formattedDueDate,
+      owner: owner,
       priority,
     };
 

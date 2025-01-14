@@ -35,6 +35,7 @@
 - [x] dark mode
 - [x] adding profile picture
 - [x] user profile settings page
+- [ ] bugs in the pirority #bugs
 - [ ] dedicated list
 - [ ] sort and filter options
 - [ ] pining a task to top of the list
@@ -51,3 +52,4 @@
 - [ ] adding video to task as `completed video`
 - [ ] better performance
 - [ ] shortcuts
+- [ ] redirect to login page after sign-up

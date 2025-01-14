@@ -3,21 +3,34 @@ import Todo from "../components/todo";
 import { useTodosListState } from "../store";
 import { TodoType } from "../types";
 import api from "../axios";
+import { useLoggedInUser } from "@/components/hooks/AuthHooks";
 
 const TodoList = () => {
   const tasksStore = useTodosListState();
+  const email = useLoggedInUser()
 
   const fetchTasks = async () => {
-    try {
-      const response = await api.get("/api/todos");
+    let url: string;
+    if (email) {
 
-      if (Array.isArray(response.data.todos)) {
-        tasksStore.setTodo(response.data.todos);
-      } else {
-        console.error("Fetched data is not an array:", response.data);
+      url = `/api/todos/${email ?? 'none'}`
+      console.log(url)
+      console.log(email)
+      try {
+        const response = await api.get(url);
+
+        if (Array.isArray(response.data.todos)) {
+          tasksStore.setTodo(response.data.todos);
+        } else {
+          console.error("Fetched data is not an array:", response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching tasks:', error);
       }
-    } catch (error) {
-      console.error('Error fetching tasks:', error);
+
+    }
+    else {
+      console.log("no email ")
     }
   };
 
@@ -33,7 +46,7 @@ const TodoList = () => {
     <ul className="grid grid-cols-1 w-full items-start">
       {uncompletedTasks.length > 0 ? (
         uncompletedTasks.map((task: TodoType) => (
-          <Todo key={task.id} id={task.id} title={task.title} completed={task.completed} dueDate={task.dueDate} priority={task.priority} />
+          <Todo key={task.id} id={task.id} title={task.title} completed={task.completed} dueDate={task.dueDate} priority={task.priority} owner={email} />
         ))
       ) : (
         <li>No uncompleted tasks available</li>
@@ -43,7 +56,7 @@ const TodoList = () => {
         <>
           <h2 className="mt-4 p-1 w-full text-gray-700 font-semibold">Completed Tasks</h2>
           {completedTasks.map((task: TodoType) => (
-            <Todo key={task.id} id={task.id} title={task.title} completed={task.completed} dueDate={task.dueDate} priority={task.priority} />
+            <Todo key={task.id} id={task.id} title={task.title} completed={task.completed} dueDate={task.dueDate} priority={task.priority} owner={email} />
           ))}
         </>
       )}
