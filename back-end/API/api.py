@@ -131,7 +131,7 @@ def edit_account_info(reqbody:UpdateAccountInfo , email:str , response:Response)
 
             # Set new email
             if reqbody.new_email != None:
-                if reqbody.new_email.lower() != jwt.decode(user[1],'secret',algorithms='HS256'):
+                if reqbody.new_email.lower() != jwt.decode(user[1],'secret',algorithms='HS256')['email']:
                     DataBase.cursor.execute(
                         f"UPDATE users SET email = '{jwt.encode({'email':reqbody.new_email.lower()},'secret',algorithm='HS256')}' WHERE email = '{jwt.encode({'email':email.lower()},'secret',algorithm='HS256')}'"
                     )
@@ -184,7 +184,7 @@ def edit_account_info(reqbody:UpdateAccountInfo , email:str , response:Response)
 async def edit_profile_info(email:str , reqbody:UpdateProfileInfo ,response:Response , image:UploadFile = File(default=None)):
     # fetch user from database
     DataBase.cursor.execute(
-        f"SELECT * FROM users WHERE email = '{email.lower()}'"
+        f"SELECT * FROM users WHERE email = '{jwt.encode({'email':email.lower()},'secret',algorithm='HS256')}'"
     )
     user = DataBase.cursor.fetchone()
 
@@ -193,7 +193,7 @@ async def edit_profile_info(email:str , reqbody:UpdateProfileInfo ,response:Resp
         try:
             if reqbody.new_full_name != None:
                 DataBase.cursor.execute(
-                    f"UPDATE users SET full_name = '{reqbody.new_full_name}' WHERE email = '{email.lower()}'"
+                    f"UPDATE users SET full_name = '{jwt.encode({'full_name':reqbody.new_full_name},'secret',algorithm='HS256')}' WHERE email = '{jwt.encode({'email':email.lower()},'secret',algorithm='HS256')}'"
                 )
                 DataBase.connection.commit()
         
@@ -206,7 +206,7 @@ async def edit_profile_info(email:str , reqbody:UpdateProfileInfo ,response:Resp
                     buffer.write(content)
 
                 DataBase.cursor.execute(
-                    f"UPDATE users SET avatar_url = '/ASSETS/Profiles/{unique_filename}.{list(image.content_type.split('/'))[1]}' WHERE email = '{email.lower()}'"
+                    f"UPDATE users SET avatar_url = '/ASSETS/Profiles/{unique_filename}.{list(image.content_type.split('/'))[1]}' WHERE email = '{jwt.encode({'email':email.lower()},'secret',algorithm='HS256')}'"
                 )
                 DataBase.connection.commit()
 
@@ -217,7 +217,7 @@ async def edit_profile_info(email:str , reqbody:UpdateProfileInfo ,response:Resp
 
 
         DataBase.cursor.execute(
-            f"SELECT * FROM users WHERE email = '{email.lower()}'"
+            f"SELECT * FROM users WHERE email = '{jwt.encode({'email':email.lower()},'secret',algorithm='HS256')}'"
         )
         updated_user = DataBase.cursor.fetchone()
 
@@ -244,16 +244,16 @@ async def edit_profile_info(email:str , reqbody:UpdateProfileInfo ,response:Resp
 )
 def delete_account(reqbody:DeleteAccount ,email:str, response:Response):
     DataBase.cursor.execute(
-        f"SELECT * FROM users WHERE email = '{email.lower()}'"
+        f"SELECT * FROM users WHERE email = '{jwt.encode({'email':email.lower()},'secret',algorithm='HS256')}'"
     )
     user = DataBase.cursor.fetchone()
 
     if user != None:
-        if reqbody.password == user[2]:
+        if reqbody.password == jwt.decode(user[2],'secret',algorithms='HS256')['password']:
             try:
                 # ------- Delete Account -------
                 DataBase.cursor.execute(
-                    f"DELETE FROM users WHERE email = '{reqbody.email.lower()}'"
+                    f"DELETE FROM users WHERE email = '{jwt.encode({'email':reqbody.email.lower()},'secret',algorithm='HS256')}'"
                 )
                 DataBase.connection.commit()
 
