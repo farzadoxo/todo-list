@@ -2,6 +2,7 @@ from random import randint
 from DATABASE.Db import DataBase
 import logging
 import os
+import jwt
 import json
 
 
@@ -23,7 +24,7 @@ class ResponseBody:
     def TodoResponseBody(task: tuple):
         response_body = {
             "id": task[0],
-            "owner" : task[1], 
+            "owner" : jwt.decode(task[1],"secret",algorithms="HS256")['owner'], 
             "title": task[2],
             "completed": task[3],
             "dueDate": task[4],
