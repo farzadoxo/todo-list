@@ -6,7 +6,6 @@ from typing import Optional
 class NewTodo(BaseModel):
     """this request body use for make a task or todo of a template"""
     
-    owner : str
     title : str
     completed : bool = False
     dueDate : Optional[str] = None
