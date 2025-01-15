@@ -253,13 +253,13 @@ def delete_account(reqbody:DeleteAccount ,email:str, response:Response):
             try:
                 # ------- Delete Account -------
                 DataBase.cursor.execute(
-                    f"DELETE FROM users WHERE email = '{jwt.encode({'email':reqbody.email.lower()},'secret',algorithm='HS256')}'"
+                    f"DELETE FROM users WHERE email = '{jwt.encode({'email':email.lower()},'secret',algorithm='HS256')}'"
                 )
                 DataBase.connection.commit()
 
                 # ------- Delete Todos --------
                 DataBase.cursor.execute(
-                    f"DELETE FROM todos WHERE owner = '{reqbody.email.lower()}'"
+                    f"DELETE FROM todos WHERE owner = '{jwt.encode({'owner':email.lower()},'secret',algorithm='HS256')}'"
                 )
                 DataBase.connection.commit()
 
@@ -295,7 +295,7 @@ def get_todos(email:str , response:Response):
     try:
         # Make a query and Fetch todos from database
         DataBase.cursor.execute(
-            f"SELECT * FROM todos WHERE owner = '{email}'"
+            f"SELECT * FROM todos WHERE owner = '{jwt.encode({'owner':email},'secret',algorithm='HS256')}'"
         )
         todos = DataBase.cursor.fetchall()
 
@@ -310,15 +310,17 @@ def get_todos(email:str , response:Response):
 
 
 @router.post(
-    '/api/todos',
+    '/api/todos/{email}',
     status_code= status.HTTP_201_CREATED,
     summary="Create new todo",
     description="Create a new task and save it on database"
 )
-def new_todo(reqbody:NewTodo , response:Response): 
+def new_todo(reqbody:NewTodo ,email:str, response:Response): 
     try:
         id = IDGenerator.generate_id()
-        task_value = (id , reqbody.owner , reqbody.title , reqbody.completed , reqbody.dueDate , reqbody.priority , None)
+        task_value = (id , jwt.encode({'owner':email.lower()},'secret',algorithm='HS256') ,
+                      reqbody.title , reqbody.completed ,
+                      reqbody.dueDate , reqbody.priority , None)
         DataBase.cursor.execute(
             f"INSERT INTO todos VALUES (?,?,?,?,?,?,?)", task_value
         )
