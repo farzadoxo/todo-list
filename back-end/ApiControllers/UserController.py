@@ -1,7 +1,6 @@
 from Extentions.LogExtention import LogSystem
 from Extentions.ResponseExtention import ResponseBody
 from DTOs.User import (Signup,Login,DeleteAccount,UpdateAccountInfo,UpdateProfileInfo)
-from ApiControllers.self_module import IDGenerator
 from DATABASE.Db import DataBase
 from fastapi import (status, HTTPException, APIRouter, Response , File , UploadFile)
 import os
