@@ -1,5 +1,5 @@
 # Use the official Python image from the Docker Hub
-FROM python:3.9
+FROM python:latest
 
 # Set the working directory inside the container
 WORKDIR /backend
@@ -8,7 +8,7 @@ WORKDIR /backend
 COPY requirements.txt .
 
 # Install any needed packages specified in requirements.txt
-RUN pip install --upgrade pip && pip install --trusted-host https://mirror-pypi.runflare.com -i https://mirror-pypi.runflare.com/simple/ -r requirements.txt
+RUN pip install -r requirements.txt
 
 # Copy the rest of your application code into the container
 COPY . .
