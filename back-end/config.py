@@ -1,6 +1,6 @@
 import logging
-from ApiControllers.UserController import router
-from ApiControllers.TodoController import router
+from ApiControllers.UserController import router as user_router
+from ApiControllers.TodoController import router as todo_router
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from Extentions.LogExtention import LoggerSetup
@@ -9,7 +9,8 @@ from Extentions.LogExtention import LoggerSetup
 
 # API instance
 Api = FastAPI()
-Api.include_router(router)
+Api.include_router(user_router)
+Api.include_router(todo_router)
 
 
 # cors serttings

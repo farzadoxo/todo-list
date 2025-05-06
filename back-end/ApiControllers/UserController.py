@@ -17,7 +17,8 @@ router = APIRouter()
     '/api/register',
     status_code=status.HTTP_201_CREATED,
     summary="Create Account",
-    description="Create account need a request body with 3 item (username , email , password)"
+    description="Create account need a request body with 3 item (username , email , password)",
+    response_model=None
 )
 def signup(reqbody:Signup , response:Response):
     # fetch availeble user from database
@@ -70,7 +71,8 @@ def signup(reqbody:Signup , response:Response):
     '/api/login',
     status_code= status.HTTP_200_OK,
     summary="Login to account",
-    description="Login to a account using email and password"
+    description="Login to a account using email and password",
+    response_model=None
 )
 def login(reqbody:Login , response : Response):
     # Fetch user info from database
@@ -106,7 +108,8 @@ def login(reqbody:Login , response : Response):
     '/api/account/{email}',
     status_code= status.HTTP_200_OK,
     summary="Change account info",
-    description="Change account info or update account info"
+    description="Change account info or update account info",
+    response_model=None
 )
 def edit_account_info(reqbody:UpdateAccountInfo , email:str , response:Response):
     # fetch data from database
@@ -179,7 +182,8 @@ def edit_account_info(reqbody:UpdateAccountInfo , email:str , response:Response)
     '/api/profile/{email}',
     status_code=status.HTTP_200_OK,
     summary="Change profile info",
-    description="Change profile info like FullName or Avatar"
+    description="Change profile info like FullName or Avatar",
+    response_model=None
 )
 async def edit_profile_info(email:str , reqbody:UpdateProfileInfo ,response:Response , image:UploadFile = File(default=None)):
     # fetch user from database
@@ -240,7 +244,8 @@ async def edit_profile_info(email:str , reqbody:UpdateProfileInfo ,response:Resp
         '/api/account/{email}',
         status_code=status.HTTP_200_OK,
         summary="Delete account",
-        description="Delete Account info and all user todos"
+        description="Delete Account info and all user todos",
+        response_model=None
 )
 def delete_account(reqbody:DeleteAccount ,email:str, response:Response):
     DataBase.cursor.execute(
@@ -281,5 +286,3 @@ def delete_account(reqbody:DeleteAccount ,email:str, response:Response):
     else:
         response.status_code = status.HTTP_404_NOT_FOUND
         return "Account Not Found!"
-
-

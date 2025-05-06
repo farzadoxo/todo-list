@@ -15,7 +15,8 @@ router = APIRouter()
     '/api/todos/{email}',
     status_code= status.HTTP_200_OK,
     summary="Show all user todos",
-    description="Fetch All user todos from database and show it"
+    description="Fetch All user todos from database and show it",
+    response_model=None
 )
 def get_todos(email:str , response:Response):
     try:
@@ -39,7 +40,8 @@ def get_todos(email:str , response:Response):
     '/api/todos/{email}',
     status_code= status.HTTP_201_CREATED,
     summary="Create new todo",
-    description="Create a new task and save it on database"
+    description="Create a new task and save it on database",
+    response_model=None
 )
 def new_todo(reqbody:NewTodo ,email:str, response:Response): 
     try:
@@ -70,7 +72,8 @@ def new_todo(reqbody:NewTodo ,email:str, response:Response):
     '/api/upload/{task_id}',
     status_code=status.HTTP_200_OK,
     summary="Upload picture",
-    description="Upload a picture from completed task"
+    description="Upload a picture from completed task",
+    response_model=None
 )
 async def upload(response:Response , task_id:int , image:UploadFile = File(...)):
     DataBase.cursor.execute(
@@ -122,7 +125,8 @@ async def upload(response:Response , task_id:int , image:UploadFile = File(...))
     '/api/todos/{task_id}',
     status_code=status.HTTP_204_NO_CONTENT,
     summary="Delete a todo",
-    description="Delete a todo from database by id"
+    description="Delete a todo from database by id",
+    response_model=None
 )
 def delete_todo(task_id:int , response:Response):
     # fetch todo
@@ -162,7 +166,8 @@ def delete_todo(task_id:int , response:Response):
     '/api/todos/{task_id}',
     status_code=status.HTTP_200_OK,
     summary="Update todo",
-    description="Change or update task info like : title-priority-dueDate and etc ..."
+    description="Change or update task info like : title-priority-dueDate and etc ...",
+    response_model=None
 )
 def update_todo(reqbody:UpdateTodo , task_id:int , response:Response):
     # fetch task from database
@@ -235,7 +240,8 @@ def update_todo(reqbody:UpdateTodo , task_id:int , response:Response):
     '/api/search/{task_id}',
     status_code= status.HTTP_302_FOUND,
     summary="Search Task",
-    description="Search todo in database using id"
+    description="Search todo in database using id",
+    response_model=None
 )
 def search_todo(task_id:int , response:Response):
     # Make a query to find todo in database
