@@ -3,7 +3,7 @@ from typing import Optional
 
 
 
-class SignUp(BaseModel):
+class Signup(BaseModel):
     """This request body use for signup to service"""
     
     full_name : str
