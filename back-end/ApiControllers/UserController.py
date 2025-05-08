@@ -20,7 +20,7 @@ router = APIRouter()
     description="Create account need a request body with 3 item (username , email , password)",
     response_model=None
 )
-def signup(reqbody:Signup , response:Response):
+def signup(reqbody:Signup.Signup , response:Response):
     # fetch availeble user from database
     DataBase.cursor.execute(
         f"SELECT * FROM users WHERE email = '{jwt.encode({'email':reqbody.email.lower()},"secret",algorithm="HS256")}'"
@@ -74,7 +74,7 @@ def signup(reqbody:Signup , response:Response):
     description="Login to a account using email and password",
     response_model=None
 )
-def login(reqbody:Login , response : Response):
+def login(reqbody:Login.Login , response : Response):
     # Fetch user info from database
     DataBase.cursor.execute(
         f"SELECT * FROM users WHERE email = '{jwt.encode({'email':reqbody.email.lower()},'secret',algorithm='HS256')}'"
@@ -111,7 +111,7 @@ def login(reqbody:Login , response : Response):
     description="Change account info or update account info",
     response_model=None
 )
-def edit_account_info(reqbody:UpdateAccountInfo , email:str , response:Response):
+def edit_account_info(reqbody:UpdateAccountInfo.UpdateAccountInfo , email:str , response:Response):
     # fetch data from database
     DataBase.cursor.execute(
         f"SELECT * FROM users WHERE email = '{jwt.encode({'email':email.lower()},'secret',algorithm='HS256')}'"
@@ -185,7 +185,7 @@ def edit_account_info(reqbody:UpdateAccountInfo , email:str , response:Response)
     description="Change profile info like FullName or Avatar",
     response_model=None
 )
-async def edit_profile_info(email:str , reqbody:UpdateProfileInfo ,response:Response , image:UploadFile = File(default=None)):
+async def edit_profile_info(email:str , reqbody:UpdateProfileInfo.UpdateProfileInfo ,response:Response , image:UploadFile = File(default=None)):
     # fetch user from database
     DataBase.cursor.execute(
         f"SELECT * FROM users WHERE email = '{jwt.encode({'email':email.lower()},'secret',algorithm='HS256')}'"
@@ -247,7 +247,7 @@ async def edit_profile_info(email:str , reqbody:UpdateProfileInfo ,response:Resp
         description="Delete Account info and all user todos",
         response_model=None
 )
-def delete_account(reqbody:DeleteAccount ,email:str, response:Response):
+def delete_account(reqbody:DeleteAccount.DeleteAccount ,email:str, response:Response):
     DataBase.cursor.execute(
         f"SELECT * FROM users WHERE email = '{jwt.encode({'email':email.lower()},'secret',algorithm='HS256')}'"
     )

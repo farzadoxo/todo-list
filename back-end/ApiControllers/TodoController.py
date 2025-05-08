@@ -43,7 +43,7 @@ def get_todos(email:str , response:Response):
     description="Create a new task and save it on database",
     response_model=None
 )
-def new_todo(reqbody:NewTodo ,email:str, response:Response): 
+def new_todo(reqbody:NewTodo.NewTodo ,email:str, response:Response): 
     try:
         id = GuidGenerator.generate_guid()
         task_value = (id , jwt.encode({'owner':email.lower()},'secret',algorithm='HS256') ,
@@ -169,7 +169,7 @@ def delete_todo(task_id:int , response:Response):
     description="Change or update task info like : title-priority-dueDate and etc ...",
     response_model=None
 )
-def update_todo(reqbody:UpdateTodo , task_id:int , response:Response):
+def update_todo(reqbody:UpdateTodo.UpdateTodo , task_id:int , response:Response):
     # fetch task from database
     DataBase.cursor.execute(
         f"SELECT * FROM todos WHERE id = {task_id}"
