@@ -18,7 +18,7 @@ if __name__ == "__main__":
         pass
 
     # Run API server
-    uvicorn.run(app="config:Api", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run(app="ApiControllers.config:Api", host="0.0.0.0", port=8000, reload=True)
 
 
 # ------------ WARNING --------------
