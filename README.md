@@ -13,7 +13,16 @@ What distinguishes this todo app from other todo apps is that instead of checkin
 - Upload Mechanism 📤
 - Additional details of Todo 📝
 - Auth system 📇
-- Beautiful GUI 🎨 
+- Beautiful GUI 🎨
+  
+# Used Technologies :
+- Python
+- FastAPI
+- Sqlite3
+- Js - Ts
+- Html - Css
+- Vite
+
 
 # How to use 
 ## BackEnd
