@@ -111,7 +111,7 @@ Clone this repository from github and change directory to project using command 
 git clone https://github.com/farzadoxo/todo-list && cd todo-list
 ```
 ### Step 2: Build and Run docker image
-Create a docker image and run it using docker-compose using command below:
+Create a docker image and run it using command below:
 ```bash
 docker compose up
 ```
