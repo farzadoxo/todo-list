@@ -8,21 +8,24 @@
 This todo app allows you to create todos, manage them, and save them on a server so you can access them anywhere.
 What distinguishes this todo app from other todo apps is that instead of checking off todos, you can take a picture of the completed task! 📝
 
-## Options :
+## Options
 - Online - Cloud base ☁️
 - Upload Mechanism 📤
 - Additional details of Todo 📝
 - Auth system 📇
 - Beautiful GUI 🎨
   
-# Used Technologies :
-- Python
-- FastAPI
-- Sqlite3
-- Js - Ts
-- React
-- Html - Css
-- Vite
+# Used Technologies
+- Front-End:
+  - Html - Css
+  - Js - TS
+  - React
+  - Vite
+- Back-End:
+  - Python
+  - FastAPI
+  - Sqlite3
+  - Pyjwt
 
 # Back-end Development Setup
 This guide provides steps to set up and run the React-based front-end application for the Todo List project.
