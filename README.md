@@ -20,37 +20,104 @@ What distinguishes this todo app from other todo apps is that instead of checkin
 - FastAPI
 - Sqlite3
 - Js - Ts
+- React
 - Html - Css
 - Vite
 
+# Back-end Development Setup
+This guide provides steps to set up and run the React-based front-end application for the Todo List project.
 
-# How to use 
-## BackEnd
+### Prerequisites
 
-🐋 if you have docker on your computer :
-1. clone repository using command below :
-```bash
-git clone https://github.com/farzadoxo/todo-list
-```
-2. `cd todo-list`
-3. `docker compose up`
-4. *(wait to build docker images)*
-5. Ready :)
+- Ensure Docker is installed on your system
+- Make sure you have Git installed and configured properly
 
-💻 if you wanna to run this project directly in your computer :
-1. clone repository using command below :
+### Step 1: Clone this repository
 ```bash
-git clone https://github.com/farzadoxo/todo-list
+git clone https://github.com/farzadoxo/todo-list && cd todo-list/back-end
 ```
-2. `cd todo-list/back-end`
-3. install libraries and madules using command below:
+### Step 2: Build the docker image
 ```bash
-pip install -r requirements.txt
+docker build -t todo-back .
 ```
-4. run back-end server with comand below:
-```bash
-python3 main.py
-```
-- <a href="https://github.com/farzadoxo/todo-list/tree/master/front-end"> FrontEnd </a>
+### Step 3: Run The Container
+Launch the Docker container with port forwarding:
 
-> (Guids availlable in directories 👆)
+```bash
+docker run -p 8080:8000 --name back-front-container todo-back
+```
+### Additional Notes
+
+- The default port for the fastapi development server is 8080, which is forwarded to port 8000.
+- You can access the application at `http://localhost:8000` once the container starts.
+- To stop the container, use the command: `docker stop todo-back-container`
+- You can access to the FastAPI Swagger UI at `http://localhost:8000/docs` once the container starts.
+
+# Front-end Development Setup
+
+This guide provides steps to set up and run the React-based front-end application for the Todo List project.
+
+### Prerequisites
+
+- Ensure Docker is installed on your system
+- Make sure you have Git installed and configured properly
+
+### Step 1: Clone the Repository
+
+First, download the source code from GitHub:
+
+```bash
+git clone https://github.com/farzadoxo/todo-list.git cd todo-list/front-end
+```
+
+### Step 2: Build the Docker Image
+
+Navigate to the front-end directory and build the Docker image:
+
+```bash
+docker build -t todo-front .
+```
+
+### Step 3: Run the Container
+
+Launch the Docker container with port forwarding:
+
+```bash
+docker run -p 3000:5173 --name todo-front-container todo-front
+```
+
+### Additional Notes
+
+- The default port for the React development server is 5173, which is forwarded to port 3000.
+- You can access the application at `http://localhost:3000` once the container starts.
+- To stop the container, use the command: `docker stop todo-front-container`
+
+### Troubleshooting
+
+If you encounter issues during the setup process:
+
+1. Ensure all prerequisites (Git, Docker) are correctly installed and configured.
+2. Check if you have sufficient permissions to execute Docker commands.
+3. Verify that the repository URL is correct and accessible.
+4. If problems persist, review the Dockerfile and ensure it's compatible with your system configuration.
+
+# How to use?
+### Step 1: Clone repository
+Clone this repository from github and change directory to project using command below:
+```bash
+git clone https://github.com/farzadoxo/todo-list && cd todo-list
+```
+### Step 2: Build and Run docker image
+Create a docker image and run it using docker-compose using command below:
+```bash
+docker compose up
+```
+
+# Documation
+- [Database](https://github.com/farzadoxo/todo-list/blob/master/back-end/README.md)
+- [Api Endpoints](https://github.com/farzadoxo/todo-list/blob/master/docs/api.md)
+- [FrontEnd](https://github.com/farzadoxo/todo-list/tree/master/front-end)
+
+
+_________
+**If you enjoyed this project or use it leave me a STAR in github ⭐**
