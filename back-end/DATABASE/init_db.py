@@ -22,7 +22,7 @@ def initialize_database(db_name: str = "database.db"):
             CREATE TABLE IF NOT EXISTS users (
                 full_name TEXT NOT NULL ,
                 email TEXT NOT NULL PRIMARY KEY,
-                password TEXT NOT NULL ,
+                hashed_password TEXT NOT NULL ,
                 avatar_url TEXT
 
             )
